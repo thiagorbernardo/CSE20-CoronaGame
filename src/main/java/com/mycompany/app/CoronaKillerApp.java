@@ -5,45 +5,40 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
-import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.EntityFactory;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.Spawns;
-import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.input.virtual.VirtualButton;
-import com.almasb.fxgl.physics.BoundingShape;
-import com.almasb.fxgl.physics.HitBox;
-import com.almasb.fxgl.texture.AnimatedTexture;
-import com.almasb.fxgl.texture.AnimationChannel;
 
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
-
-import static com.almasb.fxgl.dsl.FXGL.image;
 
 
 enum EntityType {
-    PLAYER, BULLET, ENEMY, BACKGROUND
+    PLAYER, BULLET, ENEMY, BACKGROUND, WALL
 }
 
 public class CoronaKillerApp extends GameApplication {
+    /* Setting game settings, such as screen size */
     @Override
     protected void initSettings(GameSettings settings) {
+        settings.setFullScreenFromStart(true);
+        settings.setScaleAffectedOnResize(false);
+
         settings.setWidth(1280);
         settings.setHeight(720);
-        settings.setManualResizeEnabled(true);
+//        settings.setManualResizeEnabled(true);
         settings.setTitle("Corona Killer");
         settings.setVersion("0.1");
         settings.setApplicationMode(ApplicationMode.DEVELOPER);
-
     }
 
+    /**
+     * Initing physics manager
+     */
     @Override
     protected void initPhysics() {
-        FXGL.onCollision(EntityType.ENEMY, EntityType.PLAYER, (enemy, player) -> {
+
+        /* Collisions SOMETHING -> ENEMY */
+
+        FXGL.onCollision(EntityType.PLAYER, EntityType.ENEMY, (player, enemy) -> {
             System.out.println("Deaddddddddddd");
             Sound deathSound = FXGL.getAssetLoader().loadSound("death.wav");
 
@@ -56,23 +51,28 @@ public class CoronaKillerApp extends GameApplication {
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
             bullet.removeFromWorld();
             enemy.removeFromWorld();
-            this.enemy = null;
+            this.bullet = null;
             System.out.println("On Collision");
         });
 
-        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.BACKGROUND, (bullet, background) -> {
+        /* Collisions SOMETHING -> WALL */
+
+        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.WALL, (bullet, wall) -> {
             bullet.removeFromWorld();
+            wall.removeFromWorld();
             this.bullet = null;
         });
 
-        FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.BACKGROUND, (player, background) -> {
-            System.out.println("Start of collision between background and player");
-//            System.out.println(FXGL.getGameWorld().getEntityByID("LEFT", 1));
-            player.getComponent(PlayerComponent.class).stopMovement();
-            System.out.println(player.isColliding(background));
+        FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
+            System.out.println("Start of collision between wall and player");
+//            player.getComponent(PlayerComponent.class).stopMovement();
+            System.out.println(player.isColliding(wall));
         });
     }
 
+    /**
+     * Initing listener for input actions
+     */
     @Override
     protected void initInput() {
         FXGL.getInput().addAction(new UserAction("Left") {
@@ -125,9 +125,8 @@ public class CoronaKillerApp extends GameApplication {
 
 
         FXGL.onKey(KeyCode.SPACE , () -> {
-            this.player.getComponent(PlayerComponent.class).shotProjectile(this.gameFactory);
 //            if(this.bullet == null)
-//                this.bullet = this.gameFactory.newBullet(this.player);
+                this.bullet = this.player.getComponent(PlayerComponent.class).shotProjectile(this.gameFactory);
         });
 
         FXGL.onKey(KeyCode.L , () -> {
@@ -138,17 +137,17 @@ public class CoronaKillerApp extends GameApplication {
         });
     }
 
-    private GameFactory gameFactory = new GameFactory();
-    private Entity player, bullet, enemy, background;
+    private final GameFactory gameFactory = new GameFactory();
+    private Entity player, bullet, enemy;
 
+    /**
+     * Init configurations of the FXGL game
+     */
     @Override
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(gameFactory);
         FXGL.setLevelFromMap("level1.tmx");
-//        FXGL.getGameWorld().setLevel(level);
 
-//        this.background = this.gameFactory.newBackground();
-//        System.out.println(this.background.getBoundingBoxComponent().getHeight());
         player = this.gameFactory.newPlayer();
 
     }

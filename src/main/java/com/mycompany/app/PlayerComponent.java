@@ -2,6 +2,7 @@ package com.mycompany.app;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
+import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;
 
 public class PlayerComponent extends CharacterComponent {
@@ -9,7 +10,7 @@ public class PlayerComponent extends CharacterComponent {
         super("player/" + path + ".png");
     }
 
-    public void shotProjectile(GameFactory gameFactory) {
+    public Entity shotProjectile(GameFactory gameFactory) {
         Point2D origin = this.entity.getCenter();
         System.out.println(origin);
 
@@ -32,6 +33,7 @@ public class PlayerComponent extends CharacterComponent {
 
         ProjectileComponent bullet = new ProjectileComponent(direction, 500);
 
-        gameFactory.newBullet(origin, bullet, "bullet1");
+
+        return gameFactory.newBullet(origin, bullet, "bullet1");
     }
 }

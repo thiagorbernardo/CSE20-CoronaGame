@@ -97,6 +97,9 @@ public abstract class CharacterComponent extends Component {
 //        }
     }
 
+    /**
+     * Method to move player leftwards
+     */
     public void left() {
         if(this.canMove) {
             this.activeDirection = Direction.LEFT;
@@ -104,6 +107,9 @@ public abstract class CharacterComponent extends Component {
         }
     }
 
+    /**
+     * Method to move player rightwards
+     */
     public void right() {
         if(this.canMove) {
             this.activeDirection = Direction.RIGHT;
@@ -112,6 +118,9 @@ public abstract class CharacterComponent extends Component {
 
     }
 
+    /**
+     * Method to move player upwards
+     */
     public void up() {
         if(this.canMove) {
             this.activeDirection = Direction.UP;
@@ -120,6 +129,9 @@ public abstract class CharacterComponent extends Component {
 
     }
 
+    /**
+     * Method to move player downwards
+     */
     public void down() {
         if(this.canMove) {
             this.activeDirection = Direction.DOWN;
@@ -128,6 +140,9 @@ public abstract class CharacterComponent extends Component {
 
     }
 
+    /**
+     * Method to stop movement from player
+     */
     public void stop() {
         this.physics.setVelocityX(0);
         this.physics.setVelocityY(0);

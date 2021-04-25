@@ -53,9 +53,9 @@
 </data>
  </layer>
  <objectgroup id="2" name="Camada de Objetos 1">
-  <object id="6" name="enemy" type="enemy" x="0" y="-0.0909091" width="31.5" height="719.841"/>
-  <object id="7" name="wall" type="enemy" x="31.625" y="687.875" width="1248" height="32"/>
-  <object id="8" name="wall" type="enemy" x="1247.88" y="-0.375" width="32" height="688"/>
-  <object id="10" name="wall" type="enemy" x="31.6364" y="0.0909091" width="1216" height="32"/>
+  <object id="6" name="enemy" type="wall" x="0" y="-0.0909091" width="31.5" height="719.841"/>
+  <object id="7" name="wall" type="wall" x="31.625" y="687.875" width="1248" height="32"/>
+  <object id="8" name="wall" type="wall" x="1247.88" y="-0.375" width="32" height="688"/>
+  <object id="10" name="wall" type="wall" x="31.6364" y="0.0909091" width="1216" height="32"/>
  </objectgroup>
 </map>

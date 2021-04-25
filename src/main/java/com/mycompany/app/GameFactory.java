@@ -3,27 +3,17 @@ package com.mycompany.app;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
-import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
-import com.almasb.fxgl.entity.components.BoundingBoxComponent;
-import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.almasb.fxgl.texture.AnimatedTexture;
-import com.almasb.fxgl.texture.AnimationChannel;
-import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
-
-import java.util.List;
 
 public class GameFactory implements EntityFactory {
     @Spawns("player")
@@ -54,7 +44,6 @@ public class GameFactory implements EntityFactory {
                 .at(origin)
                 .collidable()
                 .with(projectile)
-                .with(new OffscreenCleanComponent())
                 .buildAndAttach();
     }
 
@@ -78,20 +67,22 @@ public class GameFactory implements EntityFactory {
 //                .with(new PlayerComponent("player2"))
                 .build();
     }
-    @Spawns("background")
-    public Entity newBackground() {
-        double w = FXGL.getSettings().getWidth();
-        double h = FXGL.getSettings().getHeight();
-        double thickness = -30;
-        return FXGL.entityBuilder()
-                .type(EntityType.BACKGROUND)
-                .view(FXGL.texture("1.jpg"))
-                .bbox(new HitBox("LEFT",  new Point2D(-thickness, 0), BoundingShape.box(thickness, h)))
-                .bbox(new HitBox("RIGHT", new Point2D(w, 0), BoundingShape.box(thickness, h)))
-                .bbox(new HitBox("TOP",   new Point2D(0, -thickness), BoundingShape.box(w, thickness)))
-                .bbox(new HitBox("BOT",   new Point2D(0, h), BoundingShape.box(w, thickness)))
-                .collidable()
+
+    /**
+     * Method to create a entity wall
+     * @param data tmx tile data
+     * @return a Entity
+     */
+    @Spawns("wall")
+    public Entity newWall(SpawnData data) {
+
+        return FXGL.entityBuilder(data)
+                .type(EntityType.WALL)
+                .at(data.getX(), data.getY())
+                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+                .view(new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.RED))
                 .with(new PhysicsComponent())
-                .buildAndAttach();
+                .collidable()
+                .build();
     }
 }

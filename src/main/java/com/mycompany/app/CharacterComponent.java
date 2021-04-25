@@ -1,6 +1,5 @@
 package com.mycompany.app;
 
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
@@ -11,11 +10,7 @@ import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.image;
 
-enum Direction {
-    RIGHT, LEFT, UP, DOWN
-}
-
-public class PlayerComponent extends Component {
+public abstract class CharacterComponent extends Component {
     private final int width = 34;
     private final int height = 32;
     private final int speed = 300;
@@ -30,8 +25,8 @@ public class PlayerComponent extends Component {
 
     public Direction activeDirection = Direction.DOWN;
 
-    public PlayerComponent(String path) {
-        Image image = image("player/" + path + ".png");
+    public CharacterComponent(String path) {
+        Image image = image(path);
         int qtdImages = 10;
 
         animDown = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 0, 1);
@@ -47,39 +42,6 @@ public class PlayerComponent extends Component {
         texture.loop();
     }
 
-    @Override
-    public void onAdded() {
-        entity.getTransformComponent().setScaleOrigin(new Point2D(16, 16));
-        entity.getViewComponent().addChild(texture);
-    }
-
-    @Override
-    public void onUpdate(double tpf) {
-        AnimationChannel activeAnimationChannel = this.texture.getAnimationChannel();
-//        this.canMove = true;
-
-        if(this.physics.isMoving()) {
-            if (this.activeDirection == Direction.LEFT) {
-                if (activeAnimationChannel != animLeft) {
-                    texture.loopAnimationChannel(animLeft);
-                }
-            } else if (this.activeDirection == Direction.RIGHT) {
-                if (activeAnimationChannel != animRight) {
-                    texture.loopAnimationChannel(animRight);
-                }
-
-            } else if (this.activeDirection == Direction.UP) {
-                if (activeAnimationChannel != animUp) {
-                    texture.loopAnimationChannel(animUp);
-                }
-
-            } else if (this.activeDirection == Direction.DOWN) {
-                if (activeAnimationChannel != animDown) {
-                    texture.loopAnimationChannel(animDown);
-                }
-            }
-        }
-    }
     public void stopMovement(){
 //        this.canMove = false;
         this.stop();
@@ -134,19 +96,15 @@ public class PlayerComponent extends Component {
         this.physics.setVelocityY(0);
 
         if(this.activeDirection == Direction.LEFT){
-                texture.loopAnimationChannel(animLeftIdle);
+            texture.loopAnimationChannel(animLeftIdle);
         } else if(this.activeDirection == Direction.RIGHT){
-                texture.loopAnimationChannel(animRightIdle);
+            texture.loopAnimationChannel(animRightIdle);
 
         } else if(this.activeDirection == Direction.UP){
-                texture.loopAnimationChannel(animUpIdle);
+            texture.loopAnimationChannel(animUpIdle);
 
         } else if(this.activeDirection == Direction.DOWN){
-                texture.loopAnimationChannel(animDownIdle);
+            texture.loopAnimationChannel(animDownIdle);
         }
-    }
-
-    public void shotProjectile() {
-
     }
 }

@@ -47,22 +47,13 @@ public class GameFactory implements EntityFactory {
     }
 
     @Spawns("bullet")
-    public Entity newBullet(Entity player) {
-        Point2D playerCenter = player.getCenter();
-
-//        player.getComponent(PlayerComponent.class).activeDirection
-
-        Point2D direction = playerCenter.subtract(-FXGL.getAppWidth(), playerCenter.getY());
-
-        ProjectileComponent bullet = new ProjectileComponent(direction, 500);
-        bullet.allowRotation(false);
-
+    public Entity newBullet(Point2D origin, ProjectileComponent projectile, String path) {
         return FXGL.entityBuilder()
                 .type(EntityType.BULLET)
-                .viewWithBBox(FXGL.texture("projectiles/bullet1.png"))
-                .at(player.getCenter())
+                .viewWithBBox(FXGL.texture("projectiles/" + path + ".png"))
+                .at(origin)
                 .collidable()
-                .with(bullet)
+                .with(projectile)
                 .with(new OffscreenCleanComponent())
                 .buildAndAttach();
     }

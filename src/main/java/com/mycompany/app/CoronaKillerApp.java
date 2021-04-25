@@ -45,12 +45,12 @@ public class CoronaKillerApp extends GameApplication {
     protected void initPhysics() {
         FXGL.onCollision(EntityType.ENEMY, EntityType.PLAYER, (enemy, player) -> {
             System.out.println("Deaddddddddddd");
-//            Sound deathSound = FXGL.getAssetLoader().loadSound("death.wav");
-//
-//            FXGL.getAudioPlayer().playSound(deathSound);
-//            FXGL.showMessage("Se fodeu!", () -> {
-//                FXGL.getGameController().startNewGame();
-//            });
+            Sound deathSound = FXGL.getAssetLoader().loadSound("death.wav");
+
+            FXGL.getAudioPlayer().playSound(deathSound);
+            FXGL.showMessage("Perdeu!", () -> {
+                FXGL.getGameController().startNewGame();
+            });
         });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
@@ -125,8 +125,9 @@ public class CoronaKillerApp extends GameApplication {
 
 
         FXGL.onKey(KeyCode.SPACE , () -> {
-            if(this.bullet == null)
-                this.bullet = this.gameFactory.newBullet(this.player);
+            this.player.getComponent(PlayerComponent.class).shotProjectile(this.gameFactory);
+//            if(this.bullet == null)
+//                this.bullet = this.gameFactory.newBullet(this.player);
         });
 
         FXGL.onKey(KeyCode.L , () -> {

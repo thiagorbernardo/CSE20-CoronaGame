@@ -10,6 +10,10 @@ import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.image;
 
+enum Direction {
+    RIGHT, LEFT, UP, DOWN
+}
+
 public abstract class CharacterComponent extends Component {
     private final int width = 34;
     private final int height = 32;
@@ -23,7 +27,7 @@ public abstract class CharacterComponent extends Component {
 
     private AnimationChannel animUp, animUpIdle, animDown, animDownIdle, animRight, animRightIdle, animLeft, animLeftIdle;
 
-    public Direction activeDirection = Direction.DOWN;
+    public Direction activeDirection = Direction.RIGHT;
 
     public CharacterComponent(String path) {
         Image image = image(path);
@@ -38,8 +42,41 @@ public abstract class CharacterComponent extends Component {
         animLeft = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 6, 7);
         animLeftIdle = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 7, 7);
 
-        texture = new AnimatedTexture(animDownIdle);
+        texture = new AnimatedTexture(animRightIdle);
         texture.loop();
+    }
+
+    @Override
+    public void onAdded() {
+        entity.getViewComponent().addChild(texture);
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        AnimationChannel activeAnimationChannel = this.texture.getAnimationChannel();
+//        this.canMove = true;
+
+        if(this.physics.isMoving()) {
+            if (this.activeDirection == Direction.LEFT) {
+                if (activeAnimationChannel != animLeft) {
+                    texture.loopAnimationChannel(animLeft);
+                }
+            } else if (this.activeDirection == Direction.RIGHT) {
+                if (activeAnimationChannel != animRight) {
+                    texture.loopAnimationChannel(animRight);
+                }
+
+            } else if (this.activeDirection == Direction.UP) {
+                if (activeAnimationChannel != animUp) {
+                    texture.loopAnimationChannel(animUp);
+                }
+
+            } else if (this.activeDirection == Direction.DOWN) {
+                if (activeAnimationChannel != animDown) {
+                    texture.loopAnimationChannel(animDown);
+                }
+            }
+        }
     }
 
     public void stopMovement(){

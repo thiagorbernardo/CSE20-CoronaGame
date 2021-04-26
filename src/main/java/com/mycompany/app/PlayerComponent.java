@@ -6,8 +6,8 @@ import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;
 
 public class PlayerComponent extends CharacterComponent {
-    public PlayerComponent(String path) {
-        super("player/" + path + ".png");
+    public PlayerComponent(String path, int speed) {
+        super("player/" + path + ".png", speed);
     }
 
     public Entity shotProjectile(GameFactory gameFactory) {

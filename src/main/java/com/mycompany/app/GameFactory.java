@@ -24,15 +24,18 @@ public class GameFactory implements EntityFactory {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.KINEMATIC);
 
+        Rectangle rect = new Rectangle(16, 20, Color.BLUE);
+
+        rect.setX(7);
+        rect.setY(5);
         return FXGL.entityBuilder()
                 .type(EntityType.PLAYER)
                 .at(anchor)
                 .scale(2, 2)
-                .bbox(new HitBox(BoundingShape.box(34, 32)))
-                .view(new Rectangle(34, 32, Color.BLUE))
+                .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-                .with(new PlayerComponent("player"))
+                .with(new PlayerComponent("player", 300))
                 .buildAndAttach();
     }
 
@@ -48,24 +51,23 @@ public class GameFactory implements EntityFactory {
     }
 
     @Spawns("enemy")
-    public Entity newEnemy(SpawnData data) {
+    public Entity newEnemy(Entity player) {
         PhysicsComponent physics = new PhysicsComponent();
-//        physics.setBodyType(BodyType.STATIC);
+        physics.setBodyType(BodyType.STATIC);
 
-        System.out.println(data + "POSITION------------" + data.getX() + ", " + data.getY());
-        System.out.println(data + "WIDTH-----------------" + data.<Integer>get("width") + ", " + data.<Integer>get("height"));
-        return FXGL.entityBuilder(data)
+        Rectangle rect = new Rectangle(16, 20, Color.BLUE);
+
+        rect.setX(7);
+        rect.setY(5);
+        return FXGL.entityBuilder()
                 .type(EntityType.ENEMY)
-                .at(data.getX(), data.getY())
-//                .scale(2, 2)
-//                .at(player.getX() + 100, player.getY() + 100)
-                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-                .view(new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.RED))
-//                .bbox(new HitBox(BoundingShape.box(34, 32)))
+                .at(player.getX() + 100, player.getY() + 100)
+                .scale(2, 2)
+                .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-//                .with(new PlayerComponent("player2"))
-                .build();
+                .with(new PlayerComponent("player2", 300))
+                .buildAndAttach();
     }
 
     /**

@@ -69,9 +69,9 @@ public class CoronaKillerApp extends GameApplication {
             this.bullet = null;
         });
 
-        FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
-            System.out.println("Collision Player -> Wall " + this.i++);
-            player.getComponent(PlayerComponent.class).setCollision(wall);
+        FXGL.onCollision(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
+//            System.out.println("Collision Player -> Wall " + this.i++);
+            player.getComponent(PlayerComponent.class).setCollision();
         });
     }
 
@@ -128,18 +128,19 @@ public class CoronaKillerApp extends GameApplication {
             }
         }, KeyCode.W);
 
+        FXGL.getInput().addAction(new UserAction("Shot") {
+            @Override
+            protected void onActionBegin() {
+                bullet = player.getComponent(PlayerComponent.class).shotProjectile(gameFactory);
+            }
+        }, KeyCode.SPACE);
 
-        FXGL.onKey(KeyCode.SPACE , () -> {
-//            if(this.bullet == null)
-                this.bullet = this.player.getComponent(PlayerComponent.class).shotProjectile(this.gameFactory);
-        });
-
-        FXGL.onKey(KeyCode.L , () -> {
-//            if(this.enemy == null)
-//                System.out.println("fix");
-//                this.enemy = this.gameFactory.newEnemy();
-                FXGL.spawn("enemy");
-        });
+        FXGL.getInput().addAction(new UserAction("Enemy") {
+            @Override
+            protected void onActionBegin() {
+                enemy = gameFactory.newEnemy(player);
+            }
+        }, KeyCode.L);
     }
 
     private final GameFactory gameFactory = new GameFactory();

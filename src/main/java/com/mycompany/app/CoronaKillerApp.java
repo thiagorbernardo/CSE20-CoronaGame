@@ -12,19 +12,18 @@ import javafx.scene.input.KeyCode;
 
 
 enum EntityType {
-    PLAYER, BULLET, ENEMY, BACKGROUND, WALL
+    PLAYER, BULLET, ENEMY, BACKGROUND, WALL, SCREEN
 }
 
 public class CoronaKillerApp extends GameApplication {
     /* Setting game settings, such as screen size */
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setFullScreenFromStart(true);
-        settings.setScaleAffectedOnResize(false);
+//        settings.setFullScreenAllowed(true);
+//        settings.setFullScreenFromStart(true);
 
         settings.setWidth(1280);
         settings.setHeight(720);
-//        settings.setManualResizeEnabled(true);
         settings.setTitle("Corona Killer");
         settings.setVersion("0.1");
         settings.setApplicationMode(ApplicationMode.DEVELOPER);
@@ -55,6 +54,13 @@ public class CoronaKillerApp extends GameApplication {
             System.out.println("On Collision");
         });
 
+        /* Collisions SOMETHING -> SCREEN */
+
+        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.SCREEN, (bullet, screen) -> {
+            System.out.println("Bullet hit screen");
+            bullet.removeFromWorld();
+        });
+
         /* Collisions SOMETHING -> WALL */
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.WALL, (bullet, wall) -> {
@@ -64,9 +70,8 @@ public class CoronaKillerApp extends GameApplication {
         });
 
         FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
-            System.out.println("Start of collision between wall and player");
-//            player.getComponent(PlayerComponent.class).stopMovement();
-            System.out.println(player.isColliding(wall));
+            System.out.println("Collision Player -> Wall " + this.i++);
+            player.getComponent(PlayerComponent.class).setCollision(wall);
         });
     }
 
@@ -139,6 +144,8 @@ public class CoronaKillerApp extends GameApplication {
 
     private final GameFactory gameFactory = new GameFactory();
     private Entity player, bullet, enemy;
+    private int i;
+
 
     /**
      * Init configurations of the FXGL game
@@ -148,6 +155,7 @@ public class CoronaKillerApp extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(gameFactory);
         FXGL.setLevelFromMap("level1.tmx");
 
+        this.gameFactory.newWallScreen();
         player = this.gameFactory.newPlayer();
 
     }

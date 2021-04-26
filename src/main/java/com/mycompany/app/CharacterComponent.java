@@ -1,6 +1,8 @@
 package com.mycompany.app;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
@@ -19,9 +21,9 @@ public abstract class CharacterComponent extends Component {
     private final int height = 32;
     private final int speed = 300;
 
-    private boolean canMove = true;
-
     private PhysicsComponent physics;
+
+    private Entity isCollidingWith = null;
 
     private AnimatedTexture texture;
 
@@ -55,89 +57,59 @@ public abstract class CharacterComponent extends Component {
     public void onUpdate(double tpf) {
         AnimationChannel activeAnimationChannel = this.texture.getAnimationChannel();
 //        this.canMove = true;
-
+//
         if(this.physics.isMoving()) {
-            if (this.activeDirection == Direction.LEFT) {
-                if (activeAnimationChannel != animLeft) {
-                    texture.loopAnimationChannel(animLeft);
-                }
-            } else if (this.activeDirection == Direction.RIGHT) {
-                if (activeAnimationChannel != animRight) {
-                    texture.loopAnimationChannel(animRight);
-                }
-
-            } else if (this.activeDirection == Direction.UP) {
-                if (activeAnimationChannel != animUp) {
-                    texture.loopAnimationChannel(animUp);
-                }
-
-            } else if (this.activeDirection == Direction.DOWN) {
-                if (activeAnimationChannel != animDown) {
-                    texture.loopAnimationChannel(animDown);
-                }
+            switch (this.activeDirection) {
+                case LEFT:
+                    if (activeAnimationChannel != animLeft)
+                        texture.loopAnimationChannel(animLeft);
+                    break;
+                case RIGHT:
+                    if (activeAnimationChannel != animRight)
+                        texture.loopAnimationChannel(animRight);
+                    break;
+                case UP:
+                    if (activeAnimationChannel != animUp)
+                        texture.loopAnimationChannel(animUp);
+                    break;
+                case DOWN:
+                    if (activeAnimationChannel != animDown)
+                        texture.loopAnimationChannel(animDown);
+                    break;
             }
         }
-    }
-
-    public void stopMovement(){
-//        this.canMove = false;
-        this.stop();
-
-
-//        if(this.activeDirection == Direction.LEFT){
-//            this.right();
-//        } else if(this.activeDirection == Direction.RIGHT){
-//            this.left();
-//
-//        } else if(this.activeDirection == Direction.UP){
-//            this.down();
-//
-//        } else if(this.activeDirection == Direction.DOWN){
-//            this.up();
-//        }
     }
 
     /**
      * Method to move player leftwards
      */
     public void left() {
-        if(this.canMove) {
             this.activeDirection = Direction.LEFT;
             this.physics.setVelocityX(-this.speed);
-        }
     }
 
     /**
      * Method to move player rightwards
      */
     public void right() {
-        if(this.canMove) {
             this.activeDirection = Direction.RIGHT;
             this.physics.setVelocityX(this.speed);
-        }
-
     }
 
     /**
      * Method to move player upwards
      */
     public void up() {
-        if(this.canMove) {
             this.activeDirection = Direction.UP;
             this.physics.setVelocityY(-this.speed);
-        }
-
     }
 
     /**
      * Method to move player downwards
      */
     public void down() {
-        if(this.canMove) {
             this.activeDirection = Direction.DOWN;
             this.physics.setVelocityY(300);
-        }
-
     }
 
     /**
@@ -159,4 +131,32 @@ public abstract class CharacterComponent extends Component {
             texture.loopAnimationChannel(animDownIdle);
         }
     }
+
+    public void setCollision(Entity object) {
+            if(this.entity.isColliding(object)) {
+                this.stop();
+                switch (this.activeDirection) {
+                    case LEFT:
+                        this.physics.overwritePosition(this.entity.getPosition().add(5, 0));
+                        this.activeDirection = Direction.RIGHT;
+//                        this.isCollidingWith = null;
+                        break;
+                    case RIGHT:
+                        this.physics.overwritePosition(this.entity.getPosition().add(-5, 0));
+                        this.activeDirection = Direction.LEFT;
+//                        this.isCollidingWith = null;
+                        break;
+                    case UP:
+                        this.physics.overwritePosition(this.entity.getPosition().add(0, 5));
+                        this.activeDirection = Direction.DOWN;
+//                        this.isCollidingWith = null;
+                        break;
+                    case DOWN:
+                        this.physics.overwritePosition(this.entity.getPosition().add(0, -5));
+                        this.activeDirection = Direction.UP;
+//                        this.isCollidingWith = null;
+                        break;
+                }
+            }
+        }
 }

@@ -29,7 +29,7 @@ public class GameFactory implements EntityFactory {
                 .at(anchor)
                 .scale(2, 2)
                 .bbox(new HitBox(BoundingShape.box(34, 32)))
-                .view(new Rectangle(34, 32, Color.RED))
+                .view(new Rectangle(34, 32, Color.BLUE))
                 .with(physics)
                 .collidable()
                 .with(new PlayerComponent("player"))
@@ -84,5 +84,13 @@ public class GameFactory implements EntityFactory {
                 .with(new PhysicsComponent())
                 .collidable()
                 .build();
+    }
+
+    @Spawns("screen")
+    public Entity newWallScreen() {
+        return FXGL.entityBuilder()
+                .type(EntityType.SCREEN)
+                .collidable()
+                .buildScreenBoundsAndAttach(-5);
     }
 }

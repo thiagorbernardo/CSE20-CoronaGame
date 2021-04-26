@@ -12,7 +12,6 @@ public class PlayerComponent extends CharacterComponent {
 
     public Entity shotProjectile(GameFactory gameFactory) {
         Point2D origin = this.entity.getCenter();
-        System.out.println(origin);
 
         Point2D direction;
 

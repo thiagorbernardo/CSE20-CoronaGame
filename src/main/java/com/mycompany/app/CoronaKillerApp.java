@@ -34,6 +34,9 @@ public class CoronaKillerApp extends GameApplication {
      */
     @Override
     protected void initPhysics() {
+        FXGL.getPhysicsWorld().setGravity(0, 0);
+
+        /* Collisions SOMETHING -> PLAYER */
 
         /* Collisions SOMETHING -> ENEMY */
 
@@ -46,6 +49,7 @@ public class CoronaKillerApp extends GameApplication {
                 FXGL.getGameController().startNewGame();
             });
         });
+
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
             bullet.removeFromWorld();
@@ -70,8 +74,8 @@ public class CoronaKillerApp extends GameApplication {
         });
 
         FXGL.onCollision(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
-//            System.out.println("Collision Player -> Wall " + this.i++);
-            player.getComponent(PlayerComponent.class).setCollision();
+            System.out.println("Collision Player -> Wall " + this.i++);
+//            player.getComponent(PlayerComponent.class).setCollision();
         });
     }
 
@@ -100,8 +104,7 @@ public class CoronaKillerApp extends GameApplication {
 
             @Override
             protected void onActionEnd() {
-                player.getComponent(PlayerComponent.class).stop();
-            }
+                player.getComponent(PlayerComponent.class).stop(); }
         }, KeyCode.D);
 
         FXGL.getInput().addAction(new UserAction("Down") {
@@ -157,7 +160,10 @@ public class CoronaKillerApp extends GameApplication {
         FXGL.setLevelFromMap("level1.tmx");
 
         this.gameFactory.newWallScreen();
-        player = this.gameFactory.newPlayer();
+        this.player = this.gameFactory.newPlayer();
+        this.enemy = this.gameFactory.newEnemy(this.player);
+
+        this.enemy.getComponent(Enemy.class).followPlayer(this.player);
 
     }
 

@@ -53,7 +53,7 @@ public class GameFactory implements EntityFactory {
     @Spawns("enemy")
     public Entity newEnemy(Entity player) {
         PhysicsComponent physics = new PhysicsComponent();
-        physics.setBodyType(BodyType.STATIC);
+        physics.setBodyType(BodyType.KINEMATIC);
 
         Rectangle rect = new Rectangle(16, 20, Color.BLUE);
 
@@ -61,12 +61,12 @@ public class GameFactory implements EntityFactory {
         rect.setY(5);
         return FXGL.entityBuilder()
                 .type(EntityType.ENEMY)
-                .at(player.getX() + 100, player.getY() + 100)
+                .at(player.getX() + 100, player.getY())
                 .scale(2, 2)
                 .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-                .with(new PlayerComponent("player2", 300))
+                .with(new Enemy("player2", 300))
                 .buildAndAttach();
     }
 
@@ -93,6 +93,6 @@ public class GameFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(EntityType.SCREEN)
                 .collidable()
-                .buildScreenBoundsAndAttach(-5);
+                .buildScreenBoundsAndAttach(10);
     }
 }

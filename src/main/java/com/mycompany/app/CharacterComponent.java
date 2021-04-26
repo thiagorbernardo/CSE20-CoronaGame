@@ -24,7 +24,7 @@ public abstract class CharacterComponent extends Component {
     private final int height = 32;
     private int speed;
 
-    private PhysicsComponent physics;
+    protected PhysicsComponent physics;
 
     private AnimatedTexture texture;
 
@@ -61,26 +61,29 @@ public abstract class CharacterComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        AnimationChannel activeAnimationChannel = this.texture.getAnimationChannel();
+        setTexture();
+    }
 
+    protected void setTexture() {
+        AnimationChannel activeAnimationChannel = this.texture.getAnimationChannel();
         if (this.physics.isMoving()) {
             switch (this.activeDirection) {
-            case LEFT:
-                if (activeAnimationChannel != animLeft)
-                    texture.loopAnimationChannel(animLeft);
-                break;
-            case RIGHT:
-                if (activeAnimationChannel != animRight)
-                    texture.loopAnimationChannel(animRight);
-                break;
-            case UP:
-                if (activeAnimationChannel != animUp)
-                    texture.loopAnimationChannel(animUp);
-                break;
-            case DOWN:
-                if (activeAnimationChannel != animDown)
-                    texture.loopAnimationChannel(animDown);
-                break;
+                case LEFT:
+                    if (activeAnimationChannel != animLeft)
+                        texture.loopAnimationChannel(animLeft);
+                    break;
+                case RIGHT:
+                    if (activeAnimationChannel != animRight)
+                        texture.loopAnimationChannel(animRight);
+                    break;
+                case UP:
+                    if (activeAnimationChannel != animUp)
+                        texture.loopAnimationChannel(animUp);
+                    break;
+                case DOWN:
+                    if (activeAnimationChannel != animDown)
+                        texture.loopAnimationChannel(animDown);
+                    break;
             }
         }
     }

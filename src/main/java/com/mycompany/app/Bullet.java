@@ -5,12 +5,12 @@ import javafx.geometry.Point2D;
 
 import static com.almasb.fxgl.dsl.FXGL.image;
 
-public class BulletComponent extends Component {
+public class Bullet extends Component {
     private double speed;
     private double xDirection;
     private double yDirection;
 
-    public BulletComponent(Point2D destiny, double speed) {
+    public Bullet(Point2D destiny, double speed) {
         this.speed = speed;
         this.xDirection = destiny.getX();
         this.yDirection = destiny.getY();

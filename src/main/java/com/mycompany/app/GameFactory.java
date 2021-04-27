@@ -1,8 +1,6 @@
 package com.mycompany.app;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
-import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -33,18 +31,19 @@ public class GameFactory implements EntityFactory {
                 .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-                .with(new PlayerComponent("player", 300, 1))
+                .with(new Player("player", 300, 1))
                 .buildAndAttach();
     }
 
     @Spawns("bullet")
-    public Entity newBullet(Point2D origin, ProjectileComponent projectile, String path) {
+    public Entity newBullet(Point2D origin, Point2D destiny, String path) {
         return FXGL.entityBuilder()
                 .type(EntityType.BULLET)
                 .viewWithBBox(FXGL.texture("projectiles/" + path + ".png"))
                 .at(origin)
                 .collidable()
-                .with(projectile)
+//                .with(projectile)
+                .with(new Bullet(destiny, 400))
                 .buildAndAttach();
     }
 

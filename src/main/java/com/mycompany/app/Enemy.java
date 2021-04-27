@@ -22,20 +22,21 @@ public class Enemy extends CharacterComponent {
             double y = (this.player.getY() - this.entity.getY());
 
             if(x < 0){
-                this.physics.setVelocityX(-this.speed);
+                this.left();
             }else if (x > 0){
-                this.physics.setVelocityX(this.speed);
+                this.right();
             }else{
                 this.physics.setVelocityX(0);
+//                this.setIdleAnimation();
             }
             if(y < 0){
-                this.physics.setVelocityY(-this.speed);
+                this.up();
             }else if (y > 0){
-                this.physics.setVelocityY(this.speed);
+                this.down();
             }else{
                 this.physics.setVelocityY(0);
+//                this.setIdleAnimation();
             }
-
         }
     }
 

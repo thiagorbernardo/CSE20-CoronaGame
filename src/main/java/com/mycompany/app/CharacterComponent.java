@@ -127,6 +127,10 @@ public abstract class CharacterComponent extends Component {
         this.physics.setVelocityX(0);
         this.physics.setVelocityY(0);
 
+        this.setIdleAnimation();
+    }
+
+    protected void setIdleAnimation() {
         if (this.activeDirection == Direction.LEFT) {
             texture.loopAnimationChannel(animLeftIdle);
         } else if (this.activeDirection == Direction.RIGHT) {

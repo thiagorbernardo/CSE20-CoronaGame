@@ -57,8 +57,8 @@ public class GameFactory implements EntityFactory {
 
         return FXGL.entityBuilder()
                 .type(EntityType.ENEMY)
-                .at(player.getX() + 100, player.getY())
-                .scale(2, 2)
+                .at(700, 500)
+                .scale(1.5, 1.5)
                 .viewWithBBox(rect)
                 .with(physics)
                 .collidable()

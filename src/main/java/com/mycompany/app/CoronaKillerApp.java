@@ -12,7 +12,7 @@ import javafx.scene.input.KeyCode;
 
 
 enum EntityType {
-    PLAYER, BULLET, ENEMY, BACKGROUND, WALL, SCREEN
+    PLAYER, BULLET, ENEMY, BACKGROUND, WALL, SCREEN, BOX
 }
 
 public class CoronaKillerApp extends GameApplication {
@@ -69,13 +69,13 @@ public class CoronaKillerApp extends GameApplication {
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.WALL, (bullet, wall) -> {
             bullet.removeFromWorld();
-            wall.removeFromWorld();
+            //wall.removeFromWorld();
             this.bullet = null;
         });
 
         FXGL.onCollision(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
             System.out.println("Collision Player -> Wall " + this.i++);
-//            player.getComponent(PlayerComponent.class).setCollision();
+            //player.getComponent(PlayerComponent.class).setCollision();
         });
     }
 
@@ -142,12 +142,14 @@ public class CoronaKillerApp extends GameApplication {
             @Override
             protected void onActionBegin() {
                 enemy = gameFactory.newEnemy(player);
+                enemy.getComponent(Enemy.class).followPlayer(player);
             }
         }, KeyCode.L);
+
     }
 
     private final GameFactory gameFactory = new GameFactory();
-    private Entity player, bullet, enemy;
+    private Entity player, bullet, enemy, box;
     private int i;
 
 
@@ -162,7 +164,7 @@ public class CoronaKillerApp extends GameApplication {
         this.gameFactory.newWallScreen();
         this.player = this.gameFactory.newPlayer();
         this.enemy = this.gameFactory.newEnemy(this.player);
-
+        this.box = this.gameFactory.newBox();
         this.enemy.getComponent(Enemy.class).followPlayer(this.player);
 
     }

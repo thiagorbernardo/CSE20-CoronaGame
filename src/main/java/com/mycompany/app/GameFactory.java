@@ -22,12 +22,10 @@ public class GameFactory implements EntityFactory {
         Point2D anchor = new Point2D(300, 300);
 
         PhysicsComponent physics = new PhysicsComponent();
-        physics.setBodyType(BodyType.KINEMATIC);
+        physics.setBodyType(BodyType.DYNAMIC);
 
-        Rectangle rect = new Rectangle(16, 20, Color.BLUE);
+        Rectangle rect = new Rectangle(34, 32, Color.BLUE);
 
-        rect.setX(7);
-        rect.setY(5);
         return FXGL.entityBuilder()
                 .type(EntityType.PLAYER)
                 .at(anchor)
@@ -53,12 +51,10 @@ public class GameFactory implements EntityFactory {
     @Spawns("enemy")
     public Entity newEnemy(Entity player) {
         PhysicsComponent physics = new PhysicsComponent();
-        physics.setBodyType(BodyType.KINEMATIC);
+        physics.setBodyType(BodyType.DYNAMIC);
 
-        Rectangle rect = new Rectangle(16, 20, Color.BLUE);
+        Rectangle rect = new Rectangle(34, 32, Color.BLUE);
 
-        rect.setX(7);
-        rect.setY(5);
         return FXGL.entityBuilder()
                 .type(EntityType.ENEMY)
                 .at(player.getX() + 100, player.getY())
@@ -66,7 +62,7 @@ public class GameFactory implements EntityFactory {
                 .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-                .with(new Enemy("player2", 300))
+                .with(new Enemy("player2", 100))
                 .buildAndAttach();
     }
 
@@ -82,7 +78,7 @@ public class GameFactory implements EntityFactory {
                 .type(EntityType.WALL)
                 .at(data.getX(), data.getY())
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-                .view(new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.RED))
+//                .view(new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.RED))
                 .with(new PhysicsComponent())
                 .collidable()
                 .build();
@@ -94,5 +90,22 @@ public class GameFactory implements EntityFactory {
                 .type(EntityType.SCREEN)
                 .collidable()
                 .buildScreenBoundsAndAttach(10);
+    }
+    @Spawns("box")
+    public Entity newBox() {
+        PhysicsComponent physics = new PhysicsComponent();
+        physics.setBodyType(BodyType.STATIC);
+
+        Rectangle rect = new Rectangle(34, 32, Color.BLUE);
+
+        return FXGL.entityBuilder()
+                .type(EntityType.BOX)
+                .at(400, 400)
+                .viewWithBBox(rect)
+                .with(physics)
+                .collidable()
+                .buildAndAttach();
+
+
     }
 }

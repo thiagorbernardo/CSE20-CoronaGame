@@ -22,7 +22,7 @@ enum Direction {
 public abstract class CharacterComponent extends Component {
     private final int width = 34;
     private final int height = 32;
-    private int speed;
+    protected int speed;
 
     protected PhysicsComponent physics;
 
@@ -117,7 +117,7 @@ public abstract class CharacterComponent extends Component {
      */
     public void down() {
         this.activeDirection = Direction.DOWN;
-        this.physics.setVelocityY(300);
+        this.physics.setVelocityY(this.speed);
     }
 
     /**

@@ -24,6 +24,8 @@ public abstract class CharacterComponent extends Component {
     private final int height = 32;
     protected int speed;
 
+    protected int life;
+
     protected PhysicsComponent physics;
 
     private AnimatedTexture texture;
@@ -35,11 +37,12 @@ public abstract class CharacterComponent extends Component {
 
     protected Direction activeDirection = Direction.RIGHT;
 
-    public CharacterComponent(String path, int speed) {
+    public CharacterComponent(String path, int speed, int life) {
         Image image = image(path);
         int qtdImages = 10;
 
         this.speed = speed;
+        this.life = life;
 
         this.animDown = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 0, 1);
         this.animDownIdle = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 8, 8);

@@ -33,7 +33,7 @@ public class GameFactory implements EntityFactory {
                 .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-                .with(new PlayerComponent("player", 300))
+                .with(new PlayerComponent("player", 300, 1))
                 .buildAndAttach();
     }
 
@@ -62,7 +62,7 @@ public class GameFactory implements EntityFactory {
                 .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-                .with(new Enemy("player2", 100))
+                .with(new Enemy("player2", 100, 1))
                 .buildAndAttach();
     }
 

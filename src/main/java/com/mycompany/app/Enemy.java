@@ -8,8 +8,8 @@ import javafx.geometry.Point2D;
 public class Enemy extends CharacterComponent {
     private Entity player;
 
-    public Enemy(String path, int speed) {
-        super("player/" + path + ".png", speed);
+    public Enemy(String path, int speed, int life) {
+        super("player/" + path + ".png", speed, life);
     }
 
     @Override

@@ -19,7 +19,7 @@ enum Direction {
     STOP
 }
 
-public abstract class CharacterComponent extends Component {
+public abstract class Character extends Component {
     private final int width = 34;
     private final int height = 32;
     protected int speed;
@@ -37,7 +37,7 @@ public abstract class CharacterComponent extends Component {
 
     protected Direction activeDirection = Direction.RIGHT;
 
-    public CharacterComponent(String path, int speed, int life) {
+    public Character(String path, int speed, int life) {
         Image image = image(path);
         int qtdImages = 10;
 
@@ -132,6 +132,13 @@ public abstract class CharacterComponent extends Component {
     public void stop() {
         this.physics.setVelocityX(0);
         this.physics.setVelocityY(0);
+    }
+
+    /**
+     * Character suffer damage
+     */
+    public int damage(){
+      return this.life--;
     }
 
     protected void setIdleAnimation() {

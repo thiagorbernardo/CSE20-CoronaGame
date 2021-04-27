@@ -31,9 +31,6 @@ public class PlayerComponent extends CharacterComponent {
                 break;
         }
 
-        ProjectileComponent bullet = new ProjectileComponent(direction, 500);
-
-
-        return gameFactory.newBullet(origin, bullet, "bullet1");
+        return gameFactory.newBullet(origin, direction, "bullet1");
     }
 }

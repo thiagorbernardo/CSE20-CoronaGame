@@ -91,6 +91,8 @@ public class GameFactory implements EntityFactory {
                 .collidable()
                 .buildScreenBoundsAndAttach(10);
     }
+
+    //TODO: Only for tests
     @Spawns("box")
     public Entity newBox() {
         PhysicsComponent physics = new PhysicsComponent();

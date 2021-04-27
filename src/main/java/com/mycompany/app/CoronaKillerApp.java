@@ -41,7 +41,6 @@ public class CoronaKillerApp extends GameApplication {
         /* Collisions SOMETHING -> ENEMY */
 
         FXGL.onCollision(EntityType.PLAYER, EntityType.ENEMY, (player, enemy) -> {
-            System.out.println("Deaddddddddddd");
             Sound deathSound = FXGL.getAssetLoader().loadSound("death.wav");
 
             FXGL.getAudioPlayer().playSound(deathSound);
@@ -55,17 +54,20 @@ public class CoronaKillerApp extends GameApplication {
             bullet.removeFromWorld();
             enemy.removeFromWorld();
             this.bullet = null;
-            System.out.println("On Collision");
+            System.out.println("Hitting enemy");
         });
 
         /* Collisions SOMETHING -> SCREEN */
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.SCREEN, (bullet, screen) -> {
-            System.out.println("Bullet hit screen");
             bullet.removeFromWorld();
         });
 
         /* Collisions SOMETHING -> WALL */
+
+        FXGL.onCollision(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
+            System.out.println("Enemy hitting wall - change directions?");
+        });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.WALL, (bullet, wall) -> {
             bullet.removeFromWorld();
@@ -74,8 +76,8 @@ public class CoronaKillerApp extends GameApplication {
         });
 
         FXGL.onCollision(EntityType.PLAYER, EntityType.WALL, (player, wall) -> {
-            System.out.println("Collision Player -> Wall " + this.i++);
-            //player.getComponent(PlayerComponent.class).setCollision();
+//            System.out.println("Collision Player -> Wall " + this.i++);
+//            player.getComponent(PlayerComponent.class).setCollision();
         });
     }
 
@@ -164,7 +166,7 @@ public class CoronaKillerApp extends GameApplication {
         this.gameFactory.newWallScreen();
         this.player = this.gameFactory.newPlayer();
         this.enemy = this.gameFactory.newEnemy(this.player);
-        this.box = this.gameFactory.newBox();
+//        this.box = this.gameFactory.newBox();
         this.enemy.getComponent(Enemy.class).followPlayer(this.player);
 
     }

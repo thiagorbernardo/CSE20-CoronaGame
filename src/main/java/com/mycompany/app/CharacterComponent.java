@@ -33,7 +33,7 @@ public abstract class CharacterComponent extends Component {
             animRight, animRightIdle,
             animLeft, animLeftIdle;
 
-    public Direction activeDirection = Direction.RIGHT;
+    protected Direction activeDirection = Direction.RIGHT;
 
     public CharacterComponent(String path, int speed) {
         Image image = image(path);
@@ -62,6 +62,9 @@ public abstract class CharacterComponent extends Component {
     @Override
     public void onUpdate(double tpf) {
         setTexture();
+        if(!this.physics.isMoving()){
+            this.setIdleAnimation();
+        }
     }
 
     protected void setTexture() {
@@ -126,8 +129,6 @@ public abstract class CharacterComponent extends Component {
     public void stop() {
         this.physics.setVelocityX(0);
         this.physics.setVelocityY(0);
-
-        this.setIdleAnimation();
     }
 
     protected void setIdleAnimation() {

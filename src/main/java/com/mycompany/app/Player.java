@@ -1,13 +1,14 @@
 package com.mycompany.app;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;
 
-public class PlayerComponent extends CharacterComponent {
+public class Player extends Character {
 
-    public PlayerComponent(String path, int speed, int life) {
+    private int points = 0;
+
+    public Player(String path, int speed, int life) {
         super("player/" + path + ".png", speed, life);
     }
 
@@ -32,5 +33,9 @@ public class PlayerComponent extends CharacterComponent {
         }
 
         return gameFactory.newBullet(origin, direction, "bullet1");
+    }
+
+    public double hit(){
+        return this.points += 10;
     }
 }

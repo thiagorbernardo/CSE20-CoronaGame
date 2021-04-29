@@ -7,10 +7,11 @@ import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
-
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import java.util.Random;
+import javafx.util.Duration;
 
 enum EntityType {
     PLAYER, BULLET, ENEMY, BACKGROUND, WALL, SCREEN, BOX
@@ -154,11 +155,10 @@ public class CoronaKillerApp extends GameApplication {
         FXGL.getInput().addAction(new UserAction("Enemy") {
             @Override
             protected void onActionBegin() {
-                enemy = gameFactory.newEnemy(player);
+                enemy = gameFactory.newEnemy(player, 700, 500);
                 enemy.getComponent(Enemy.class).followPlayer(player);
             }
         }, KeyCode.L);
-
     }
 
     @Override
@@ -187,10 +187,37 @@ public class CoronaKillerApp extends GameApplication {
 
         this.gameFactory.newWallScreen();
         this.player = this.gameFactory.newPlayer();
-        this.enemy = this.gameFactory.newEnemy(this.player);
+        this.enemy = this.gameFactory.newEnemy(this.player, 700, 500);
         // this.box = this.gameFactory.newBox();
         this.enemy.getComponent(Enemy.class).followPlayer(this.player);
+        Random gerador = new Random();
+        FXGL.run(() -> {
+            
+               switch (gerador.nextInt(4)){
+                   case 0:
+                       enemy = gameFactory.newEnemy(player, 700, 500);
+                       enemy.getComponent(Enemy.class).followPlayer(player);
+                       break;
 
+                   case 1:
+                        enemy = gameFactory.newEnemy(player, 200, 500);
+                        enemy.getComponent(Enemy.class).followPlayer(player);
+                        break;
+
+                   case 2:
+                       enemy = gameFactory.newEnemy(player, 200, 200);
+                       enemy.getComponent(Enemy.class).followPlayer(player);
+                       break;
+
+                   case 3:
+                       enemy = gameFactory.newEnemy(player, 700, 200);
+                       enemy.getComponent(Enemy.class).followPlayer(player);
+                       break;
+               }
+
+            System.out.println("tempo");
+
+        }, Duration.seconds(2));
     }
 
     public static void main(String[] args) {

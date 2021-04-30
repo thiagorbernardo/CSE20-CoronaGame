@@ -1,12 +1,13 @@
 package com.mycompany.app;
 
 import com.almasb.fxgl.entity.Entity;
+import javafx.geometry.Point2D;
 
 public class Enemy extends Character {
     private Entity player;
 
     public Enemy(String path, int speed, int life) {
-        super("player/" + path + ".png", speed, life);
+        super("player/" + path + ".png", 50,48, speed, life);
     }
 
     @Override
@@ -18,8 +19,10 @@ public class Enemy extends Character {
     }
 
     private void chasingMovement() {
-        double x = (this.player.getX() - this.entity.getX());
-        double y = (this.player.getY() - this.entity.getY());
+        Point2D playerCenter = this.player.getCenter();
+        Point2D enemyCenter = this.entity.getCenter();
+        double x = (playerCenter.getX() - enemyCenter.getX());
+        double y = (playerCenter.getY() - enemyCenter.getY());
 
 //        System.out.println("X :" + this.physics.isMovingX() + " Y: " + this.physics.isMovingY());
 

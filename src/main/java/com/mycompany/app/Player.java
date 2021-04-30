@@ -9,7 +9,7 @@ public class Player extends Character {
     private int points = 0;
 
     public Player(String path, int speed, int life) {
-        super("player/" + path + ".png", speed, life);
+        super("player/" + path + ".png", 34, 32, speed, life);
     }
 
     public Entity shotProjectile(GameFactory gameFactory) {

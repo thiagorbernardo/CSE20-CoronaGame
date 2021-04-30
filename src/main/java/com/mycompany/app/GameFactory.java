@@ -22,7 +22,7 @@ public class GameFactory implements EntityFactory {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
 
-        Rectangle rect = new Rectangle(34, 32, Color.BLUE);
+        Rectangle rect = new Rectangle(25, 25, Color.BLUE);
 
         return FXGL.entityBuilder()
                 .type(EntityType.PLAYER)
@@ -31,7 +31,7 @@ public class GameFactory implements EntityFactory {
                 .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-                .with(new Player("player", 300, 0))
+                .with(new Player("player", 200, 0))
                 .buildAndAttach();
     }
 
@@ -52,16 +52,16 @@ public class GameFactory implements EntityFactory {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
 
-        Rectangle rect = new Rectangle(34, 32, Color.BLUE);
+        Rectangle rect = new Rectangle(40, 40, Color.BLUE);
 
         return FXGL.entityBuilder()
                 .type(EntityType.ENEMY)
                 .at(x, y) //700 500
-                .scale(1.5, 1.5)
+                .scale(1.0, 1.0)
                 .viewWithBBox(rect)
                 .with(physics)
                 .collidable()
-                .with(new Enemy("player2", 100, 1))
+                .with(new Enemy("enemy1", 100, 1))
                 .buildAndAttach();
     }
 

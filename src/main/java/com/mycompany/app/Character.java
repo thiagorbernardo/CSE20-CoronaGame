@@ -20,8 +20,8 @@ enum Direction {
 }
 
 public abstract class Character extends Component {
-    private final int width = 34;
-    private final int height = 32;
+    private int width;
+    private int height;
     protected int speed;
 
     protected int life;
@@ -37,21 +37,25 @@ public abstract class Character extends Component {
 
     protected Direction activeDirection = Direction.RIGHT;
 
-    public Character(String path, int speed, int life) {
+    public Character(String path, int width, int height, int speed, int life) {
         Image image = image(path);
         int qtdImages = 10;
+        Duration animationTime = Duration.seconds(0.5);
 
+        this.width = width;
+        this.height = height;
         this.speed = speed;
         this.life = life;
 
-        this.animDown = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 0, 1);
-        this.animDownIdle = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 8, 8);
-        this.animUp = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 2, 3);
-        this.animUpIdle = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 9, 9);
-        this.animRight = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 4, 5);
-        this.animRightIdle = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 5, 5);
-        this.animLeft = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 6, 7);
-        this.animLeftIdle = new AnimationChannel(image, qtdImages, this.width, this.height, Duration.seconds(1), 7, 7);
+
+        this.animDown = new AnimationChannel(image, qtdImages, this.width, this.height, animationTime, 0, 1);
+        this.animDownIdle = new AnimationChannel(image, qtdImages, this.width, this.height, animationTime, 8, 8);
+        this.animUp = new AnimationChannel(image, qtdImages, this.width, this.height, animationTime, 2, 3);
+        this.animUpIdle = new AnimationChannel(image, qtdImages, this.width, this.height, animationTime, 9, 9);
+        this.animRight = new AnimationChannel(image, qtdImages, this.width, this.height, animationTime, 4, 5);
+        this.animRightIdle = new AnimationChannel(image, qtdImages, this.width, this.height, animationTime, 5, 5);
+        this.animLeft = new AnimationChannel(image, qtdImages, this.width, this.height, animationTime, 6, 7);
+        this.animLeftIdle = new AnimationChannel(image, qtdImages, this.width, this.height, animationTime, 7, 7);
 
         this.texture = new AnimatedTexture(this.animRightIdle);
         this.texture.loop();

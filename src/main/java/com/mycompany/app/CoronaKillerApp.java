@@ -24,7 +24,7 @@ public class CoronaKillerApp extends GameApplication {
         // settings.setFullScreenAllowed(true);
         // settings.setFullScreenFromStart(true);
 
-        settings.setWidth(1280);
+        settings.setWidth(1296);
         settings.setHeight(720);
         settings.setTitle("Corona Killer");
         settings.setVersion("0.1");
@@ -183,41 +183,43 @@ public class CoronaKillerApp extends GameApplication {
     @Override
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(gameFactory);
-        FXGL.setLevelFromMap("level1.tmx");
+        FXGL.setLevelFromMap("level3.tmx");
+
+        Sound levelSound = FXGL.getAssetLoader().loadSound("level1.wav");
+        FXGL.getAudioPlayer().playSound(levelSound);
 
         this.gameFactory.newWallScreen();
         this.player = this.gameFactory.newPlayer();
-        this.enemy = this.gameFactory.newEnemy(this.player, 700, 500);
+        //this.enemy = this.gameFactory.newEnemy(this.player, 700, 500);
         // this.box = this.gameFactory.newBox();
-        this.enemy.getComponent(Enemy.class).followPlayer(this.player);
-        Random gerador = new Random();
+        //this.enemy.getComponent(Enemy.class).followPlayer(this.player);
         FXGL.run(() -> {
-            
+                Random gerador = new Random();
                switch (gerador.nextInt(4)){
                    case 0:
-                       enemy = gameFactory.newEnemy(player, 700, 500);
+                       enemy = gameFactory.newEnemy(player, 1, 360);
                        enemy.getComponent(Enemy.class).followPlayer(player);
                        break;
 
                    case 1:
-                        enemy = gameFactory.newEnemy(player, 200, 500);
+                        enemy = gameFactory.newEnemy(player, 1280, 360);
                         enemy.getComponent(Enemy.class).followPlayer(player);
                         break;
 
                    case 2:
-                       enemy = gameFactory.newEnemy(player, 200, 200);
+                       enemy = gameFactory.newEnemy(player, 640, 700);
                        enemy.getComponent(Enemy.class).followPlayer(player);
                        break;
 
                    case 3:
-                       enemy = gameFactory.newEnemy(player, 700, 200);
+                       enemy = gameFactory.newEnemy(player, 640, 1);
                        enemy.getComponent(Enemy.class).followPlayer(player);
                        break;
                }
 
             System.out.println("tempo");
 
-        }, Duration.seconds(2));
+        }, Duration.seconds(1));
     }
 
     public static void main(String[] args) {

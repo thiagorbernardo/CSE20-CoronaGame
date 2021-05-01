@@ -7,7 +7,7 @@ public class Enemy extends Character {
     private Entity player;
 
     public Enemy(String path, int speed, int life) {
-        super("player/" + path + ".png", 50,48, speed, life);
+        super("enemy/" + path + ".png", 50,48, speed, life);
     }
 
     @Override

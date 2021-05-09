@@ -1,23 +1,13 @@
-package com.mycompany.app;
+package com.mycompany.app.Characters;
 
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
-import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.image;
-
-enum Direction {
-    RIGHT, LEFT, UP, DOWN,
-    UPRIGHT, UPLEFT,
-    DOWNRIGHT, DOWNLEFT,
-    STOP
-}
 
 public abstract class Character extends Component {
     private int width;

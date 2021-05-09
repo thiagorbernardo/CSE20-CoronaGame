@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="27" height="15" tilewidth="48" tileheight="48" infinite="0" nextlayerid="3" nextobjectid="82">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="27" height="15" tilewidth="48" tileheight="48" infinite="0" nextlayerid="3" nextobjectid="88">
  <tileset firstgid="1" name="tiles_spritesheet2" tilewidth="48" tileheight="48" tilecount="352" columns="32">
   <image source="tiles_spritesheet2.png" width="1536" height="528"/>
  </tileset>
@@ -54,5 +54,9 @@
   <object id="79" name="log" type="wall" x="1056.67" y="431.333" width="46.6667" height="49.3333"/>
   <object id="80" name="log" type="wall" x="1055.33" y="192.667" width="48" height="96"/>
   <object id="81" name="log" type="wall" x="1008" y="192" width="48" height="47.3333"/>
+  <object id="84" name="door" type="door" x="576.515" y="672.102" width="143.902" height="47.9333"/>
+  <object id="85" name="door" type="door" x="576.591" y="-0.133317" width="143.902" height="47.9333"/>
+  <object id="86" name="door" type="door" x="0.000112121" y="290.443" width="48.2422" height="143.781"/>
+  <object id="87" name="door" type="door" x="1247.75" y="287.985" width="48.2422" height="143.781"/>
  </objectgroup>
 </map>

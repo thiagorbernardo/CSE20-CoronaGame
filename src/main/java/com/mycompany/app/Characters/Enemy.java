@@ -1,4 +1,4 @@
-package com.mycompany.app;
+package com.mycompany.app.Characters;
 
 import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;

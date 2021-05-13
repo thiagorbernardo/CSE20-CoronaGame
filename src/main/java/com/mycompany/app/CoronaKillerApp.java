@@ -229,6 +229,10 @@ public class CoronaKillerApp extends GameApplication {
     private Entity player, bullet, enemy, box;
     private int level = 0;
     private Text textPixels = new Text();
+    private double initTime = System.currentTimeMillis();
+    private double spawnTimer = 2000;
+    private double lastSpawn = 0;
+    double elapsedTime = 0;
 
     /**
      * Init configurations of the FXGL game
@@ -248,30 +252,51 @@ public class CoronaKillerApp extends GameApplication {
         this.enemy = this.gameFactory.newEnemy(this.player, 700, 500);
 
         this.enemy.getComponent(Enemy.class).followPlayer(this.player);
-         FXGL.run(() -> {
-         Random gerador = new Random();
-         switch (gerador.nextInt(4)){
-         case 0:
-         enemy = gameFactory.newEnemy(player, 30, 360);
-         enemy.getComponent(Enemy.class).followPlayer(player);
-         break;
+         //FXGL.run(() -> {
 
-         case 1:
-         enemy = gameFactory.newEnemy(player, 1200, 360);
-         enemy.getComponent(Enemy.class).followPlayer(player);
-         break;
+         //}, Duration.seconds(spawnTimer));
+    }
 
-         case 2:
-         enemy = gameFactory.newEnemy(player, 640, 640);
-         enemy.getComponent(Enemy.class).followPlayer(player);
-         break;
+    @Override
+    protected void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+        Random gerador = new Random();
+        if((System.currentTimeMillis() - lastSpawn) > spawnTimer) {
+            switch (gerador.nextInt(4)) {
+                case 0:
+                    enemy = gameFactory.newEnemy(player, 30, 360);
+                    enemy.getComponent(Enemy.class).followPlayer(player);
+                    break;
 
-         case 3:
-         enemy = gameFactory.newEnemy(player, 640, 30);
-         enemy.getComponent(Enemy.class).followPlayer(player);
-         break;
-         }
-         }, Duration.seconds(2));
+                case 1:
+                    enemy = gameFactory.newEnemy(player, 1200, 360);
+                    enemy.getComponent(Enemy.class).followPlayer(player);
+                    break;
+
+                case 2:
+                    enemy = gameFactory.newEnemy(player, 640, 640);
+                    enemy.getComponent(Enemy.class).followPlayer(player);
+                    break;
+
+                case 3:
+                    enemy = gameFactory.newEnemy(player, 640, 30);
+                    enemy.getComponent(Enemy.class).followPlayer(player);
+                    break;
+            }
+            this.lastSpawn = System.currentTimeMillis();
+        }
+
+        elapsedTime = elapsedTime + 10;
+
+        if(elapsedTime > 2000 && spawnTimer > 500) {
+            //Para tornar o jogo mais difícil, pode-se alterar o passo em que diminui-se
+            //o spawn timer
+            spawnTimer = spawnTimer - 50;
+            elapsedTime = 0;
+        }
+
+        System.out.println(spawnTimer);
+
     }
 
     protected void setLevel(SpawnData spawnLocation){

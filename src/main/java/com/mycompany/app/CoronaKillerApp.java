@@ -12,6 +12,8 @@ import com.almasb.fxgl.input.UserAction;
 import com.mycompany.app.Characters.Direction;
 import com.mycompany.app.Characters.Enemy;
 import com.mycompany.app.Characters.Player;
+import com.mycompany.app.Save.Ranking;
+import com.mycompany.app.Save.RankingJSON;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
@@ -25,6 +27,21 @@ enum EntityType {
 }
 
 public class CoronaKillerApp extends GameApplication {
+    private final GameFactory gameFactory = new GameFactory();
+    Sound shotSound;
+    double elapsedTime = 0;
+    private Entity player, bullet, enemy;
+    private int level = 0;
+    private Text textPixels = new Text();
+    private double initTime = System.currentTimeMillis();
+    private double spawnTimer = 2000;
+    private double lastSpawn = 0;
+    private RankingJSON rank = new RankingJSON();
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     /* Setting game settings, such as screen size */
     @Override
     protected void initSettings(GameSettings settings) {
@@ -38,7 +55,7 @@ public class CoronaKillerApp extends GameApplication {
         settings.setApplicationMode(ApplicationMode.DEVELOPER);
 
         settings.setDeveloperMenuEnabled(true);
-//        settings.setMainMenuEnabled(true);
+        // settings.setMainMenuEnabled(true);
 
         settings.setAppIcon("icons/icon.png");
     }
@@ -61,6 +78,11 @@ public class CoronaKillerApp extends GameApplication {
 
             if (playerLife <= 0) {
                 FXGL.getAudioPlayer().playSound(deathSound);
+                rank.save(new Ranking("joao", this.player.getComponent(Player.class).getPoints()));
+
+                for (Ranking ranking : rank.getTopPlayers()) {
+                    System.out.println(ranking.name + ": " + ranking.points);
+                }
                 FXGL.showMessage("Perdeu!", () -> {
                     FXGL.getGameWorld().reset();
                     FXGL.getGameController().startNewGame();
@@ -71,7 +93,8 @@ public class CoronaKillerApp extends GameApplication {
         });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
-            double points = this.player.getComponent(Player.class).hit();
+            this.player.getComponent(Player.class).hit();
+            double points = this.player.getComponent(Player.class).getPoints();
             System.out.println(points);
             this.textPixels.setText("Pontuação: " + points);
             bullet.removeFromWorld();
@@ -89,9 +112,9 @@ public class CoronaKillerApp extends GameApplication {
 
         FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.DOOR, (player, door) -> {
             System.out.println("here");
-            if(this.player.getComponent(Player.class).getPoints() > 20 && level == 1)
+            if (this.player.getComponent(Player.class).getPoints() > 20 && level == 1)
                 door.removeFromWorld();
-            else if(this.player.getComponent(Player.class).getPoints() > 40 && level == 2)
+            else if (this.player.getComponent(Player.class).getPoints() > 40 && level == 2)
                 door.removeFromWorld();
         });
 
@@ -110,24 +133,21 @@ public class CoronaKillerApp extends GameApplication {
 
         FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.SCREEN, (player, screen) -> {
             Point2D playerPosition = player.getPosition();
-             System.out.println("Next level" + playerPosition);
+            System.out.println("Next level" + playerPosition);
 
-            if(playerPosition.getX() > 1200) {
+            if (playerPosition.getX() > 1200) {
                 System.out.println("right");
                 this.setLevel(new SpawnData(1210, playerPosition.getY())); // RIGHT
-            }
-            else if(playerPosition.getX() < 100) {
+            } else if (playerPosition.getX() < 100) {
                 System.out.println("left");
 
-                this.setLevel(new SpawnData(40, playerPosition.getY())); //LEFT
-            }
-            else if(playerPosition.getY() > 600) {
+                this.setLevel(new SpawnData(40, playerPosition.getY())); // LEFT
+            } else if (playerPosition.getY() > 600) {
                 System.out.println("bottom");
-                this.setLevel(new SpawnData(playerPosition.getX(), 630)); //BOTTOM
-            }
-            else if(playerPosition.getY() < 100) {
+                this.setLevel(new SpawnData(playerPosition.getX(), 630)); // BOTTOM
+            } else if (playerPosition.getY() < 100) {
                 System.out.println("top");
-                this.setLevel(new SpawnData(playerPosition.getX(), 50)); //TOP
+                this.setLevel(new SpawnData(playerPosition.getX(), 50)); // TOP
             }
         });
     }
@@ -206,33 +226,24 @@ public class CoronaKillerApp extends GameApplication {
         FXGL.getInput().addAction(new UserAction("DEV") {
             @Override
             protected void onActionBegin() {
-                if(FXGL.getDevService().isDevPaneOpen())
+                if (FXGL.getDevService().isDevPaneOpen())
                     FXGL.getDevService().closeDevPane();
-                else FXGL.getDevService().openDevPane();
+                else
+                    FXGL.getDevService().openDevPane();
             }
         }, KeyCode.F1);
     }
 
     @Override
     protected void initUI() {
-        this.textPixels.setTranslateX(75);
-        this.textPixels.setTranslateY(75);
+        this.textPixels.setTranslateX(30);
+        this.textPixels.setTranslateY(30);
 
         Font font = new Font(20);
         this.textPixels.setFont(font);
 
         FXGL.getGameScene().addUINode(this.textPixels); // add to the scene graph
     }
-
-    private final GameFactory gameFactory = new GameFactory();
-    Sound shotSound;
-    private Entity player, bullet, enemy, box;
-    private int level = 0;
-    private Text textPixels = new Text();
-    private double initTime = System.currentTimeMillis();
-    private double spawnTimer = 2000;
-    private double lastSpawn = 0;
-    double elapsedTime = 0;
 
     /**
      * Init configurations of the FXGL game
@@ -252,16 +263,16 @@ public class CoronaKillerApp extends GameApplication {
         this.enemy = this.gameFactory.newEnemy(this.player, 700, 500);
 
         this.enemy.getComponent(Enemy.class).followPlayer(this.player);
-         //FXGL.run(() -> {
+        // FXGL.run(() -> {
 
-         //}, Duration.seconds(spawnTimer));
+        // }, Duration.seconds(spawnTimer));
     }
 
     @Override
     protected void onUpdate(double tpf) {
         super.onUpdate(tpf);
         Random gerador = new Random();
-        if((System.currentTimeMillis() - lastSpawn) > spawnTimer) {
+        if ((System.currentTimeMillis() - lastSpawn) > spawnTimer) {
             switch (gerador.nextInt(4)) {
                 case 0:
                     enemy = gameFactory.newEnemy(player, 30, 360);
@@ -288,9 +299,9 @@ public class CoronaKillerApp extends GameApplication {
 
         elapsedTime = elapsedTime + 10;
 
-        if(elapsedTime > 2000 && spawnTimer > 500) {
-            //Para tornar o jogo mais difícil, pode-se alterar o passo em que diminui-se
-            //o spawn timer
+        if (elapsedTime > 2000 && spawnTimer > 500) {
+            // Para tornar o jogo mais difícil, pode-se alterar o passo em que diminui-se
+            // o spawn timer
             spawnTimer = spawnTimer - 50;
             elapsedTime = 0;
         }
@@ -299,7 +310,7 @@ public class CoronaKillerApp extends GameApplication {
 
     }
 
-    protected void setLevel(SpawnData spawnLocation){
+    protected void setLevel(SpawnData spawnLocation) {
         System.out.println();
         if (player != null) {
             Data playerData = this.player.getComponent(Player.class).getPlayerData();
@@ -309,13 +320,9 @@ public class CoronaKillerApp extends GameApplication {
 
             this.player = this.gameFactory.newPlayer(spawnLocation);
             this.player.getComponent(Player.class).setPlayerData(playerData);
-//            FXGL.getGameController().gotoGameMenu();
+            // FXGL.getGameController().gotoGameMenu();
             return;
         }
         FXGL.setLevelFromMap("level" + ++this.level + ".tmx");
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

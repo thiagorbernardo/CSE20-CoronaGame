@@ -4,13 +4,13 @@ package com.mycompany.app;
 import com.mycompany.app.Power.PowerType;
 
 public class Data {
-    private int points;
+    private double points;
     private int speed;
     private PowerType activePower;
     private double lastShot;
     private int life;
 
-    public Data(int points, int speed, PowerType activePower, double lastShot, int life) {
+    public Data(double points, int speed, PowerType activePower, double lastShot, int life) {
         this.points = points;
         this.speed = speed;
         this.activePower = activePower;
@@ -18,7 +18,7 @@ public class Data {
         this.life = life;
     }
 
-    public int getPoints() {
+    public double getPoints() {
         return points;
     }
 

@@ -12,8 +12,6 @@ import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.mycompany.app.Characters.Enemy;
 import com.mycompany.app.Characters.Player;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class GameFactory implements EntityFactory {
     @Spawns("player")
@@ -109,22 +107,5 @@ public class GameFactory implements EntityFactory {
                 .type(EntityType.SCREEN)
                 .collidable()
                 .buildScreenBoundsAndAttach(1000);
-    }
-
-    // TODO: Only for tests
-    @Spawns("box")
-    public Entity newBox() {
-        PhysicsComponent physics = new PhysicsComponent();
-        physics.setBodyType(BodyType.STATIC);
-
-        Rectangle rect = new Rectangle(34, 32, Color.BLUE);
-
-        return FXGL.entityBuilder()
-                .type(EntityType.BOX).at(400, 400)
-                .viewWithBBox(rect)
-                .with(physics)
-                .collidable()
-                .buildAndAttach();
-
     }
 }

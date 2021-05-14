@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class Player extends Character {
 
-    protected int points = 0;
+    protected double points = 0;
     protected PowerType activePower = null;
     protected double lastShot = System.currentTimeMillis();
     protected NotificationService notify = FXGL.getNotificationService();
@@ -50,9 +50,9 @@ public class Player extends Character {
         return gameFactory.newBullet(origin, direction, "bullet1", 400);
     }
 
-    public double hit() {
+    public void hit() {
         this.setActivePower();
-        return this.points += 10;
+        this.points += 10;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Player extends Character {
         this.activePower = null;
     }
 
-    public int getPoints(){
+    public double getPoints(){
         return this.points;
     }
 

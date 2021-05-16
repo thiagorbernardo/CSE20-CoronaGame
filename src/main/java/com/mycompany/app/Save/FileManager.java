@@ -5,12 +5,10 @@ import java.nio.charset.StandardCharsets;
 
 public class FileManager {
     private String path;
-    private FileType fileType;
     private String header;
 
-    public FileManager(String path, FileType fileType, String header) {
+    public FileManager(String path, String header) {
         this.path = path;
-        this.fileType = fileType;
         this.header = header;
     }
 
@@ -49,5 +47,4 @@ public class FileManager {
         }
 
     }
-
 }

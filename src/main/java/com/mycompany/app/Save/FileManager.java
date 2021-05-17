@@ -17,6 +17,9 @@ public class FileManager {
 
         if (!file.exists()) {
             try {
+                if(!file.getParentFile().exists())
+                    file.getParentFile().mkdirs();
+
                 file.createNewFile();
 
                 FileWriter fileWriter = new FileWriter(this.path, StandardCharsets.UTF_8);

@@ -15,8 +15,6 @@ public class FileManager {
     public void createFile() {
         File file = new File(this.path);
 
-        System.out.println(file.exists());
-
         if (!file.exists()) {
             try {
                 file.createNewFile();

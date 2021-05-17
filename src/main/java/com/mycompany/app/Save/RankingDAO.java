@@ -9,6 +9,4 @@ public interface RankingDAO {
 
     void save(Ranking newRanking);
 
-    void setFileReader();
-
 }

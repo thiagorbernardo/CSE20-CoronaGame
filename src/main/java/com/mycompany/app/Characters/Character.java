@@ -59,7 +59,7 @@ public abstract class Character extends Component {
     @Override
     public void onUpdate(double tpf) {
         setTexture();
-        if(!this.physics.isMoving()){
+        if(!this.physics.isMoving()) {
             this.setIdleAnimation();
         }
     }

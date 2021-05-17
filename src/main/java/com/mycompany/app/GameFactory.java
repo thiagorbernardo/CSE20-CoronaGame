@@ -9,7 +9,8 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.mycompany.app.Characters.Enemy;
+import com.mycompany.app.Characters.EnemyA;
+import com.mycompany.app.Characters.EnemyB;
 import com.mycompany.app.Characters.Player;
 import javafx.geometry.Point2D;
 
@@ -57,16 +58,30 @@ public class GameFactory implements EntityFactory {
                 .bbox(new HitBox(BoundingShape.polygon(17, 6, 17, 42, 34, 42, 34, 6)))
                 .with(physics)
                 .collidable()
-                .with(new Enemy("enemy1", 100, 2))
+                .with(new EnemyA("enemy1", 100, 2))
                 .buildAndAttach();
     }
+    @Spawns("enemy")
+    public Entity newEnemyB(Entity player, int x, int y) {
+        PhysicsComponent physics = new PhysicsComponent();
+        physics.setBodyType(BodyType.DYNAMIC);
 
-    /**
-     * Method to create a entity wall
-     *
-     * @param data tmx tile data
-     * @return a Entity
-     */
+        return FXGL.entityBuilder()
+                .type(EntityType.ENEMYB)
+                .at(x, y) // 700 500
+                .scale(1.0, 1.0)
+                .bbox(new HitBox(BoundingShape.polygon(17, 6, 17, 42, 34, 42, 34, 6)))
+                .with(physics)
+                .collidable()
+                .with(new EnemyB("enemy1", 100, 2))
+                .buildAndAttach();
+    }
+        /**
+         * Method to create a entity wall
+         *
+         * @param data tmx tile data
+         * @return a Entity
+         */
     @Spawns("wall")
     public Entity newWall(SpawnData data) {
 

@@ -10,7 +10,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.input.UserAction;
 import com.mycompany.app.Characters.Direction;
-import com.mycompany.app.Characters.Enemy;
+import com.mycompany.app.Characters.EnemyA;
+import com.mycompany.app.Characters.EnemyB;
 import com.mycompany.app.Characters.Player;
 import com.mycompany.app.Save.Ranking;
 import com.mycompany.app.Save.RankingJSON;
@@ -23,14 +24,14 @@ import javafx.util.Duration;
 import java.util.Random;
 
 enum EntityType {
-    PLAYER, BULLET, ENEMY, BACKGROUND, WALL, SCREEN, BOX, DOOR
+    PLAYER, BULLET, ENEMY, BACKGROUND, WALL, SCREEN, BOX, DOOR, ENEMYB
 }
 
 public class CoronaKillerApp extends GameApplication {
     private final GameFactory gameFactory = new GameFactory();
     Sound shotSound;
     double elapsedTime = 0;
-    private Entity player, bullet, enemy;
+    private Entity player, bullet, enemy, enemyb;
     private int level = 0;
     private Text textPixels = new Text();
     private double initTime = System.currentTimeMillis();
@@ -55,7 +56,7 @@ public class CoronaKillerApp extends GameApplication {
         settings.setApplicationMode(ApplicationMode.DEVELOPER);
 
         settings.setDeveloperMenuEnabled(true);
-        // settings.setMainMenuEnabled(true);
+        settings.setMainMenuEnabled(true);
 
         settings.setAppIcon("icons/icon.png");
     }
@@ -92,6 +93,24 @@ public class CoronaKillerApp extends GameApplication {
             }
         });
 
+        FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.ENEMYB, (player, enemy) -> {
+            int playerLife = this.player.getComponent(Player.class).damage();
+            Sound deathSound = FXGL.getAssetLoader().loadSound("death.wav");
+
+            System.out.println(playerLife);
+            System.out.println(this.player.isColliding(this.enemyb));
+
+            if (playerLife <= 0) {
+                FXGL.getAudioPlayer().playSound(deathSound);
+                FXGL.showMessage("Perdeu!", () -> {
+                    FXGL.getGameWorld().reset();
+                    FXGL.getGameController().startNewGame();
+                    FXGL.getAudioPlayer().stopAllSoundsAndMusic();
+                    this.textPixels.setText("");
+                });
+            }
+        });
+
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
             this.player.getComponent(Player.class).hit();
             double points = this.player.getComponent(Player.class).getPoints();
@@ -99,6 +118,17 @@ public class CoronaKillerApp extends GameApplication {
             this.textPixels.setText("Pontuação: " + points);
             bullet.removeFromWorld();
             enemy.removeFromWorld();
+            this.bullet = null;
+            System.out.println("Hitting enemy");
+        });
+
+        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMYB, (bullet, enemyb) -> {
+            this.player.getComponent(Player.class).hit();
+            double points = this.player.getComponent(Player.class).getPoints();
+            System.out.println(points);
+            this.textPixels.setText("Pontuação: " + String.format("%.0f", points));
+            bullet.removeFromWorld();
+            enemyb.removeFromWorld();
             this.bullet = null;
             System.out.println("Hitting enemy");
         });
@@ -121,8 +151,10 @@ public class CoronaKillerApp extends GameApplication {
         /* Collisions SOMETHING -> WALL */
 
         FXGL.onCollision(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
-            // System.out.println("Enemy hitting wall - change directions?");
+            System.out.println("Enemy hitting wall - change directions?");
+            enemy.getComponent(EnemyA.class).setFlag(wall);
         });
+
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.WALL, (bullet, wall) -> {
             bullet.removeFromWorld();
@@ -219,7 +251,7 @@ public class CoronaKillerApp extends GameApplication {
             @Override
             protected void onActionBegin() {
                 enemy = gameFactory.newEnemy(player, 700, 500);
-                enemy.getComponent(Enemy.class).followPlayer(player);
+                enemy.getComponent(EnemyA.class).followPlayer(player);
             }
         }, KeyCode.L);
 
@@ -262,10 +294,8 @@ public class CoronaKillerApp extends GameApplication {
 
         this.enemy = this.gameFactory.newEnemy(this.player, 700, 500);
 
-        this.enemy.getComponent(Enemy.class).followPlayer(this.player);
-        // FXGL.run(() -> {
-
-        // }, Duration.seconds(spawnTimer));
+        this.enemy.getComponent(EnemyA.class).followPlayer(this.player);
+        this.enemyb = this.gameFactory.newEnemyB(this.player, 900, 300);
     }
 
     @Override
@@ -276,22 +306,22 @@ public class CoronaKillerApp extends GameApplication {
             switch (gerador.nextInt(4)) {
                 case 0:
                     enemy = gameFactory.newEnemy(player, 30, 360);
-                    enemy.getComponent(Enemy.class).followPlayer(player);
+                    enemy.getComponent(EnemyA.class).followPlayer(player);
                     break;
 
                 case 1:
                     enemy = gameFactory.newEnemy(player, 1200, 360);
-                    enemy.getComponent(Enemy.class).followPlayer(player);
+                    enemy.getComponent(EnemyA.class).followPlayer(player);
                     break;
 
                 case 2:
                     enemy = gameFactory.newEnemy(player, 640, 640);
-                    enemy.getComponent(Enemy.class).followPlayer(player);
+                    enemy.getComponent(EnemyA.class).followPlayer(player);
                     break;
 
                 case 3:
                     enemy = gameFactory.newEnemy(player, 640, 30);
-                    enemy.getComponent(Enemy.class).followPlayer(player);
+                    enemy.getComponent(EnemyA.class).followPlayer(player);
                     break;
             }
             this.lastSpawn = System.currentTimeMillis();

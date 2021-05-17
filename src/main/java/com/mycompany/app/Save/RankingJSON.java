@@ -9,19 +9,23 @@ import java.util.*;
 
 public class RankingJSON implements RankingDAO {
     private Gson gson = new Gson();
-    private String filePath = new File("").getAbsolutePath() + "/src/main/resources/ranking/ranking.json";
-    private FileReader fileReader;
+    private String filePath = "src/main/resources/ranking/ranking.json";
+
+    private FileManager fileManager = new FileManager("src/main/resources/ranking/ranking.json", "[]");
 
     @Override
     public List<Ranking> read() {
 
-        this.setFileReader();
+        this.fileManager.createFile();
 
-        List<Ranking> rankingList = this.gson.fromJson(this.fileReader, new TypeToken<List<Ranking>>() {
-        }.getType());
-
+        List<Ranking> rankingList = null;
         try {
-            this.fileReader.close();
+            FileReader fileReader = new FileReader(this.filePath, StandardCharsets.UTF_8);
+
+            rankingList = this.gson.fromJson(fileReader, new TypeToken<List<Ranking>>() {
+            }.getType());
+
+            fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,22 +51,7 @@ public class RankingJSON implements RankingDAO {
 
         rankingList.add(newRanking);
 
-        try {
-            FileWriter fileWriter = new FileWriter(this.filePath, StandardCharsets.UTF_8);
-            fileWriter.append(this.gson.toJson(rankingList));
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.fileManager.saveString(this.gson.toJson(rankingList), false);
     }
 
-    @Override
-    public void setFileReader() {
-        try {
-            this.fileReader = new FileReader(this.filePath, StandardCharsets.UTF_8);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

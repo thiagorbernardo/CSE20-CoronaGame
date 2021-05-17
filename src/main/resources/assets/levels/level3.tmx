@@ -1,104 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="27" height="15" tilewidth="48" tileheight="48" infinite="0" nextlayerid="4" nextobjectid="96">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="27" height="15" tilewidth="48" tileheight="48" infinite="0" nextlayerid="4" nextobjectid="185">
  <tileset firstgid="1" name="tiles_spritesheet2" tilewidth="48" tileheight="48" tilecount="352" columns="32">
   <image source="tiles_spritesheet2.png" width="1536" height="528"/>
  </tileset>
  <layer id="1" name="Camada de Tiles 1" width="27" height="15">
   <data encoding="csv">
-62,62,63,62,63,62,63,62,63,62,62,63,64,64,64,62,63,62,62,63,62,62,63,63,63,62,63,
+218,219,219,219,219,221,63,62,63,62,62,63,64,64,64,62,63,62,62,63,62,218,220,220,220,220,221,
 55,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,55,
-55,64,280,157,157,64,64,157,280,157,64,64,157,280,157,64,64,157,280,157,64,64,157,157,280,64,55,
-55,64,157,157,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,157,157,64,55,
-55,64,157,64,64,64,64,64,157,64,64,64,64,157,64,64,64,64,157,64,64,64,64,64,157,64,55,
+55,64,157,64,157,64,64,157,280,157,64,64,157,280,157,64,64,157,280,157,64,64,157,64,157,64,55,
 55,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,55,
-64,64,64,157,64,64,64,157,157,157,64,64,157,157,157,64,64,157,157,157,64,64,157,64,64,64,64,
-64,64,157,280,157,64,64,157,280,157,64,64,157,328,157,64,64,157,280,157,64,157,280,157,64,64,64,
-64,64,64,157,64,64,64,157,157,157,64,64,157,157,157,64,64,157,157,157,64,64,157,64,64,64,64,
+55,64,157,64,157,64,64,64,157,64,64,64,64,157,64,64,64,64,157,64,64,64,157,64,157,64,55,
 55,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,55,
-55,64,157,64,64,64,64,64,157,64,64,64,64,157,64,64,64,64,157,64,64,64,64,64,157,64,55,
-55,64,157,157,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,157,157,64,55,
-55,64,280,157,157,64,64,157,280,157,64,64,157,280,157,64,64,157,280,157,64,64,157,157,280,64,55,
+64,64,64,64,64,64,64,157,157,157,64,64,157,157,157,64,64,157,157,157,64,64,64,64,64,64,64,
+64,64,157,64,157,64,64,157,280,157,64,64,157,328,157,64,64,157,280,157,64,64,157,64,157,64,64,
+64,64,64,64,64,64,64,157,157,157,64,64,157,157,157,64,64,157,157,157,64,64,64,64,64,64,64,
+55,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,55,
+55,64,157,64,157,64,64,64,157,64,64,64,64,157,64,64,64,64,157,64,64,64,157,64,157,64,55,
+55,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,55,
+55,64,157,64,157,64,64,157,280,157,64,64,157,280,157,64,64,157,280,157,64,64,157,64,157,64,55,
 55,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,55,
 62,63,62,63,62,63,63,62,63,63,62,63,64,64,64,62,62,62,62,63,62,63,63,62,63,62,63
 </data>
  </layer>
  <objectgroup id="3" name="Camada de Objetos 1">
-  <object id="18" name="hole" type="wall" x="721.667" y="0.66665" width="575.333" height="46.6667"/>
-  <object id="19" name="hole" type="wall" x="720" y="673" width="576" height="45"/>
-  <object id="20" name="hole" type="wall" x="0" y="672" width="578" height="48"/>
-  <object id="21" name="hole" type="wall" x="0" y="-1" width="576" height="49"/>
-  <object id="22" name="rock" type="wall" x="1248" y="432" width="48.6667" height="240"/>
-  <object id="23" name="rock" type="wall" x="1248" y="47.3333" width="48" height="240"/>
-  <object id="24" name="rock" type="wall" x="0" y="47.3333" width="48.6667" height="241.333"/>
-  <object id="25" name="rock" type="wall" x="0.666667" y="430.667" width="48.6667" height="242"/>
-  <object id="26" name="skull" type="wall" x="94" y="96" width="51" height="49"/>
-  <object id="27" name="skull" type="wall" x="143" y="335" width="50" height="50"/>
-  <object id="28" name="skull" type="wall" x="94" y="577" width="50" height="47"/>
-  <object id="29" name="skull" type="wall" x="384" y="94" width="49" height="50"/>
-  <object id="30" name="skull" type="wall" x="384" y="336" width="49" height="48"/>
-  <object id="31" name="skull" type="wall" x="382" y="576.25" width="50.625" height="47.75"/>
-  <object id="32" name="skull" type="wall" x="622" y="93" width="51" height="52"/>
-  <object id="33" name="skull" type="wall" x="623" y="335" width="50" height="49"/>
-  <object id="34" name="skull" type="wall" x="623" y="573" width="50" height="51"/>
-  <object id="35" name="skull" type="wall" x="863" y="95" width="50" height="49"/>
-  <object id="36" name="skull" type="wall" x="864" y="335" width="48" height="48"/>
-  <object id="37" name="skull" type="wall" x="863" y="573" width="50" height="52"/>
-  <object id="38" name="skull" type="wall" x="1054" y="334" width="51" height="50"/>
-  <object id="39" name="skull" type="wall" x="1152" y="576" width="49" height="48"/>
-  <object id="40" name="skull" type="wall" x="1151" y="95" width="50" height="50"/>
-  <object id="41" name="spike" type="wall" x="95.3333" y="144" width="50" height="96"/>
-  <object id="42" name="spike" type="wall" x="144" y="95.3333" width="47.3333" height="96"/>
-  <object id="43" name="spike" type="wall" x="191.333" y="95.3333" width="50" height="48.6667"/>
-  <object id="44" name="spike" type="wall" x="142.667" y="383.333" width="49.3333" height="48.6667"/>
-  <object id="45" name="spike" type="wall" x="96" y="335.333" width="47.3333" height="48.6667"/>
-  <object id="46" name="spike" type="wall" x="142.667" y="287.333" width="50" height="48"/>
-  <object id="47" name="spike" type="wall" x="193.333" y="335.333" width="46" height="48"/>
-  <object id="48" name="spike" type="wall" x="144.667" y="576" width="96" height="48"/>
-  <object id="49" name="spike" type="wall" x="94.6667" y="526" width="97.3333" height="48.6667"/>
-  <object id="50" name="spike" type="wall" x="94" y="478.667" width="50" height="45.3333"/>
-  <object id="51" name="spike" type="wall" x="335.958" y="576.208" width="45.9583" height="47.625"/>
-  <object id="52" name="spike" type="wall" x="432.667" y="576.125" width="47.875" height="47.9167"/>
-  <object id="53" name="spike" type="wall" x="382.667" y="478.667" width="49.3333" height="48.6667"/>
-  <object id="54" name="spike" type="wall" x="335.333" y="384.667" width="144" height="47.3333"/>
-  <object id="55" name="spike" type="wall" x="334" y="285.333" width="146.667" height="50"/>
-  <object id="56" name="spike" type="wall" x="432" y="334.667" width="48" height="49.3333"/>
-  <object id="57" name="spike" type="wall" x="334" y="335.333" width="50" height="48.6667"/>
-  <object id="58" name="spike" type="wall" x="382.667" y="190" width="48.6667" height="50"/>
-  <object id="59" name="spike" type="wall" x="335.333" y="94" width="48.6667" height="48.6667"/>
-  <object id="60" name="spike" type="wall" x="433.333" y="94" width="47.3333" height="49.3333"/>
-  <object id="62" name="spike" type="wall" x="575.333" y="383.333" width="145.333" height="48.6667"/>
-  <object id="63" name="spike" type="wall" x="574.667" y="286.667" width="145.333" height="48.6667"/>
-  <object id="64" name="spike" type="wall" x="672" y="336" width="48.6667" height="46.6667"/>
-  <object id="65" name="spike" type="wall" x="574.667" y="334.667" width="48" height="46.6667"/>
-  <object id="66" name="spike" type="wall" x="816" y="383.333" width="143.333" height="48"/>
-  <object id="67" name="spike" type="wall" x="814.667" y="286.667" width="147.333" height="47.3333"/>
-  <object id="68" name="spike" type="wall" x="912" y="334" width="47.3333" height="48.6667"/>
-  <object id="69" name="spike" type="wall" x="815.333" y="333.333" width="48.6667" height="48.6667"/>
-  <object id="70" name="spike" type="wall" x="863.333" y="478.667" width="48" height="48.6667"/>
-  <object id="71" name="spike" type="wall" x="624" y="479.333" width="47.3333" height="48"/>
-  <object id="72" name="spike" type="wall" x="674" y="575.333" width="46.6667" height="48"/>
-  <object id="73" name="spike" type="wall" x="575.333" y="575.333" width="48" height="48"/>
-  <object id="74" name="spike" type="wall" x="815.333" y="573.333" width="47.3333" height="50"/>
-  <object id="75" name="spike" type="wall" x="910.667" y="573.333" width="49.3333" height="49.3333"/>
-  <object id="76" name="spike" type="wall" x="624" y="191.333" width="47.3333" height="48"/>
-  <object id="77" name="spike" type="wall" x="575.333" y="94" width="47.3333" height="50"/>
-  <object id="78" name="spike" type="wall" x="672.667" y="96" width="46.6667" height="47.3333"/>
-  <object id="79" name="spike" type="wall" x="814.667" y="95.3333" width="48.6667" height="48"/>
-  <object id="80" name="spike" type="wall" x="912" y="96" width="48" height="47.3333"/>
-  <object id="81" name="spike" type="wall" x="864" y="192" width="47.3333" height="46.6667"/>
-  <object id="82" name="spike" type="wall" x="1055.33" y="576" width="97.3333" height="47.3333"/>
-  <object id="83" name="spike" type="wall" x="1104" y="528.667" width="96.6667" height="45.3333"/>
-  <object id="84" name="spike" type="wall" x="1151.33" y="479.333" width="50" height="49.3333"/>
-  <object id="85" name="spike" type="wall" x="1055.33" y="384" width="48.6667" height="47.3333"/>
-  <object id="86" name="spike" type="wall" x="1104.67" y="335.333" width="47.3333" height="47.3333"/>
-  <object id="87" name="spike" type="wall" x="1056" y="288.667" width="48.6667" height="44"/>
-  <object id="88" name="spike" type="wall" x="1007.33" y="335.333" width="48" height="48"/>
-  <object id="89" name="spike" type="wall" x="1151.33" y="144.667" width="49.3333" height="95.3333"/>
-  <object id="90" name="spike" type="wall" x="1054.67" y="95.3333" width="97.3333" height="46.6667"/>
-  <object id="91" name="spike" type="wall" x="1103.33" y="142.667" width="48.6667" height="48.6667"/>
-  <object id="92" name="door" type="door" x="576.269" y="672.401" width="143.902" height="47.9333"/>
-  <object id="93" name="door" type="door" x="576.345" y="0.165691" width="143.902" height="47.9333"/>
-  <object id="94" name="door" type="door" x="-0.246044" y="290.742" width="48.2422" height="143.781"/>
-  <object id="95" name="door" type="door" x="1247.5" y="288.284" width="48.2422" height="143.781"/>
+  <object id="135" name="door" type="door" x="0" y="288" width="48" height="144"/>
+  <object id="136" name="door" type="door" x="576" y="0" width="144" height="48"/>
+  <object id="137" name="door" type="door" x="1248" y="288" width="48" height="144"/>
+  <object id="138" name="door" type="door" x="576" y="672" width="144" height="48"/>
+  <object id="139" name="rock" type="wall" x="0" y="48" width="48" height="240"/>
+  <object id="140" name="rock" type="wall" x="0" y="0" width="288" height="48"/>
+  <object id="141" name="hole" type="wall" x="288" y="0" width="288" height="48"/>
+  <object id="142" name="hole" type="wall" x="720" y="0" width="288" height="48"/>
+  <object id="143" name="rock" type="wall" x="1008" y="0" width="288" height="48"/>
+  <object id="144" name="rock" type="wall" x="1248" y="48" width="48" height="240"/>
+  <object id="145" name="rock" type="wall" x="1248" y="432" width="48" height="240"/>
+  <object id="146" name="hole" type="wall" x="720" y="672" width="576" height="48"/>
+  <object id="147" name="hole" type="wall" x="0" y="672" width="576" height="48"/>
+  <object id="148" name="rock" type="wall" x="0" y="432" width="48" height="240"/>
+  <object id="149" name="spike" type="wall" x="96" y="96" width="48" height="48"/>
+  <object id="150" name="spike" type="wall" x="96" y="192" width="48" height="48"/>
+  <object id="151" name="spike" type="wall" x="96" y="336" width="48" height="48"/>
+  <object id="152" name="spike" type="wall" x="96" y="480" width="48" height="48"/>
+  <object id="153" name="spike" type="wall" x="96" y="576" width="48" height="48"/>
+  <object id="154" name="spike" type="wall" x="192" y="96" width="48" height="48"/>
+  <object id="155" name="spike" type="wall" x="192" y="192" width="48" height="48"/>
+  <object id="156" name="spike" type="wall" x="192" y="336" width="48" height="48"/>
+  <object id="157" name="spike" type="wall" x="192" y="480" width="48" height="48"/>
+  <object id="158" name="spike" type="wall" x="192" y="576" width="48" height="48"/>
+  <object id="159" name="spike" type="wall" x="336" y="96" width="144" height="48"/>
+  <object id="160" name="spike" type="wall" x="384" y="192" width="48" height="48"/>
+  <object id="161" name="spike" type="wall" x="336" y="288" width="144" height="144"/>
+  <object id="162" name="spike" type="wall" x="384" y="480" width="48" height="48"/>
+  <object id="163" name="spike" type="wall" x="336" y="576" width="144" height="48"/>
+  <object id="164" name="spike" type="wall" x="576" y="96" width="144" height="48"/>
+  <object id="165" name="spike" type="wall" x="624" y="192" width="48" height="48"/>
+  <object id="166" name="spike" type="wall" x="576" y="288" width="144" height="144"/>
+  <object id="167" name="spike" type="wall" x="624" y="480" width="48" height="48"/>
+  <object id="168" name="spike" type="wall" x="576" y="576" width="144" height="48"/>
+  <object id="169" name="spike" type="wall" x="816" y="96" width="144" height="48"/>
+  <object id="170" name="spike" type="wall" x="864" y="192" width="48" height="48"/>
+  <object id="171" name="spike" type="wall" x="816" y="288" width="144" height="144"/>
+  <object id="172" name="spike" type="wall" x="864" y="480" width="48" height="48"/>
+  <object id="173" name="spike" type="wall" x="816" y="576" width="144" height="48"/>
+  <object id="174" name="spike" type="wall" x="1056" y="96" width="48" height="48"/>
+  <object id="175" name="spike" type="wall" x="1056" y="192" width="48" height="48"/>
+  <object id="176" name="spike" type="wall" x="1056" y="336" width="48" height="48"/>
+  <object id="177" name="spike" type="wall" x="1056" y="480" width="48" height="48"/>
+  <object id="178" name="spike" type="wall" x="1056" y="576" width="48" height="48"/>
+  <object id="179" name="spike" type="wall" x="1152" y="96" width="48" height="48"/>
+  <object id="180" name="spike" type="wall" x="1152" y="192" width="48" height="48"/>
+  <object id="182" name="spike" type="wall" x="1152" y="336" width="48" height="48"/>
+  <object id="183" name="spike" type="wall" x="1152" y="480" width="48" height="48"/>
+  <object id="184" name="spike" type="wall" x="1152" y="576" width="48" height="48"/>
  </objectgroup>
 </map>

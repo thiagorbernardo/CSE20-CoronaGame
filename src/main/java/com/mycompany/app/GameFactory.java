@@ -57,7 +57,7 @@ public class GameFactory implements EntityFactory {
                 .bbox(new HitBox(BoundingShape.polygon(17, 6, 17, 42, 34, 42, 34, 6)))
                 .with(physics)
                 .collidable()
-                .with(new Enemy("enemy1", 100, 2))
+                .with(new Enemy("enemy3", 100, 2))
                 .buildAndAttach();
     }
 

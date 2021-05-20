@@ -293,8 +293,8 @@ public class CoronaKillerApp extends GameApplication {
         this.setLevel(new SpawnData());
 
         this.shotSound = FXGL.getAssetLoader().loadSound("shot.wav");
-        Sound levelSound = FXGL.getAssetLoader().loadSound("level1.wav");
-        // FXGL.getAudioPlayer().playSound(levelSound);
+        Sound levelSound = FXGL.getAssetLoader().loadSound("starwars.mp3");
+         FXGL.getAudioPlayer().playSound(levelSound);
 
         this.gameFactory.newWallScreen();
         this.player = this.gameFactory.newPlayer(new SpawnData(300, 300));
@@ -309,7 +309,18 @@ public class CoronaKillerApp extends GameApplication {
     protected void onUpdate(double tpf) {
         super.onUpdate(tpf);
         Random gerador = new Random();
+        String enemysprite = "enemy1";
+
         if ((System.currentTimeMillis() - lastSpawn) > spawnTimer) {
+
+            int rnd = gerador.nextInt(3);
+            if(rnd == 0)
+                enemysprite = "enemy1";
+            if(rnd == 1)
+                enemysprite = "enemy2";
+            if(rnd == 2)
+                enemysprite = "enemy3";
+
             switch (gerador.nextInt(4)) {
                 case 0:
                     enemy = gameFactory.newEnemy(player, 30, 360, EntityType.ENEMY);

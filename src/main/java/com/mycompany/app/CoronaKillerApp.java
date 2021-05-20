@@ -3,18 +3,22 @@ package com.mycompany.app;
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.input.UserAction;
+import com.mycompany.app.Characters.Character;
 import com.mycompany.app.Characters.Direction;
 import com.mycompany.app.Characters.EnemyA;
 import com.mycompany.app.Characters.EnemyB;
 import com.mycompany.app.Characters.Player;
 import com.mycompany.app.Save.Ranking;
 import com.mycompany.app.Save.RankingJSON;
+import com.mycompany.app.UI.Menu;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
@@ -54,10 +58,20 @@ public class CoronaKillerApp extends GameApplication {
         settings.setTitle("The Last Cowboy");
         settings.setVersion("1.0");
         settings.setApplicationMode(ApplicationMode.DEVELOPER);
+//         settings.setSceneFactory(new SceneFactory() {
+// //            @Override
+// //            public FXGLMenu newGameMenu() {
+// //                return new Menu();
+// //            }
+//             @Override
+//             public FXGLMenu newMainMenu() {
+//                 return new Menu();
+//             }
+//         });
+//        settings.setDeveloperMenuEnabled(true);
 
-        settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
-
+//        settings.setSceneFactory(new SceneFactory());
         settings.setAppIcon("icons/icon.png");
     }
 
@@ -153,6 +167,7 @@ public class CoronaKillerApp extends GameApplication {
         FXGL.onCollision(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
             System.out.println("Enemy hitting wall - change directions?");
             enemy.getComponent(EnemyA.class).setFlag(wall);
+            System.out.println();
         });
 
 
@@ -247,14 +262,6 @@ public class CoronaKillerApp extends GameApplication {
             }
         }, KeyCode.SPACE);
 
-        FXGL.getInput().addAction(new UserAction("Enemy") {
-            @Override
-            protected void onActionBegin() {
-                enemy = gameFactory.newEnemy(player, 700, 500);
-                enemy.getComponent(EnemyA.class).followPlayer(player);
-            }
-        }, KeyCode.L);
-
         FXGL.getInput().addAction(new UserAction("DEV") {
             @Override
             protected void onActionBegin() {
@@ -292,10 +299,10 @@ public class CoronaKillerApp extends GameApplication {
         this.gameFactory.newWallScreen();
         this.player = this.gameFactory.newPlayer(new SpawnData(300, 300));
 
-        this.enemy = this.gameFactory.newEnemy(this.player, 700, 500);
+        this.enemy = this.gameFactory.newEnemy(this.player, 700, 500, EntityType.ENEMY);
 
         this.enemy.getComponent(EnemyA.class).followPlayer(this.player);
-        this.enemyb = this.gameFactory.newEnemyB(this.player, 900, 300);
+        this.enemyb = this.gameFactory.newEnemy(this.player, 900, 300, EntityType.ENEMYB);
     }
 
     @Override
@@ -305,22 +312,22 @@ public class CoronaKillerApp extends GameApplication {
         if ((System.currentTimeMillis() - lastSpawn) > spawnTimer) {
             switch (gerador.nextInt(4)) {
                 case 0:
-                    enemy = gameFactory.newEnemy(player, 30, 360);
+                    enemy = gameFactory.newEnemy(player, 30, 360, EntityType.ENEMY);
                     enemy.getComponent(EnemyA.class).followPlayer(player);
                     break;
 
                 case 1:
-                    enemy = gameFactory.newEnemy(player, 1200, 360);
+                    enemy = gameFactory.newEnemy(player, 1200, 360, EntityType.ENEMY);
                     enemy.getComponent(EnemyA.class).followPlayer(player);
                     break;
 
                 case 2:
-                    enemy = gameFactory.newEnemy(player, 640, 640);
+                    enemy = gameFactory.newEnemy(player, 640, 640, EntityType.ENEMY);
                     enemy.getComponent(EnemyA.class).followPlayer(player);
                     break;
 
                 case 3:
-                    enemy = gameFactory.newEnemy(player, 640, 30);
+                    enemy = gameFactory.newEnemy(player, 640, 30, EntityType.ENEMY);
                     enemy.getComponent(EnemyA.class).followPlayer(player);
                     break;
             }

@@ -9,7 +9,6 @@ import java.awt.*;
 
 public class EnemyA extends Character implements Ia {
     private Entity player;
-    private Entity wall;
     private Boolean flag;
 
 
@@ -34,60 +33,9 @@ public class EnemyA extends Character implements Ia {
     }
 
     public void setFlag(Entity w){
-        wall = w;
         flag = true;
     }
 
-    public void dodge(){
-//        BoundingBoxComponent wallBox = wall.getBoundingBoxComponent();
-//        BoundingBoxComponent enemyBox = this.entity.getBoundingBoxComponent();
-//        System.out.println(wallBox.getMinXWorld());
-//        System.out.println(wallBox.getMaxXWorld());
-//        if(wallBox.getMaxXWorld() + 1 == enemyBox.getMinXWorld()){
-//            Point2D first  = new Point2D(wallBox.getMaxXWorld(), wallBox.getMinYWorld()),
-//                    second = new Point2D(wallBox.getMaxXWorld(), wallBox.getMaxYWorld());
-//            if (minorDistance(first, second)){
-//                this.down();
-//            }else{
-//                this.up();
-//            }
-//        }else if(wallBox.getMinXWorld() - 1 == enemyBox.getMaxXWorld()) {
-//            Point2D first  = new Point2D(wallBox.getMinXWorld(), wallBox.getMinYWorld()),
-//                    second = new Point2D(wallBox.getMinXWorld(), wallBox.getMaxYWorld());
-//            if (minorDistance(first, second)) {
-//                this.down();
-//            } else {
-//                this.up();
-//            }
-//        }else if(wallBox.getMinYWorld() - 1 == enemyBox.getMaxYWorld()) {
-//            Point2D first  = new Point2D(wallBox.getMinXWorld(), wallBox.getMinYWorld()),
-//                    second = new Point2D(wallBox.getMaxXWorld(), wallBox.getMinYWorld());
-//            if (minorDistance(first, second)) {
-//                this.right();
-//            } else {
-//                this.left();
-//            }
-//        }else if(wallBox.getMaxYWorld() + 1 == enemyBox.getMinYWorld()) {
-//            Point2D first  = new Point2D(wallBox.getMinXWorld(), wallBox.getMaxYWorld()),
-//                    second = new Point2D(wallBox.getMaxXWorld(), wallBox.getMaxYWorld());
-//            if (minorDistance(first, second)) {
-//                this.right();
-//            } else {
-//                this.left();
-//            }
-//        }
-    }
-
-    private boolean minorDistance(Point2D a, Point2D b) {
-        double d1 = Math.abs(this.entity.getCenter().distance(a));
-        double d2 = Math.abs(this.entity.getCenter().distance(b));
-
-        if (d1 > d2){
-            return true;
-        }else{
-            return false;
-        }
-    }
     public void followPlayer(Entity charToFollow){
         this.player = charToFollow;
     }

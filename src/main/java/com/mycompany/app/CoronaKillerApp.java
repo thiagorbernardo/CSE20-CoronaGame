@@ -3,6 +3,8 @@ package com.mycompany.app;
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.mycompany.app.Characters.EnemyA;
@@ -13,6 +15,9 @@ import com.mycompany.app.Controller.GameController;
 import com.mycompany.app.Controller.GameFactory;
 import com.mycompany.app.Projectiles.Bullet;
 import com.mycompany.app.Save.*;
+import com.mycompany.app.UI.GameMenu;
+import com.mycompany.app.UI.Menu;
+import com.mycompany.app.UI.Scene;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -27,7 +32,7 @@ public class CoronaKillerApp extends GameApplication {
     private double initTime = System.currentTimeMillis();
     private double spawnTimer = 2000;
     private double lastSpawn = 0;
-
+    private Scene scene = new Scene();
     /* Ranking */
     private RankingDAO rank = new RankingJSON();
 
@@ -50,9 +55,12 @@ public class CoronaKillerApp extends GameApplication {
         settings.setVersion("1.0");
         settings.setApplicationMode(ApplicationMode.DEVELOPER);
 
-        settings.setDeveloperMenuEnabled(true);
-        // settings.setMainMenuEnabled(true);
 
+        settings.setSceneFactory(scene);
+
+        settings.setDeveloperMenuEnabled(true);
+        settings.setGameMenuEnabled(true);
+        settings.setMainMenuEnabled(true);
         settings.setAppIcon("icons/icon.png");
     }
 
@@ -155,7 +163,7 @@ public class CoronaKillerApp extends GameApplication {
     protected void onPreInit() {
         super.onPreInit();
 
-        this.gameController = new GameController();
+        this.gameController = new GameController(this.scene);
 
         this.gameController.preInitGame();
     }
@@ -170,11 +178,11 @@ public class CoronaKillerApp extends GameApplication {
         if ((System.currentTimeMillis() - lastSpawn) > spawnTimer) {
 
             int rnd = gerador.nextInt(3);
-            if(rnd == 0)
+            if (rnd == 0)
                 enemysprite = "enemy1";
-            if(rnd == 1)
+            if (rnd == 1)
                 enemysprite = "enemy2";
-            if(rnd == 2)
+            if (rnd == 2)
                 enemysprite = "enemy3";
 
             switch (gerador.nextInt(4)) {
@@ -209,8 +217,6 @@ public class CoronaKillerApp extends GameApplication {
             spawnTimer = spawnTimer - 50;
             elapsedTime = 0;
         }
-
-        System.out.println(spawnTimer);
 
     }
 }

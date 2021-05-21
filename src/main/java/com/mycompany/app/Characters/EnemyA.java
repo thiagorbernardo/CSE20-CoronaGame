@@ -52,7 +52,7 @@ public class EnemyA extends Character implements Ia {
         }else if (y > 0){
             this.down();
         }else{
-            this.physics.setVelocityX(0);
+            this.physics.setVelocityY(0);
         }
         if(x < 0){
             this.left();

@@ -15,6 +15,8 @@ import com.mycompany.app.Characters.Player;
 import com.mycompany.app.Characters.PlayerTypes;
 
 import com.mycompany.app.Save.*;
+import com.mycompany.app.Events.Menu.MenuListener;
+import com.mycompany.app.Events.Menu.MenuManager;
 
 import com.mycompany.app.Events.Sound.MusicsNames;
 import com.mycompany.app.Events.Sound.SoundListener;
@@ -22,6 +24,11 @@ import com.mycompany.app.Events.Sound.SoundManager;
 import com.mycompany.app.Events.Sound.SoundNames;
 
 import javafx.collections.FXCollections;
+import com.mycompany.app.Save.Ranking;
+import com.mycompany.app.Save.RankingDAO;
+import com.mycompany.app.Save.RankingJSON;
+
+import com.mycompany.app.UI.Scene;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -43,6 +50,7 @@ public class GameController implements Game {
     private Input input = FXGL.getInput();
     private com.almasb.fxgl.app.GameController fxglGameController = FXGL.getGameController();
     private UIFactoryService fxglFactoryService = FXGL.getUIFactoryService();
+    private Scene scene;
 
     /* Ranking */
     private RankingDAO rank;
@@ -58,10 +66,13 @@ public class GameController implements Game {
 
     /* World variables */
     private int currentLevel = 0;
-    private Boolean isMultiplayer = true;
+    private Boolean isMultiplayer = false;
     private Random random = new Random();
 
 
+    public GameController(Scene scene){
+        this.scene = scene;
+    }
     /**
      * Manage pre init config, such as sounds and input keys
      */
@@ -73,10 +84,8 @@ public class GameController implements Game {
         this.playersKeyCodes.put(PlayerTypes.P1, Arrays.asList(KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S, KeyCode.SPACE));
         this.setPlayerActions(PlayerTypes.P1);
 
-        if (isMultiplayer) {
-            this.playersKeyCodes.put(PlayerTypes.P2, Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.DOWN, KeyCode.ENTER));
-            this.setPlayerActions(PlayerTypes.P2);
-        }
+        this.playersKeyCodes.put(PlayerTypes.P2, Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.DOWN, KeyCode.ENTER));
+
     }
 
     /**
@@ -87,6 +96,8 @@ public class GameController implements Game {
 
         this.fxglWorld.addEntityFactory(this.gameFactory);
 
+        this.isMultiplayer = this.scene.getMainMenu().getMenuListener().getMultiplayer();
+
         this.setLevel(new SpawnData());
 
         this.playRandomMusic();
@@ -96,6 +107,7 @@ public class GameController implements Game {
         this.players.put(PlayerTypes.P1, this.gameFactory.newPlayer(PlayerTypes.P1, new SpawnData(300, 300)));
 
         if (isMultiplayer) {
+            this.setPlayerActions(PlayerTypes.P2);
             this.players.put(PlayerTypes.P2, this.gameFactory.newPlayer(PlayerTypes.P2, new SpawnData(300, 300)));
         }
 
@@ -168,7 +180,7 @@ public class GameController implements Game {
         this.soundListener.stopAll();
 
         Entity p1 = this.players.get(PlayerTypes.P1);
-        System.out.println(p1);
+//        System.out.println(p1);
         Entity p2;
 
         if (p1 != null) {
@@ -400,6 +412,11 @@ public class GameController implements Game {
         double points = player.getComponent(Player.class).getPoints();
 
         System.out.println(playerThatHitted + "" + points);
+    }
+
+    @Override
+    public Map<PlayerTypes, Data> getPlayerData() {
+        return playersData;
     }
 
     private void updateUiInformation() {

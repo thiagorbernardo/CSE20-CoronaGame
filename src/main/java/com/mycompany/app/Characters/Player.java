@@ -2,6 +2,7 @@ package com.mycompany.app.Characters;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.mycompany.app.Power.ActivePower;
 import com.mycompany.app.Save.Data;
 import com.mycompany.app.Controller.GameFactory;
 import com.mycompany.app.Events.Notification.NotificationListener;
@@ -18,6 +19,7 @@ public class Player extends Character {
 
     protected double points = 0;
     protected PowerType activePower = null;
+    protected ActivePower power;
     protected PlayerTypes playerType;
     protected double lastShot = System.currentTimeMillis();
     protected NotificationListener notificationListener;
@@ -75,16 +77,17 @@ public class Player extends Character {
         System.out.println(randomNumber == 2);
 
         if (randomNumber == 2) {
-            List<PowerType> givenList = Arrays.asList(PowerType.SPEED, PowerType.SPEEDSHOT, PowerType.PURGE);
-
-            this.activePower = givenList.get(rand.nextInt(givenList.size()));
-            System.out.println("New power");
-            this.notificationListener.fireEvent(Color.BISQUE, "Você ganhou um novo poder: " + this.activePower);
+//            List<PowerType> givenList = Arrays.asList(PowerType.SPEED, PowerType.SPEEDSHOT, PowerType.PURGE);
+//
+//            this.activePower = givenList.get(rand.nextInt(givenList.size()));
+//            System.out.println("New power");
+//            this.notificationListener.fireEvent(Color.BISQUE, "Você ganhou um novo poder: " + this.activePower);
+            usePower();
         }
     }
 
     public void usePower() {
-        System.out.println(this.activePower);
+//        this.setPlayerData(power.use(activePower));
         this.activePower = null;
     }
 

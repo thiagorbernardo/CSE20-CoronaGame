@@ -76,6 +76,17 @@ public class CoronaKillerApp extends GameApplication {
             enemy.removeFromWorld();
         });
 
+        FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.ENEMYB, (player, enemy) -> {
+            this.gameController.checkDeathCondition(player);
+        });
+
+        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMYB, (bullet, enemy) -> {
+            this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
+            this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
+            bullet.removeFromWorld();
+            enemy.removeFromWorld();
+        });
+
         /* Collisions BULLET -> BULLET */
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.BULLET, (bullet1, bullet2) -> {

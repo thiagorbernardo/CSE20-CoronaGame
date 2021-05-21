@@ -37,4 +37,12 @@ public class Data {
     public int getLife() {
         return life;
     }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+    public void setLastShot(int lastShot) {
+        this.lastShot = lastShot;
+    }
+
 }

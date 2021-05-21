@@ -2,9 +2,9 @@ package com.mycompany.app.Characters;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.notification.NotificationService;
-import com.mycompany.app.Data;
-import com.mycompany.app.GameFactory;
+import com.mycompany.app.Save.Data;
+import com.mycompany.app.Controller.GameFactory;
+import com.mycompany.app.Events.Notification.NotificationListener;
 import com.mycompany.app.Power.PowerType;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -18,11 +18,14 @@ public class Player extends Character {
 
     protected double points = 0;
     protected PowerType activePower = null;
+    protected PlayerTypes playerType;
     protected double lastShot = System.currentTimeMillis();
-    protected NotificationService notify = FXGL.getNotificationService();
+    protected NotificationListener notificationListener;
 
-    public Player(String path, int speed, int life) {
-        super("player/" + path + ".png", 34, 32, speed, life);
+    public Player(PlayerTypes playerType, int speed, int life, NotificationListener notificationListener) {
+        super("player/" + playerType.name() + ".png", 34, 32, speed, life);
+        this.playerType = playerType;
+        this.notificationListener = notificationListener;
     }
 
     public Entity shotProjectile(GameFactory gameFactory) {
@@ -47,7 +50,7 @@ public class Player extends Character {
 
         this.lastShot = System.currentTimeMillis();
 
-        return gameFactory.newBullet(origin, direction, "bullet1", 400);
+        return gameFactory.newBullet(this.playerType, origin, direction, "bullet1", 400);
     }
 
     public void hit() {
@@ -57,7 +60,7 @@ public class Player extends Character {
 
     @Override
     public int damage() {
-        this.sendNotification(Color.RED, "Você tem " + this.life + " ponto de vida restante.");
+        this.notificationListener.fireEvent(Color.RED, "Você tem " + this.life + " ponto de vida restante.");
         return super.damage();
     }
 
@@ -76,13 +79,8 @@ public class Player extends Character {
 
             this.activePower = givenList.get(rand.nextInt(givenList.size()));
             System.out.println("New power");
-            this.sendNotification(Color.BISQUE, "Você ganhou um novo poder: " + this.activePower);
+            this.notificationListener.fireEvent(Color.BISQUE, "Você ganhou um novo poder: " + this.activePower);
         }
-    }
-
-    protected void sendNotification(Color color, String msg) {
-        this.notify.setBackgroundColor(color);
-        this.notify.pushNotification(msg);
     }
 
     public void usePower() {
@@ -106,4 +104,7 @@ public class Player extends Character {
         this.points = data.getPoints();
     }
 
+    public PlayerTypes getPlayerType() {
+        return this.playerType;
+    }
 }

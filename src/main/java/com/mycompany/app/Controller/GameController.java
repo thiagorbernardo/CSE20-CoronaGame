@@ -9,22 +9,30 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 
+import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.ui.UIFactoryService;
 import com.mycompany.app.Characters.Player;
 import com.mycompany.app.Characters.PlayerTypes;
 
-import com.mycompany.app.Save.Data;
+import com.mycompany.app.Save.*;
 
 import com.mycompany.app.Events.Sound.MusicsNames;
 import com.mycompany.app.Events.Sound.SoundListener;
 import com.mycompany.app.Events.Sound.SoundManager;
 import com.mycompany.app.Events.Sound.SoundNames;
 
-import com.mycompany.app.Save.Ranking;
-import com.mycompany.app.Save.RankingDAO;
-import com.mycompany.app.Save.RankingJSON;
-
+import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import java.util.*;
 
@@ -34,9 +42,10 @@ public class GameController implements Game {
     private ReadOnlyGameSettings fxglSettings = FXGL.getSettings();
     private Input input = FXGL.getInput();
     private com.almasb.fxgl.app.GameController fxglGameController = FXGL.getGameController();
+    private UIFactoryService fxglFactoryService = FXGL.getUIFactoryService();
 
     /* Ranking */
-    private RankingDAO rank = new RankingJSON();
+    private RankingDAO rank;
 
     /* Listeners */
     private SoundListener soundListener = new SoundManager();
@@ -321,19 +330,35 @@ public class GameController implements Game {
 
         int playerLife = playerDamaged.getComponent(Player.class).damage();
 
-        System.out.println("In game controller: " + playerLife);
-
         if (playerLife <= 0) {
             this.soundListener.playSound(SoundNames.DEATH);
+//            for (Ranking ranking : rank.getTopPlayers()) {
+//                System.out.println(ranking.name + ": " + ranking.points);
+//            }
+            String msg = isMultiplayer ? "Vocês conquistaram " : "Você conquistou ";
+            msg += String.format("%.0f", this.getPlayersPoints()) + " pontos. Parabéns!\n\n\n      Escolha o método de save do jogo.";
 
-            // Saving players ranking
-            rank.save(new Ranking("motherfucker super ranking", this.getPlayersPoints()));
+            Button btnRankJSON = this.fxglFactoryService.newButton("Ranking JSON");
+            Button btnRankTXT = this.fxglFactoryService.newButton("Ranking TXT");
+            TextField textField = new TextField();
+            btnRankJSON.setAlignment(Pos.CENTER);
+            btnRankTXT.setAlignment(Pos.CENTER);
+            textField.setAlignment(Pos.CENTER);
+            textField.setMaxWidth(200);
 
-            for (Ranking ranking : rank.getTopPlayers()) {
-                System.out.println(ranking.name + ": " + ranking.points);
-            }
+            btnRankJSON.setOnAction(e -> {
+                this.rank = new RankingJSON();
+                this.rank.save(new Ranking(textField.getText(), this.getPlayersPoints()));
+                this.resetGame();
+            });
+            btnRankTXT.setOnAction(e -> {
+                this.rank = new RankingTXT();
+                this.rank.save(new Ranking(textField.getText(), this.getPlayersPoints()));
+                this.resetGame();
+            });
 
-            this.resetGame();
+            FXGL.getDialogService().showBox(msg, textField, btnRankJSON, btnRankTXT);
+
         }
     }
 
@@ -355,22 +380,16 @@ public class GameController implements Game {
     }
 
     private void resetGame() {
-        String msg = isMultiplayer ? "Vocês conquistaram " : "Você conquistou ";
-        msg += this.getPlayersPoints() + " pontos. Parabéns!";
-
         this.soundListener.stopAll();
         this.soundListener.playMusic(MusicsNames.CHAMPIONS);
 
-        FXGL.showMessage(msg, () -> {
-            this.players.put(PlayerTypes.P1, null);
-            if (isMultiplayer)
-                this.players.put(PlayerTypes.P2, null);
+        this.players.put(PlayerTypes.P1, null);
+        if (isMultiplayer)
+            this.players.put(PlayerTypes.P2, null);
 
-            this.currentLevel = 0;
-            this.fxglWorld.reset();
-            this.fxglGameController.startNewGame();
-//                this.textPixels.setText("");
-        });
+        this.currentLevel = 0;
+        this.fxglWorld.reset();
+        this.fxglGameController.startNewGame();
     }
 
     @Override

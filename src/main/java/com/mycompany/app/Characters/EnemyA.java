@@ -29,7 +29,6 @@ public class EnemyA extends Character implements Ia {
         //System.out.println("Enemy " + this.entity.getPosition());
         //System.out.println(physics.getLinearVelocity());
         this.flag = false;
-        System.out.println("aro");
     }
 
     public void setFlag(Entity w){

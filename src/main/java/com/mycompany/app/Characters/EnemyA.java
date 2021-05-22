@@ -27,8 +27,8 @@ public class EnemyA extends Character implements Ia {
         this.flag = false;
     }
 
-    public void setFlag(Entity w){
-        flag = true;
+    public void setFlag(){
+        this.flag = true;
     }
 
     public void followPlayer(Entity charToFollow){

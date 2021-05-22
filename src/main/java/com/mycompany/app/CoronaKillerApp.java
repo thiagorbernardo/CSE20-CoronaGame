@@ -25,13 +25,8 @@ import java.util.function.Predicate;
 
 
 public class CoronaKillerApp extends GameApplication {
-    private final GameFactory gameFactory = new GameFactory();
-    double elapsedTime = 0;
-    private Entity player, player2;
-    private Text textPixels = new Text();
+    private Text textPixels = new Text("Pontuação: 0");
     private Scene scene = new Scene();
-    /* Ranking */
-    private RankingDAO rank = new RankingJSON();
 
     /* Game Controller */
     private Game gameController;
@@ -74,26 +69,19 @@ public class CoronaKillerApp extends GameApplication {
             this.gameController.checkDeathCondition(player);
         });
 
+        FXGL.onCollisionBegin(EntityType.PLAYER, EnemyType.ENEMYC, (player, enemy) -> {
+            this.gameController.checkDeathCondition(player);
+        });
+
+        FXGL.onCollisionBegin(EntityType.PLAYER, EnemyType.ENEMYB, (player, enemy) -> {
+            this.gameController.checkDeathCondition(player);
+        });
+
         FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYA, (bullet, enemy) -> {
             this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
             this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
             bullet.removeFromWorld();
             enemy.removeFromWorld();
-        });
-
-        FXGL.onCollisionBegin(EntityType.PLAYER, EnemyType.ENEMYC, (player, enemy) -> {
-            this.gameController.checkDeathCondition(player);
-        });
-
-        FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYC, (bullet, enemy) -> {
-            this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
-            this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
-            bullet.removeFromWorld();
-            enemy.removeFromWorld();
-        });
-
-        FXGL.onCollisionBegin(EntityType.PLAYER, EnemyType.ENEMYB, (player, enemy) -> {
-            this.gameController.checkDeathCondition(player);
         });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYB, (bullet, enemy) -> {
@@ -103,13 +91,23 @@ public class CoronaKillerApp extends GameApplication {
             enemy.removeFromWorld();
         });
 
+        FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYC, (bullet, enemy) -> {
+            this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
+            this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
+            bullet.removeFromWorld();
+            enemy.removeFromWorld();
+        });
+
+        FXGL.onCollision(EnemyType.ENEMYA, EnemyType.ENEMYC, (enemyA, enemyC) -> {
+            enemyA.getComponent(EnemyA.class).setFlag();
+            enemyC.getComponent(EnemyA.class).setFlag();
+        });
+
         /* Collisions BULLET -> BULLET */
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.BULLET, (bullet1, bullet2) -> {
             bullet1.removeFromWorld();
             bullet2.removeFromWorld();
-
-            System.out.println("BULLET WITH BULLET");
         });
 
         /* Collisions SOMETHING -> DOOR */
@@ -126,7 +124,11 @@ public class CoronaKillerApp extends GameApplication {
         /* Collisions SOMETHING -> WALL */
 
         FXGL.onCollision(EnemyType.ENEMYA, EntityType.WALL, (enemy, wall) -> {
-            // System.out.println("Enemy hitting wall - change directions?");
+            enemy.getComponent(EnemyA.class).setFlag();
+        });
+
+        FXGL.onCollision(EnemyType.ENEMYC, EntityType.WALL, (enemy, wall) -> {
+            enemy.getComponent(EnemyA.class).setFlag();
         });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.WALL, (bullet, wall) -> {
@@ -136,7 +138,6 @@ public class CoronaKillerApp extends GameApplication {
         /* Collisions SOMETHING -> SCREEN */
 
         FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.SCREEN, (player, screen) -> {
-            System.out.println("Hitted wall");
             this.gameController.changeCurrentLevel(player.getPosition());
         });
     }
@@ -158,9 +159,6 @@ public class CoronaKillerApp extends GameApplication {
     @Override
     protected void initGame() {
         this.gameController.initGame();
-
-        this.player = this.gameController.getPlayer(PlayerTypes.P1);
-        this.player2 = this.gameController.getPlayer(PlayerTypes.P2);
     }
 
     @Override

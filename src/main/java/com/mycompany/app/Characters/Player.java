@@ -1,7 +1,6 @@
 package com.mycompany.app.Characters;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
 
 import com.almasb.fxgl.texture.Texture;
 import com.mycompany.app.Power.*;
@@ -42,7 +41,7 @@ public class Player extends Character {
         this.addPlayerName();
     }
 
-    public Entity shotProjectile(GameFactory gameFactory) {
+    public void shotProjectile(GameFactory gameFactory) {
         Point2D origin = this.entity.getCenter();
 
         Point2D direction;
@@ -64,7 +63,7 @@ public class Player extends Character {
 
         this.lastShot = System.currentTimeMillis();
 
-        return gameFactory.newBullet(this.playerType, origin, direction, "bullet1", 400);
+        gameFactory.newBullet(this.playerType, origin, direction, "bullet1", 400);
     }
 
     public void hit() {
@@ -121,10 +120,7 @@ public class Player extends Character {
     @Override
     public void onUpdate(double tpf) {
         super.onUpdate(tpf);
-        if((this.activePower != null) && (System.currentTimeMillis() - this.lastUsePower > 5000)){
-            this.activePower = null;
-            this.setPlayerData(new Data(this.points, 200, null, this.lastShot, 2, 250, false));
-        }
+        this.resetPlayer();
     }
 
     public double getPoints() {
@@ -153,6 +149,12 @@ public class Player extends Character {
         stackPane.setTranslateX(2);
 
         this.entity.getViewComponent().addChild(stackPane);
+    }
+    private void resetPlayer(){
+        if((this.activePower != null) && (System.currentTimeMillis() - this.lastUsePower > 5000)){
+            this.activePower = null;
+            this.setPlayerData(new Data(this.points, 200, null, this.lastShot, 2, 250, false));
+        }
     }
 }
 

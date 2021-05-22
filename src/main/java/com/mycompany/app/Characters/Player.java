@@ -2,12 +2,20 @@ package com.mycompany.app.Characters;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+
 import com.mycompany.app.Power.*;
 import com.mycompany.app.Save.Data;
 import com.mycompany.app.Controller.GameFactory;
 import com.mycompany.app.Events.Notification.NotificationListener;
+
 import javafx.geometry.Point2D;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +38,12 @@ public class Player extends Character {
         super("player/" + playerType.name() + ".png", 34, 32, speed, life);
         this.playerType = playerType;
         this.notificationListener = notificationListener;
+    }
+
+    @Override
+    public void onAdded() {
+        super.onAdded();
+        this.addPlayerName();
     }
 
     public Entity shotProjectile(GameFactory gameFactory) {
@@ -65,7 +79,6 @@ public class Player extends Character {
     @Override
     public int damage() {
         if(!isInvincible){
-            //System.out.println("alguma mensagem tipo qualquer coisa");
             this.notificationListener.fireEvent(Color.RED, "Você tem " + this.life + " ponto de vida restante.");
             return --this.life;
         }
@@ -80,7 +93,6 @@ public class Player extends Character {
 
     protected void setActivePower() {
         Random rand = new Random();
-        int randomNumber = rand.nextInt(3);
 
         if (getPoints() > 0 && getPoints()%100 == 0) {
             List<PowerType> givenList = Arrays.asList(PowerType.SPEED, PowerType.SPEEDSHOT, PowerType.INVINCIBLE);
@@ -140,8 +152,20 @@ public class Player extends Character {
         this.isInvincible = data.getInvincibility();
     }
 
-    public PlayerTypes getPlayerType() {
-        return this.playerType;
+    private void addPlayerName() {
+        Text playerName = new Text(this.playerType.name());
+
+        Circle bg = new Circle(10, Color.MEDIUMVIOLETRED);
+        bg.setEffect(new BoxBlur());
+
+        playerName.setFill(Color.BLACK);
+        playerName.setTextAlignment(TextAlignment.CENTER);
+//        playerName.setFont(Font.font("Roboto"));
+
+        StackPane stackPane = new StackPane(bg, playerName);
+        stackPane.setTranslateY(-20);
+        stackPane.setTranslateX(8);
+        this.entity.getViewComponent().addChild(stackPane);
     }
 }
 

@@ -421,10 +421,10 @@ public class GameController implements Game {
         System.out.println(playerThatHitted + "" + points);
     }
 
-    @Override
-    public Map<PlayerTypes, Data> getPlayerData() {
-        return playersData;
-    }
+//    @Override
+//    public Map<PlayerTypes, Data> getPlayerData() {
+//        return playersData;
+//    }
 
     private void updateUiInformation() {
 //        this.textPixels.setText("Pontuação: " + String.format("%.0f", points));
@@ -448,7 +448,7 @@ public class GameController implements Game {
                 (spawnEnabler(this.getPlayersPoints(), this.getCurrentLevel()))) {
 
             PlayerTypes[] playerTypes = PlayerTypes.values();
-            PlayerTypes playerType = playerTypes[this.random.nextInt(playerTypes.length)];
+            PlayerTypes playerType = this.isMultiplayer ? playerTypes[this.random.nextInt(playerTypes.length)] : PlayerTypes.P1;
             System.out.println(playerType);
 
             Entity playerToFollow = this.getPlayer(playerType);

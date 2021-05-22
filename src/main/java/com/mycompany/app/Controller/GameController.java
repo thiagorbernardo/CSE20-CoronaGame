@@ -348,6 +348,8 @@ public class GameController implements Game {
     public void checkDeathCondition(Entity playerDamaged) {
 
         int playerLife = playerDamaged.getComponent(Player.class).damage();
+        //System.out.println("\nPlayer Life: " + playerLife);
+
 
         if (playerLife <= 0) {
             this.soundListener.playSound(SoundNames.DEATH);

@@ -32,7 +32,7 @@ public class GameFactory implements EntityFactory {
                 .bbox(new HitBox(BoundingShape.polygon(9, 9, 9, 32, 26, 32, 26, 9)))
                 .with(physics)
                 .collidable()
-                .with(new Player(playerType, 200, 0, new Notificator()))
+                .with(new Player(playerType, 200, 2, new Notificator()))
                 .buildAndAttach();
     }
 

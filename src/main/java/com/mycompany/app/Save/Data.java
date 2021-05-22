@@ -10,14 +10,16 @@ public class Data {
     private long lastShot;
     private int life;
     private double fireRate;
+    private boolean isInvincible;
 
-    public Data(double points, int speed, PowerType activePower, double lastShot, int life, double fireRate) {
+    public Data(double points, int speed, PowerType activePower, double lastShot, int life, double fireRate, boolean isInvincible) {
         this.points = points;
         this.speed = speed;
         this.activePower = activePower;
         this.lastShot = (long) lastShot;
         this.life = life;
         this.fireRate = fireRate;
+        this.isInvincible = isInvincible;
     }
 
     public double getPoints() {
@@ -47,10 +49,16 @@ public class Data {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
+
     public void setFireRate(double fireRate){
         this.fireRate = fireRate;
     }
 
+    public void setIsInvincible(boolean isinvincible){
+        this.isInvincible = isinvincible;
+    }
 
-
+    public boolean getIsInvincible() {
+        return isInvincible;
+    }
 }

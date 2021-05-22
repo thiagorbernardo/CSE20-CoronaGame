@@ -23,6 +23,9 @@ public class Player extends Character {
     protected double lastShot = System.currentTimeMillis();
     protected NotificationListener notificationListener;
     protected double fireRate = 250;
+    protected long lastUsePower = 0;
+    protected boolean isInvincible = false;
+
     public Player(PlayerTypes playerType, int speed, int life, NotificationListener notificationListener) {
         super("player/" + playerType.name() + ".png", 34, 32, speed, life);
         this.playerType = playerType;
@@ -61,8 +64,13 @@ public class Player extends Character {
 
     @Override
     public int damage() {
-        this.notificationListener.fireEvent(Color.RED, "Você tem " + this.life + " ponto de vida restante.");
-        return super.damage();
+        if(!isInvincible){
+            //System.out.println("alguma mensagem tipo qualquer coisa");
+            this.notificationListener.fireEvent(Color.RED, "Você tem " + this.life + " ponto de vida restante.");
+            return --this.life;
+        }
+        System.out.println("Eu ja nem falei nada");
+        return this.life;
     }
 
     public boolean canShot() {
@@ -73,21 +81,20 @@ public class Player extends Character {
     protected void setActivePower() {
         Random rand = new Random();
         int randomNumber = rand.nextInt(3);
-        System.out.println(randomNumber == 2);
-        System.out.println("Old FireRate" + this.getPlayerData().getFireRate());
-        if (randomNumber == 2) {
-        List<PowerType> givenList = Arrays.asList(PowerType.SPEED, PowerType.INVENCIBLE, PowerType.SPEEDSHOT);
+
+        if (getPoints() > 0 && getPoints()%100 == 0) {
+            List<PowerType> givenList = Arrays.asList(PowerType.SPEED, PowerType.SPEEDSHOT, PowerType.INVINCIBLE);
 
             this.powerType = givenList.get(rand.nextInt(givenList.size()));
-            System.out.println(this.getPlayerData().getFireRate());
             this.notificationListener.fireEvent(Color.BISQUE, "Você ganhou um novo poder: " + this.powerType);
             usePower();
         }
-        System.out.println("New FireRate" + this.getPlayerData().getFireRate());
     }
 
     public void usePower() {
         if (powerType != null) {
+            System.out.println("Ganhou Poder");
+            this.lastUsePower = System.currentTimeMillis();
             switch (powerType) {
                 case SPEED:
                     activePower = new MoveSpeed();
@@ -97,13 +104,22 @@ public class Player extends Character {
                     activePower = new SpeedShot();
                     this.setPlayerData(activePower.use(this.getPlayerData()));
                     break;
-                case INVENCIBLE:
-                    activePower = new Invencible();
+                case INVINCIBLE:
+                    activePower = new Invincible();
                     this.setPlayerData(activePower.use(this.getPlayerData()));
                     break;
             }
         }
-        this.activePower = null;
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+        if((this.activePower != null) && (System.currentTimeMillis() - this.lastUsePower > 5000)){
+            this.activePower = null;
+            this.setPlayerData(new Data(this.points, 200, null, this.lastShot, 2, 250, false));
+            System.out.println("Perdeu Poder");
+        }
     }
 
     public double getPoints() {
@@ -111,7 +127,7 @@ public class Player extends Character {
     }
 
     public Data getPlayerData() {
-        return new Data(this.points, this.speed, this.powerType, this.lastShot, this.life, this.fireRate);
+        return new Data(this.points, this.speed, this.powerType, this.lastShot, this.life, this.fireRate, this.isInvincible);
     }
 
     public void setPlayerData(Data data) {
@@ -121,9 +137,12 @@ public class Player extends Character {
         this.life = data.getLife();
         this.points = data.getPoints();
         this.fireRate = data.getFireRate();
+        this.isInvincible = data.getIsInvincible();
     }
 
     public PlayerTypes getPlayerType() {
         return this.playerType;
     }
 }
+
+

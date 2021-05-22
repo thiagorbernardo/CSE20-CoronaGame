@@ -7,12 +7,11 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.mycompany.app.Characters.EnemyA;
-import com.mycompany.app.Characters.EntityType;
-import com.mycompany.app.Characters.PlayerTypes;
+import com.mycompany.app.Characters.*;
 import com.mycompany.app.Controller.Game;
 import com.mycompany.app.Controller.GameController;
 import com.mycompany.app.Controller.GameFactory;
+import com.mycompany.app.Events.Sound.MusicsNames;
 import com.mycompany.app.Projectiles.Bullet;
 import com.mycompany.app.Save.*;
 import com.mycompany.app.UI.GameMenu;
@@ -22,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.Random;
+import java.util.function.Predicate;
 
 
 public class CoronaKillerApp extends GameApplication {
@@ -29,9 +29,6 @@ public class CoronaKillerApp extends GameApplication {
     double elapsedTime = 0;
     private Entity player, player2;
     private Text textPixels = new Text();
-    private double initTime = System.currentTimeMillis();
-    private double spawnTimer = 2000;
-    private double lastSpawn = 0;
     private Scene scene = new Scene();
     /* Ranking */
     private RankingDAO rank = new RankingJSON();
@@ -73,22 +70,33 @@ public class CoronaKillerApp extends GameApplication {
 
         /* Collisions SOMETHING -> ENEMY */
 
-        FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.ENEMY, (player, enemy) -> {
+        FXGL.onCollisionBegin(EntityType.PLAYER, EnemyType.ENEMYA, (player, enemy) -> {
             this.gameController.checkDeathCondition(player);
         });
 
-        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
+        FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYA, (bullet, enemy) -> {
             this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
             this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
             bullet.removeFromWorld();
             enemy.removeFromWorld();
         });
 
-        FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.ENEMYB, (player, enemy) -> {
+        FXGL.onCollisionBegin(EntityType.PLAYER, EnemyType.ENEMYC, (player, enemy) -> {
             this.gameController.checkDeathCondition(player);
         });
 
-        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMYB, (bullet, enemy) -> {
+        FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYC, (bullet, enemy) -> {
+            this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
+            this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
+            bullet.removeFromWorld();
+            enemy.removeFromWorld();
+        });
+
+        FXGL.onCollisionBegin(EntityType.PLAYER, EnemyType.ENEMYB, (player, enemy) -> {
+            this.gameController.checkDeathCondition(player);
+        });
+
+        FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYB, (bullet, enemy) -> {
             this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
             this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
             bullet.removeFromWorld();
@@ -116,7 +124,7 @@ public class CoronaKillerApp extends GameApplication {
 
         /* Collisions SOMETHING -> WALL */
 
-        FXGL.onCollision(EntityType.ENEMY, EntityType.WALL, (enemy, wall) -> {
+        FXGL.onCollision(EnemyType.ENEMYA, EntityType.WALL, (enemy, wall) -> {
             // System.out.println("Enemy hitting wall - change directions?");
         });
 
@@ -152,11 +160,6 @@ public class CoronaKillerApp extends GameApplication {
 
         this.player = this.gameController.getPlayer(PlayerTypes.P1);
         this.player2 = this.gameController.getPlayer(PlayerTypes.P2);
-
-        this.gameFactory.newEnemy(700, 500, EntityType.ENEMY)
-                .getComponent(EnemyA.class).followPlayer(this.player);
-
-        this.gameFactory.newEnemy(900, 300, EntityType.ENEMYB);
     }
 
     @Override
@@ -168,55 +171,10 @@ public class CoronaKillerApp extends GameApplication {
         this.gameController.preInitGame();
     }
 
-
     @Override
     protected void onUpdate(double tpf) {
         super.onUpdate(tpf);
-        Random gerador = new Random();
-        String enemysprite = "enemy1";
 
-        if ((System.currentTimeMillis() - lastSpawn) > spawnTimer) {
-
-            int rnd = gerador.nextInt(3);
-            if (rnd == 0)
-                enemysprite = "enemy1";
-            if (rnd == 1)
-                enemysprite = "enemy2";
-            if (rnd == 2)
-                enemysprite = "enemy3";
-
-            switch (gerador.nextInt(4)) {
-                case 0:
-                    gameFactory.newEnemy(30, 360, EntityType.ENEMY)
-                            .getComponent(EnemyA.class).followPlayer(player);
-                    break;
-
-                case 1:
-                    gameFactory.newEnemy(1200, 360, EntityType.ENEMY)
-                            .getComponent(EnemyA.class).followPlayer(player);
-                    break;
-
-                case 2:
-                    gameFactory.newEnemy(640, 640, EntityType.ENEMY).
-                            getComponent(EnemyA.class).followPlayer(player);
-                    break;
-
-                case 3:
-                    gameFactory.newEnemy(640, 30, EntityType.ENEMY)
-                            .getComponent(EnemyA.class).followPlayer(player);
-                    break;
-            }
-            this.lastSpawn = System.currentTimeMillis();
-        }
-
-        elapsedTime = elapsedTime + 10;
-
-        if (elapsedTime > 2000 && spawnTimer > 500) {
-            // Para tornar o jogo mais difícil, pode-se alterar o passo em que diminui-se
-            // o spawn timer
-            spawnTimer = spawnTimer - 50;
-            elapsedTime = 0;
-        }
-
+        this.gameController.spawnEnemy();
     }
 }

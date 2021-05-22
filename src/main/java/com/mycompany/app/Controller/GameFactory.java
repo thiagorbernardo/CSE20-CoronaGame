@@ -9,17 +9,15 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.mycompany.app.Characters.Character;
-import com.mycompany.app.Characters.EnemyA;
-import com.mycompany.app.Characters.EnemyB;
+import com.mycompany.app.Characters.*;
 
-import com.mycompany.app.Characters.EntityType;
+import com.mycompany.app.Characters.Character;
 import javafx.geometry.Point2D;
 
-import com.mycompany.app.Characters.Player;
-import com.mycompany.app.Characters.PlayerTypes;
 import com.mycompany.app.Events.Notification.Notificator;
 import com.mycompany.app.Projectiles.Bullet;
+
+import java.util.Random;
 
 public class GameFactory implements EntityFactory {
     @Spawns("player")
@@ -50,15 +48,17 @@ public class GameFactory implements EntityFactory {
     }
 
     @Spawns("enemy")
-    public Entity newEnemy(int x, int y, EntityType type) {
+    public Entity newEnemy(int x, int y, EnemyType type, Entity player) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
-        Character enemy;
-        if (type == EntityType.ENEMY)
-            enemy = new EnemyA("enemy1", 100, 2);
-        else
-            enemy = new EnemyB("enemy2", 100, 2);
-        return FXGL.entityBuilder()
+        Character enemy = new EnemyA("enemy1", 100, 2);
+
+        if(type == EnemyType.ENEMYB)
+            enemy = new EnemyB("enemy2", 50, 2);
+        else if(type == EnemyType.ENEMYC)
+            enemy = new EnemyA("enemy3", 150, 2);
+
+        Entity enemyEntity =  FXGL.entityBuilder()
                 .type(type)
                 .at(x, y) // 700 500
                 .scale(1.0, 1.0)
@@ -67,6 +67,12 @@ public class GameFactory implements EntityFactory {
                 .collidable()
                 .with(enemy)
                 .buildAndAttach();
+
+        if(type == EnemyType.ENEMYA || type == EnemyType.ENEMYC){
+            enemyEntity.getComponent(EnemyA.class).followPlayer(player);
+        }
+
+        return enemyEntity;
     }
 
     /**

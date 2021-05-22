@@ -11,9 +11,11 @@ import com.almasb.fxgl.input.UserAction;
 
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.UIFactoryService;
+import com.mycompany.app.Characters.EnemyType;
 import com.mycompany.app.Characters.Player;
 import com.mycompany.app.Characters.PlayerTypes;
 
+import com.mycompany.app.CoronaKillerApp;
 import com.mycompany.app.Save.*;
 import com.mycompany.app.Events.Menu.MenuListener;
 import com.mycompany.app.Events.Menu.MenuManager;
@@ -68,6 +70,11 @@ public class GameController implements Game {
     private int currentLevel = 0;
     private Boolean isMultiplayer = false;
     private Random random = new Random();
+
+    /*Spawn variables*/
+    private double spawnTimer = 2000;
+    private double lastSpawn = 0;
+    private double elapsedTime = 0;
 
 
     public GameController(Scene scene){
@@ -197,10 +204,9 @@ public class GameController implements Game {
 
             FXGL.setLevelFromMap("level" + ++this.currentLevel + ".tmx");
             this.gameFactory.newWallScreen();
-
             this.setEntitiesLocation(spawnLocation);
             this.playRandomMusic();
-
+            this.resetSpawn();
             return;
         }
         FXGL.setLevelFromMap("level" + ++this.currentLevel + ".tmx");
@@ -331,9 +337,9 @@ public class GameController implements Game {
 
         System.out.println("Pontuação atual: " + totalGamePoints);
 
-        if (totalGamePoints > 20 && this.currentLevel == 1)
+        if (totalGamePoints >= 500 && this.currentLevel == 1)
             door.removeFromWorld();
-        else if (totalGamePoints > 20 && this.currentLevel == 2)
+        else if (totalGamePoints >= 1000 && this.currentLevel == 2)
             door.removeFromWorld();
     }
 
@@ -348,7 +354,7 @@ public class GameController implements Game {
 //                System.out.println(ranking.name + ": " + ranking.points);
 //            }
             String msg = isMultiplayer ? "Vocês conquistaram " : "Você conquistou ";
-            msg += String.format("%.0f", this.getPlayersPoints()) + " pontos. Parabéns!\n\n\n      Escolha o método de save do jogo.";
+            msg += String.format("%.0f", this.getPlayersPoints()) + " pontos. Parabéns!\n\n\n      Escolha o método de save do jogo:";
 
             Button btnRankJSON = this.fxglFactoryService.newButton("Ranking JSON");
             Button btnRankTXT = this.fxglFactoryService.newButton("Ranking TXT");
@@ -399,6 +405,7 @@ public class GameController implements Game {
         if (isMultiplayer)
             this.players.put(PlayerTypes.P2, null);
 
+        this.resetSpawn();
         this.currentLevel = 0;
         this.fxglWorld.reset();
         this.fxglGameController.startNewGame();
@@ -431,4 +438,61 @@ public class GameController implements Game {
 
         this.soundListener.playMusic(someRandomMusic);
     }
+
+    @Override
+    public void spawnEnemy(){
+        EnemyType[] enemyTypes = EnemyType.values();
+        EnemyType enemyType = enemyTypes[this.random.nextInt(enemyTypes.length)];
+
+        if ((System.currentTimeMillis() - lastSpawn) > spawnTimer &&
+                (spawnEnabler(this.getPlayersPoints(), this.getCurrentLevel()))) {
+
+            PlayerTypes[] playerTypes = PlayerTypes.values();
+            PlayerTypes playerType = playerTypes[this.random.nextInt(playerTypes.length)];
+            System.out.println(playerType);
+
+            Entity playerToFollow = this.getPlayer(playerType);
+
+            switch (this.random.nextInt(4)) {
+                case 0:
+                    gameFactory.newEnemy(30, 360, enemyType, playerToFollow);
+                    break;
+
+                case 1:
+                    gameFactory.newEnemy(1200, 360, enemyType, playerToFollow);
+                    break;
+
+                case 2:
+                    gameFactory.newEnemy(640, 640, enemyType, playerToFollow);
+                    break;
+
+                case 3:
+                    gameFactory.newEnemy(640, 30, enemyType, playerToFollow);
+                    break;
+            }
+
+            this.lastSpawn = System.currentTimeMillis();
+        }
+
+        elapsedTime = elapsedTime + 10;
+
+        if (this.elapsedTime > 2000 && this.spawnTimer > 500) {
+            // Para tornar o jogo mais difícil, pode-se alterar o passo em que diminui-se
+            // o spawn timer
+            this.spawnTimer = this.spawnTimer - 50;
+            this.elapsedTime = 0;
+        }
+    }
+
+    private boolean spawnEnabler (double points, int currentLevel) {
+        return !((currentLevel == 1 && points >= 500) || (currentLevel == 2 && points >= 1000));
+    }
+
+    private void resetSpawn(){
+        this.spawnTimer = 2000;
+        this.lastSpawn = 0;
+    }
 }
+
+
+

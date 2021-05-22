@@ -32,4 +32,7 @@ public interface Game {
     void checkDeathCondition(Entity playerDamaged);
 
     void playerBulletHittingEnemy(PlayerTypes playerThatHitted);
+
+    void spawnEnemy();
+
 }

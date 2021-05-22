@@ -7,7 +7,7 @@ public class Data {
     private double points;
     private int speed;
     private PowerType activePower;
-    private double lastShot;
+    private long lastShot;
     private int life;
     private double fireRate;
 
@@ -15,7 +15,7 @@ public class Data {
         this.points = points;
         this.speed = speed;
         this.activePower = activePower;
-        this.lastShot = lastShot;
+        this.lastShot = (long) lastShot;
         this.life = life;
         this.fireRate = fireRate;
     }

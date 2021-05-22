@@ -7,8 +7,5 @@ public class MoveSpeed implements Power {
         return oldData;
     }
 
-    @Override
-    public void executionTime() {
 
-    }
 }

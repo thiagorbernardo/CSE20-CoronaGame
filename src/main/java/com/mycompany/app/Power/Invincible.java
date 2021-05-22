@@ -11,8 +11,5 @@ public class Invincible implements Power{
         oldData.setIsInvincible(true);
         return oldData;
     }
-
-    @Override
-    public void executionTime() {
-    }
+    
 }

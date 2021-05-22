@@ -10,8 +10,4 @@ public class SpeedShot implements Power{
         return oldData;
     }
 
-    @Override
-    public void executionTime() {
-
-    }
 }

@@ -108,7 +108,7 @@ public class Menu extends FXGLMenu {
 
     private void StartGame() {
 
-        this.menuListener.isMultiplayer();
+        this.menuListener.setMultiplayer();
 
         fireNewGame();
     }

@@ -15,12 +15,12 @@ public class MenuManager implements MenuListener{
     }
 
     @Override
-    public void isMultiplayer() {
-        multiplayer = true;
+    public void setMultiplayer() {
+        this.multiplayer = true;
     }
 
     @Override
     public boolean getMultiplayer() {
-        return multiplayer;
+        return this.multiplayer;
     }
 }

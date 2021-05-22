@@ -5,7 +5,7 @@ public interface MenuListener {
 
     public void load();
 
-    public void isMultiplayer();
+    public void setMultiplayer();
 
     public boolean getMultiplayer();
 }

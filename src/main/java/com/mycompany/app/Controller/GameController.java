@@ -16,6 +16,7 @@ import com.mycompany.app.Characters.EnemyType;
 import com.mycompany.app.Characters.Player;
 import com.mycompany.app.Characters.PlayerTypes;
 
+import com.mycompany.app.Power.PowerType;
 import com.mycompany.app.Save.*;
 
 import com.mycompany.app.Events.Sound.MusicsNames;
@@ -83,6 +84,7 @@ public class GameController implements Game {
     private Text playersPointsUI = new Text("Pontuação: 0");
     private Text p1ActivePowerUI = new Text("");
     private Text p2ActivePowerUI = new Text("");
+    private Text playersLifeUI = new Text("Vidas P1: ");
 
 
     public GameController(Scene scene) {
@@ -94,6 +96,10 @@ public class GameController implements Game {
      */
     @Override
     public void preInitGame() {
+
+        this.mapWidth = this.fxglSettings.getWidth();
+        this.mapHeight = this.fxglSettings.getHeight();
+
         this.manageSounds();
         this.setDevActions();
 
@@ -131,6 +137,7 @@ public class GameController implements Game {
 
         this.manageSave(saveFile);
 
+        this.setPlayerUIInformation();
     }
 
     /**
@@ -166,7 +173,7 @@ public class GameController implements Game {
      * @param saveFile save config
      */
     private void manageSave(Save saveFile) {
-        SpawnData standardSpawnLocation = new SpawnData(this.fxglSettings.getWidth() / 2, this.fxglSettings.getHeight() / 2);
+        SpawnData standardSpawnLocation = new SpawnData(mapWidth / 2, mapHeight / 2);
         if (saveFile != null) {
             this.playersData.put(PlayerTypes.P1, saveFile.P1Data);
 
@@ -328,7 +335,9 @@ public class GameController implements Game {
             protected void onAction() {
                 Entity player = players.get(selectedPlayer);
                 if (player != null && player.getComponent(Player.class).canShot()) {
-                    player.getComponent(Player.class).shotProjectile(gameFactory);
+                    List<Point2D> point2DS = player.getComponent(Player.class).shotProjectile();
+
+                    gameFactory.newBullet(selectedPlayer, point2DS.get(0), point2DS.get(1), "bullet1", 400);
                     soundListener.playSound(SoundNames.SHOT);
                 }
             }
@@ -401,14 +410,16 @@ public class GameController implements Game {
     public boolean playerCanLevelUp() {
         double totalGamePoints = this.getPlayersPoints();
 
-        return (((this.currentLevel == 1 && totalGamePoints >= 10)
-                || (this.currentLevel == 2 && totalGamePoints >= 40)));
+        return (((this.currentLevel == 1 && totalGamePoints >= 500)
+                || (this.currentLevel == 2 && totalGamePoints >= 1000)));
     }
 
     @Override
     public void checkDeathCondition(Entity playerDamaged) {
 
         int playerLife = playerDamaged.getComponent(Player.class).damage();
+
+        this.setPlayerUIInformation();
 
         if (playerLife <= 0) {
             this.soundListener.playSound(SoundNames.DEATH);
@@ -420,7 +431,6 @@ public class GameController implements Game {
 //            }
             String msg = isMultiplayer ? "  Vocês conquistaram " : "  Você conquistou ";
             msg += String.format("%.0f", this.getPlayersPoints()) + " pontos. Parabéns!\n\n\n      Escolha o método de save do jogo:";
-//                    "Digite um nome para poder continuar";
 
             Button btnRankJSON = this.fxglFactoryService.newButton("Ranking JSON");
             Button btnRankTXT = this.fxglFactoryService.newButton("Ranking TXT");
@@ -582,20 +592,60 @@ public class GameController implements Game {
     @Override
     public void setPlayerUIInformation() {
         this.playersPointsUI.setText("Pontuação: " + String.format("%.0f", this.getPlayersPoints()));
+
+        Entity p1 = this.players.get(PlayerTypes.P1);
+        PowerType p1Power = p1.getComponent(Player.class).getPowerType();
+
+        String p1Text = "P1 Ultimo Poder: ";
+
+
+        if(p1Power != null)
+            p1Text += p1Power;
+
+        String playersLife = "Vidas P1: " + p1.getComponent(Player.class).getLife() + "           ";
+        this.p1ActivePowerUI.setText(p1Text);
+
+        if(this.isMultiplayer) {
+            Entity p2 = this.players.get(PlayerTypes.P2);
+            PowerType p2Power = p2.getComponent(Player.class).getPowerType();
+
+            String p2Text = "P2 Ultimo Poder: ";
+
+            if(p2Power != null)
+                p2Text += p2Power;
+
+            playersLife += "Vidas P2: " + p2.getComponent(Player.class).getLife();
+            this.p2ActivePowerUI.setText(p2Text);
+        }
+
+        this.playersLifeUI.setText(playersLife);
     }
 
     @Override
     public void initPlayerUIInfo() {
         this.playersPointsUI.setTranslateX(18);
-        this.playersPointsUI.setTranslateY(35);
+        this.playersPointsUI.setTranslateY(32);
 
-//        this.playersPointsUI.setTranslateX(18);
-//        this.playersPointsUI.setTranslateY();
+        this.p1ActivePowerUI.setTranslateX(18);
+        this.p1ActivePowerUI.setTranslateY(this.mapHeight - 18);
+
+        this.p2ActivePowerUI.setTranslateX(this.mapWidth - 270);
+        this.p2ActivePowerUI.setTranslateY(this.mapHeight - 18);
+
+        this.playersLifeUI.setTranslateX(this.mapWidth - 270);
+        this.playersLifeUI.setTranslateY(32);
 
         Font font = new Font(20);
+
         this.playersPointsUI.setFont(font);
+        this.p1ActivePowerUI.setFont(font);
+        this.p2ActivePowerUI.setFont(font);
+        this.playersLifeUI.setFont(font);
 
         this.fxglGameScene.addUINode(this.playersPointsUI);
+        this.fxglGameScene.addUINode(this.p1ActivePowerUI);
+        this.fxglGameScene.addUINode(this.p2ActivePowerUI);
+        this.fxglGameScene.addUINode(this.playersLifeUI);
     }
     private void initPlayerOptionToSave() {
         String msg = "Escolha o tipo de Save:";

@@ -17,8 +17,6 @@ import javafx.geometry.Point2D;
 import com.mycompany.app.Events.Notification.Notificator;
 import com.mycompany.app.Projectiles.Bullet;
 
-import java.util.Random;
-
 public class GameFactory implements EntityFactory {
     @Spawns("player")
     public Entity newPlayer(PlayerTypes playerType, SpawnData data) {

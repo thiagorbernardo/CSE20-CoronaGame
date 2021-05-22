@@ -23,7 +23,6 @@ public class Save {
     private void mapsToObjects(Map<PlayerTypes, Entity> players){
         this.P1Data = players.get(PlayerTypes.P1).getComponent(Player.class).getPlayerData();
 
-        System.out.println(this.isMultiplayer);
         if(this.isMultiplayer)
             this.P2Data = players.get(PlayerTypes.P2).getComponent(Player.class).getPlayerData();
     }

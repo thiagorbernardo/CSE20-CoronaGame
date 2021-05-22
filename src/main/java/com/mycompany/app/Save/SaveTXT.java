@@ -38,7 +38,7 @@ public class SaveTXT implements SaveDAO {
             while ((line = br.readLine()) != null) {
                 Matcher matcher = saveRegex.matcher(line);
                 if (matcher.find()) {
-                    saveMap.put(matcher.group(1), matcher.group(2));
+                    this.saveMap.put(matcher.group(1), matcher.group(2));
                 }
             }
             fileReader.close();
@@ -59,17 +59,17 @@ public class SaveTXT implements SaveDAO {
 
         savingString.append("P1Data.points").append(":").append(save.P1Data.getPoints()).append("\n");
         savingString.append("P1Data.speed").append(":").append(save.P1Data.getSpeed()).append("\n");
-        if(save.P1Data.getActivePower() != null)
+        if (save.P1Data.getActivePower() != null)
             savingString.append("P1Data.activePower").append(":").append(save.P1Data.getActivePower()).append("\n");
         savingString.append("P1Data.lastShot").append(":").append(save.P1Data.getLastShot()).append("\n");
         savingString.append("P1Data.life").append(":").append(save.P1Data.getLife()).append("\n");
         savingString.append("P1Data.fireRate").append(":").append(save.P1Data.getFireRate()).append("\n");
         savingString.append("P1Data.isInvincible").append(":").append(save.P1Data.getInvincibility()).append("\n");
 
-        if(save.P2Data != null){
+        if (save.P2Data != null) {
             savingString.append("P2Data.points").append(":").append(save.P2Data.getPoints()).append("\n");
             savingString.append("P2Data.speed").append(":").append(save.P2Data.getSpeed()).append("\n");
-            if(save.P2Data.getActivePower() != null)
+            if (save.P2Data.getActivePower() != null)
                 savingString.append("P2Data.activePower").append(":").append(save.P2Data.getActivePower()).append("\n");
             savingString.append("P2Data.lastShot").append(":").append(save.P2Data.getLastShot()).append("\n");
             savingString.append("P2Data.life").append(":").append(save.P2Data.getLife()).append("\n");
@@ -81,6 +81,9 @@ public class SaveTXT implements SaveDAO {
     }
 
     private Save mapToSave() {
+        if (this.saveMap.size() == 0)
+            return null;
+
         Save save = new Save(false, 1, null);
 
         save.setCreatedAt(Long.parseLong(this.saveMap.get("createdAt")));

@@ -14,7 +14,6 @@ public class MenuManager implements MenuListener {
 
     @Override
     public void setSave(Save save) {
-        System.out.println("Aroooooooooooooooo" + save);
         this.save = save;
     }
 

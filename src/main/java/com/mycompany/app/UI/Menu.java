@@ -190,8 +190,6 @@ public class Menu extends FXGLMenu {
     }
 
     private void load() {
-
-
         String msg = "Escolha o tipo de Load:";
 
         Button btnRankJSON = this.fxglFactoryService.newButton("Load JSON");
@@ -199,28 +197,25 @@ public class Menu extends FXGLMenu {
         btnRankJSON.setAlignment(Pos.CENTER);
         btnRankTXT.setAlignment(Pos.CENTER);
 
-        btnRankJSON.setOnAction(e ->
-
-        {
+        btnRankJSON.setOnAction(e -> {
             this.loadSave(new SaveJSON());
         });
-        btnRankTXT.setOnAction(e ->
-
-        {
+        btnRankTXT.setOnAction(e -> {
             this.loadSave(new SaveTXT());
         });
 
-        FXGL.getDialogService().
-
-                showBox(msg, btnRankJSON, btnRankTXT);
+        FXGL.getDialogService().showBox(msg, btnRankJSON, btnRankTXT);
 
     }
 
-    private void loadSave(SaveDAO save){
+    private void loadSave(SaveDAO save) {
 
-        this.menuListener.setSave(save.read());
-        fireNewGame();
-
+        Save saveFile = save.read();
+        if(saveFile != null) {
+            this.menuListener.setSave(saveFile);
+            fireNewGame();
+        } else
+            FXGL.getDialogService().showMessageBox("Não existe um arquivo de save para este formato!");
     }
 
     public MenuListener getMenuListener() {

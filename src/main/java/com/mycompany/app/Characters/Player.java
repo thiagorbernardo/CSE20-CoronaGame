@@ -137,7 +137,7 @@ public class Player extends Character {
         this.life = data.getLife();
         this.points = data.getPoints();
         this.fireRate = data.getFireRate();
-        this.isInvincible = data.getIsInvincible();
+        this.isInvincible = data.getInvincibility();
     }
 
     public PlayerTypes getPlayerType() {

@@ -1,11 +1,7 @@
 package com.mycompany.app.Characters;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.components.BoundingBoxComponent;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
-
-import java.awt.*;
 
 public class EnemyA extends Character implements Ia {
     private Entity player;

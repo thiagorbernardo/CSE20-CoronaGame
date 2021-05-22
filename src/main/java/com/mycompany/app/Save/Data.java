@@ -23,27 +23,27 @@ public class Data {
     }
 
     public double getPoints() {
-        return points;
+        return this.points;
     }
 
     public int getSpeed() {
-        return speed;
+        return this.speed;
     }
 
     public PowerType getActivePower() {
-        return activePower;
+        return this.activePower;
     }
 
-    public double getLastShot() {
-        return lastShot;
+    public long getLastShot() {
+        return this.lastShot;
     }
 
     public int getLife() {
-        return life;
+        return this.life;
     }
 
     public double getFireRate() {
-        return fireRate;
+        return this.fireRate;
     }
 
     public void setSpeed(int speed) {
@@ -58,7 +58,7 @@ public class Data {
         this.isInvincible = isinvincible;
     }
 
-    public boolean getIsInvincible() {
-        return isInvincible;
+    public boolean getInvincibility() {
+        return this.isInvincible;
     }
 }

@@ -1,6 +1,7 @@
 package com.mycompany.app.Save;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
@@ -8,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class RankingJSON implements RankingDAO {
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private String filePath = "src/main/resources/ranking/ranking.json";
 
     private FileManager fileManager = new FileManager("src/main/resources/ranking/ranking.json", "[]");

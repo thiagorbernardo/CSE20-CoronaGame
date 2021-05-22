@@ -1,8 +1,5 @@
 package com.mycompany.app.Save;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RankingTXT implements RankingDAO {
-    private Gson gson = new Gson();
     private String filePath = "src/main/resources/ranking/ranking.txt";
 
     private FileManager fileManager = new FileManager("src/main/resources/ranking/ranking.txt", "");

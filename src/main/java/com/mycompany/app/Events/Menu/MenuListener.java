@@ -1,9 +1,11 @@
 package com.mycompany.app.Events.Menu;
 
-public interface MenuListener {
-    void save();
+import com.mycompany.app.Save.Save;
 
-    void load();
+public interface MenuListener {
+    void setSave(Save save);
+
+    Save getSave();
 
     public void setMultiplayer();
 

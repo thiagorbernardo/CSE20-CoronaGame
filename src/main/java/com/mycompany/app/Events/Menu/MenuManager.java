@@ -1,17 +1,21 @@
 package com.mycompany.app.Events.Menu;
 
 
-public class MenuManager implements MenuListener{
+import com.mycompany.app.Save.Save;
+
+public class MenuManager implements MenuListener {
+    private Save save;
     private boolean multiplayer = false;
 
     @Override
-    public void save() {
-
+    public Save getSave() {
+        return this.save;
     }
 
     @Override
-    public void load() {
-
+    public void setSave(Save save) {
+        System.out.println("Aroooooooooooooooo" + save);
+        this.save = save;
     }
 
     @Override

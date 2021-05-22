@@ -32,6 +32,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import com.mycompany.app.Save.Ranking;
+import com.mycompany.app.Save.Save;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +43,12 @@ import static javafx.beans.binding.Bindings.when;
 
 public class Menu extends FXGLMenu {
 
-
     private List<Node> buttons = new ArrayList<>();
     private int animIndex = 0;
     private boolean flag = true;
     private MenuListener menuListener = new MenuManager();
     private UIFactoryService fxglFactoryService = FXGL.getUIFactoryService();
+
 
     public Menu(MenuType type) {
         super(type);
@@ -88,9 +89,9 @@ public class Menu extends FXGLMenu {
     protected Node createBody() {
 
         Node btn0 = createActionButton(createStringBinding(() -> "NEW GAME"), this::fireNewGame);
-        Node btn1 = createActionButton(createStringBinding(() -> "MULTIPLAYER"), this::StartGame);
-        Node btn2 = createActionButton(createStringBinding(() -> "LOAD"), this::fireResume);
-        Node btn3 = createActionButton(createStringBinding(() -> "RANKING"), this::Rank);
+        Node btn1 = createActionButton(createStringBinding(() -> "MULTIPLAYER"), this::startGame);
+        Node btn2 = createActionButton(createStringBinding(() -> "LOAD"), this::load);
+        Node btn3 = createActionButton(createStringBinding(() -> "RANKING"), this::rank);
         Node btn4 = createActionButton(createStringBinding(() -> "QUIT"), this::fireExit);
 
         Group group = new Group(btn0, btn1, btn2, btn3, btn4);
@@ -109,14 +110,14 @@ public class Menu extends FXGLMenu {
         return group;
     }
 
-    private void StartGame() {
+    private void startGame() {
 
         this.menuListener.setMultiplayer();
 
         fireNewGame();
     }
 
-    private void Rank() {
+    private void rank() {
 
 //            for (Ranking ranking : rank.getTopPlayers()) {
 //                System.out.println(ranking.name + ": " + ranking.points);
@@ -186,6 +187,40 @@ public class Menu extends FXGLMenu {
         btn.setCacheHint(CacheHint.SPEED);
 
         return btn;
+    }
+
+    private void load() {
+
+
+        String msg = "Escolha o tipo de Load:";
+
+        Button btnRankJSON = this.fxglFactoryService.newButton("Load JSON");
+        Button btnRankTXT = this.fxglFactoryService.newButton("Load TXT");
+        btnRankJSON.setAlignment(Pos.CENTER);
+        btnRankTXT.setAlignment(Pos.CENTER);
+
+        btnRankJSON.setOnAction(e ->
+
+        {
+            this.loadSave(new SaveJSON());
+        });
+        btnRankTXT.setOnAction(e ->
+
+        {
+            this.loadSave(new SaveTXT());
+        });
+
+        FXGL.getDialogService().
+
+                showBox(msg, btnRankJSON, btnRankTXT);
+
+    }
+
+    private void loadSave(SaveDAO save){
+
+        this.menuListener.setSave(save.read());
+        fireNewGame();
+
     }
 
     public MenuListener getMenuListener() {

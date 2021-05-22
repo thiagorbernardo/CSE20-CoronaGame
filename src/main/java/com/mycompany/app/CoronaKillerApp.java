@@ -3,29 +3,16 @@ package com.mycompany.app;
 import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
+
 import com.mycompany.app.Characters.*;
 import com.mycompany.app.Controller.Game;
 import com.mycompany.app.Controller.GameController;
-import com.mycompany.app.Controller.GameFactory;
-import com.mycompany.app.Events.Sound.MusicsNames;
 import com.mycompany.app.Projectiles.Bullet;
-import com.mycompany.app.Save.*;
-import com.mycompany.app.UI.GameMenu;
-import com.mycompany.app.UI.Menu;
 import com.mycompany.app.UI.Scene;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-
-import java.util.Random;
-import java.util.function.Predicate;
 
 
 public class CoronaKillerApp extends GameApplication {
-    private Text textPixels = new Text("Pontuação: 0");
     private Scene scene = new Scene();
 
     /* Game Controller */
@@ -35,7 +22,10 @@ public class CoronaKillerApp extends GameApplication {
         launch(args);
     }
 
-    /* Setting game settings, such as screen size */
+    /**
+     * Setting game settings, such as screen size
+     * @param settings GameSettings that come from FXGL
+     */
     @Override
     protected void initSettings(GameSettings settings) {
         // settings.setFullScreenAllowed(true);
@@ -79,21 +69,18 @@ public class CoronaKillerApp extends GameApplication {
 
         FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYA, (bullet, enemy) -> {
             this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
-            this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
             bullet.removeFromWorld();
             enemy.removeFromWorld();
         });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYB, (bullet, enemy) -> {
             this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
-            this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
             bullet.removeFromWorld();
             enemy.removeFromWorld();
         });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EnemyType.ENEMYC, (bullet, enemy) -> {
             this.gameController.playerBulletHittingEnemy(bullet.getComponent(Bullet.class).getBulletOwner());
-            this.textPixels.setText("Pontuação: " + String.format("%.0f", this.gameController.getPlayersPoints()));
             bullet.removeFromWorld();
             enemy.removeFromWorld();
         });
@@ -144,13 +131,7 @@ public class CoronaKillerApp extends GameApplication {
 
     @Override
     protected void initUI() {
-        this.textPixels.setTranslateX(18);
-        this.textPixels.setTranslateY(35);
-
-        Font font = new Font(20);
-        this.textPixels.setFont(font);
-
-        FXGL.getGameScene().addUINode(this.textPixels); // add to the scene graph
+        this.gameController.initPlayerUIInfo();
     }
 
     /**

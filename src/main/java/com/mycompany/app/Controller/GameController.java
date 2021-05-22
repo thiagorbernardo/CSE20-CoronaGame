@@ -2,7 +2,7 @@ package com.mycompany.app.Controller;
 
 
 import com.almasb.fxgl.app.ReadOnlyGameSettings;
-import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.GameScene;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
@@ -10,23 +10,18 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 
-import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.UIFactoryService;
 import com.mycompany.app.Characters.EnemyType;
 import com.mycompany.app.Characters.Player;
 import com.mycompany.app.Characters.PlayerTypes;
 
-import com.mycompany.app.CoronaKillerApp;
 import com.mycompany.app.Save.*;
-import com.mycompany.app.Events.Menu.MenuListener;
-import com.mycompany.app.Events.Menu.MenuManager;
 
 import com.mycompany.app.Events.Sound.MusicsNames;
 import com.mycompany.app.Events.Sound.SoundListener;
 import com.mycompany.app.Events.Sound.SoundManager;
 import com.mycompany.app.Events.Sound.SoundNames;
 
-import javafx.collections.FXCollections;
 import com.mycompany.app.Save.Ranking;
 import com.mycompany.app.Save.RankingDAO;
 import com.mycompany.app.Save.RankingJSON;
@@ -34,14 +29,10 @@ import com.mycompany.app.Save.RankingJSON;
 import com.mycompany.app.UI.Scene;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.*;
@@ -53,7 +44,7 @@ public class GameController implements Game {
     private Input input = FXGL.getInput();
     private com.almasb.fxgl.app.GameController fxglGameController = FXGL.getGameController();
     private UIFactoryService fxglFactoryService = FXGL.getUIFactoryService();
-    private Scene scene;
+    private GameScene fxglGameScene = FXGL.getGameScene();
 
     /* Ranking */
     private RankingDAO rank;
@@ -71,6 +62,10 @@ public class GameController implements Game {
     private Map<PlayerTypes, List<KeyCode>> playersKeyCodes = new HashMap<>();
 
     /* World variables */
+    private int mapWidth;
+    private int mapHeight;
+
+    private Scene scene;
     private int currentLevel = 0;
     private Boolean isMultiplayer = false;
     private Random random = new Random();
@@ -79,6 +74,11 @@ public class GameController implements Game {
     private double spawnTimer = 2000;
     private double lastSpawn = 0;
     private double elapsedTime = 0;
+
+    /* UI variables */
+    private Text playersPointsUI = new Text("Pontuação: 0");
+    private Text p1ActivePowerUI = new Text("");
+    private Text p2ActivePowerUI = new Text("");
 
 
     public GameController(Scene scene) {
@@ -101,14 +101,23 @@ public class GameController implements Game {
     }
 
     /**
-     * Init default config
+     * Init default config of the game,
+     * Songs, Musics, Factory, Save, Entities and Players
      */
     @Override
     public void initGame() {
-
         this.fxglWorld.addEntityFactory(this.gameFactory);
 
+//        this.soundListener.stopAll();
+
         this.isMultiplayer = this.scene.getMainMenu().getMenuListener().getMultiplayer();
+
+        Save saveFile = this.scene.getMainMenu().getMenuListener().getSave();
+
+        if (saveFile != null) {
+            this.isMultiplayer = saveFile.isMultiplayer;
+            this.currentLevel = saveFile.level - 1;
+        }
 
         this.setLevel(new SpawnData());
 
@@ -116,12 +125,7 @@ public class GameController implements Game {
 
         this.gameFactory.newWallScreen();
 
-        this.players.put(PlayerTypes.P1, this.gameFactory.newPlayer(PlayerTypes.P1, new SpawnData(300, 300)));
-
-        if (isMultiplayer) {
-            this.setPlayerActions(PlayerTypes.P2);
-            this.players.put(PlayerTypes.P2, this.gameFactory.newPlayer(PlayerTypes.P2, new SpawnData(300, 300)));
-        }
+        this.manageSave(saveFile);
 
     }
 
@@ -151,6 +155,31 @@ public class GameController implements Game {
 
         this.fxglSettings.setGlobalMusicVolume(0.1);
         this.fxglSettings.setGlobalSoundVolume(0.2);
+    }
+
+    /**
+     * Check and spawn players in the desired location, save or default
+     * @param saveFile save config
+     */
+    private void manageSave(Save saveFile) {
+        SpawnData standardSpawnLocation = new SpawnData(this.fxglSettings.getWidth() / 2, this.fxglSettings.getHeight() / 2);
+        if (saveFile != null) {
+            this.playersData.put(PlayerTypes.P1, saveFile.P1Data);
+
+            if (saveFile.P2Data != null)
+                this.playersData.put(PlayerTypes.P2, saveFile.P2Data);
+            this.setEntitiesLocation(standardSpawnLocation);
+        } else {
+            // Starting game without load
+            this.players.put(PlayerTypes.P1, this.gameFactory.newPlayer(PlayerTypes.P1, standardSpawnLocation));
+
+            if (isMultiplayer)
+                this.players.put(PlayerTypes.P2, this.gameFactory.newPlayer(PlayerTypes.P2, standardSpawnLocation));
+
+        }
+        if (this.input.getAllBindings().size() <= 7) {
+            this.setPlayerActions(PlayerTypes.P2);
+        }
     }
 
 
@@ -192,7 +221,6 @@ public class GameController implements Game {
         this.soundListener.stopAll();
 
         Entity p1 = this.players.get(PlayerTypes.P1);
-//        System.out.println(p1);
         Entity p2;
 
         if (p1 != null) {
@@ -333,8 +361,14 @@ public class GameController implements Game {
             protected void onActionBegin() {
                 playRandomMusic();
 
-                Save ss = new SaveTXT().read();
-                System.out.println(ss.P1Data.getLastShot());
+                SaveDAO saveDAO = new SaveJSON();
+                saveDAO.save(new Save(
+                        isMultiplayer,
+                        currentLevel,
+                        players
+                ));
+
+                System.out.println("Saving game");
             }
         }, KeyCode.DIGIT0);
     }
@@ -362,21 +396,20 @@ public class GameController implements Game {
     public boolean playerCanLevelUp() {
         double totalGamePoints = this.getPlayersPoints();
 
-        System.out.println("Pontuação atual: " + totalGamePoints);
-
-        return (!((this.currentLevel == 1 && this.getPlayersPoints() >= 10)
-                || (this.currentLevel == 2 && this.getPlayersPoints() >= 1000)));
+        return (!((this.currentLevel == 1 && totalGamePoints >= 10)
+                || (this.currentLevel == 2 && totalGamePoints >= 1000)));
     }
 
     @Override
     public void checkDeathCondition(Entity playerDamaged) {
 
         int playerLife = playerDamaged.getComponent(Player.class).damage();
-        //System.out.println("\nPlayer Life: " + playerLife);
-
 
         if (playerLife <= 0) {
             this.soundListener.playSound(SoundNames.DEATH);
+
+            this.soundListener.stopAllMusics();
+            this.soundListener.playMusic(MusicsNames.CHAMPIONS);
 //            for (Ranking ranking : rank.getTopPlayers()) {
 //                System.out.println(ranking.name + ": " + ranking.points);
 //            }
@@ -399,7 +432,7 @@ public class GameController implements Game {
             textField.setOnKeyTyped(e -> {
                 int charLimit = 12;
                 //TODO: Pedir no mínimo 3 letras pra salvar no ranking
-                if (textField.getText().length() > 3) {
+                if (textField.getText().length() > 2) {
                     btnRankJSON.setDisable(false);
                     btnRankTXT.setDisable(false);
                 } else {
@@ -420,12 +453,14 @@ public class GameController implements Game {
                 this.rank = new RankingJSON();
                 this.rank.save(new Ranking(textField.getText(), this.getPlayersPoints()));
                 this.resetGame();
+                this.soundListener.stopAll();
                 fxglGameController.gotoMainMenu();
             });
             btnRankTXT.setOnAction(e -> {
                 this.rank = new RankingTXT();
                 this.rank.save(new Ranking(textField.getText(), this.getPlayersPoints()));
                 this.resetGame();
+                this.soundListener.stopAll();
                 fxglGameController.gotoMainMenu();
             });
 
@@ -452,9 +487,6 @@ public class GameController implements Game {
     }
 
     private void resetGame() {
-        this.soundListener.stopAll();
-        this.soundListener.playMusic(MusicsNames.CHAMPIONS);
-
         this.players.put(PlayerTypes.P1, null);
         if (isMultiplayer)
             this.players.put(PlayerTypes.P2, null);
@@ -473,13 +505,11 @@ public class GameController implements Game {
         player.getComponent(Player.class).hit();
         double points = player.getComponent(Player.class).getPoints();
 
-        System.out.println(playerThatHitted + "" + points);
+        this.setPlayerUIInformation();
+
+        System.out.println(playerThatHitted + ": " + points);
     }
 
-//    @Override
-//    public Map<PlayerTypes, Data> getPlayerData() {
-//        return playersData;
-//    }
 
     private void updateUiInformation() {
 //        this.textPixels.setText("Pontuação: " + String.format("%.0f", points));
@@ -489,7 +519,7 @@ public class GameController implements Game {
         this.soundListener.stopAllMusics();
         MusicsNames[] musicsNames = MusicsNames.values();
         MusicsNames someRandomMusic = musicsNames[this.random.nextInt(musicsNames.length)];
-        System.out.println(someRandomMusic);
+        System.out.println("Playing Music: " + someRandomMusic);
 
         this.soundListener.playMusic(someRandomMusic);
     }
@@ -503,7 +533,7 @@ public class GameController implements Game {
 
             PlayerTypes[] playerTypes = PlayerTypes.values();
             PlayerTypes playerType = this.isMultiplayer ? playerTypes[this.random.nextInt(playerTypes.length)] : PlayerTypes.P1;
-            System.out.println(playerType);
+            System.out.println("Spawn enemy following " + playerType);
 
             Entity playerToFollow = this.getPlayer(playerType);
 
@@ -544,6 +574,24 @@ public class GameController implements Game {
         this.lastSpawn = 0;
     }
 
+    @Override
+    public void setPlayerUIInformation() {
+        this.playersPointsUI.setText("Pontuação: " + String.format("%.0f", this.getPlayersPoints()));
+    }
+
+    @Override
+    public void initPlayerUIInfo() {
+        this.playersPointsUI.setTranslateX(18);
+        this.playersPointsUI.setTranslateY(35);
+
+//        this.playersPointsUI.setTranslateX(18);
+//        this.playersPointsUI.setTranslateY();
+
+        Font font = new Font(20);
+        this.playersPointsUI.setFont(font);
+
+        this.fxglGameScene.addUINode(this.playersPointsUI);
+    }
 
 }
 

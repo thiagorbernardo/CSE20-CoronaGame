@@ -35,4 +35,7 @@ public interface Game {
 
     void spawnEnemy();
 
+    void setPlayerUIInformation();
+
+    void initPlayerUIInfo();
 }

@@ -3,19 +3,15 @@ package com.mycompany.app.Characters;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 
+import com.almasb.fxgl.texture.Texture;
 import com.mycompany.app.Power.*;
 import com.mycompany.app.Save.Data;
 import com.mycompany.app.Controller.GameFactory;
 import com.mycompany.app.Events.Notification.NotificationListener;
 
 import javafx.geometry.Point2D;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -82,7 +78,6 @@ public class Player extends Character {
             this.notificationListener.fireEvent(Color.RED, "Você tem " + this.life + " ponto de vida restante.");
             return --this.life;
         }
-        System.out.println("Eu ja nem falei nada");
         return this.life;
     }
 
@@ -94,7 +89,7 @@ public class Player extends Character {
     protected void setActivePower() {
         Random rand = new Random();
 
-        if (getPoints() > 0 && getPoints()%100 == 0) {
+        if (this.getPoints() > 0 && this.getPoints()%100 == 0) {
             List<PowerType> givenList = Arrays.asList(PowerType.SPEED, PowerType.SPEEDSHOT, PowerType.INVINCIBLE);
 
             this.powerType = givenList.get(rand.nextInt(givenList.size()));
@@ -105,7 +100,6 @@ public class Player extends Character {
 
     public void usePower() {
         if (powerType != null) {
-            System.out.println("Ganhou Poder");
             this.lastUsePower = System.currentTimeMillis();
             switch (powerType) {
                 case SPEED:
@@ -130,7 +124,6 @@ public class Player extends Character {
         if((this.activePower != null) && (System.currentTimeMillis() - this.lastUsePower > 5000)){
             this.activePower = null;
             this.setPlayerData(new Data(this.points, 200, null, this.lastShot, 2, 250, false));
-            System.out.println("Perdeu Poder");
         }
     }
 
@@ -153,18 +146,12 @@ public class Player extends Character {
     }
 
     private void addPlayerName() {
-        Text playerName = new Text(this.playerType.name());
+        Texture texture = new Texture(FXGL.image("indicators/" + this.playerType.name() + ".png"));
 
-        Circle bg = new Circle(10, Color.MEDIUMVIOLETRED);
-        bg.setEffect(new BoxBlur());
+        StackPane stackPane = new StackPane(texture);
+        stackPane.setTranslateY(-32);
+        stackPane.setTranslateX(2);
 
-        playerName.setFill(Color.BLACK);
-        playerName.setTextAlignment(TextAlignment.CENTER);
-//        playerName.setFont(Font.font("Roboto"));
-
-        StackPane stackPane = new StackPane(bg, playerName);
-        stackPane.setTranslateY(-20);
-        stackPane.setTranslateX(8);
         this.entity.getViewComponent().addChild(stackPane);
     }
 }

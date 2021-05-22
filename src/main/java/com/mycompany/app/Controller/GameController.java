@@ -58,6 +58,9 @@ public class GameController implements Game {
     /* Ranking */
     private RankingDAO rank;
 
+    /* Save */
+    private SaveDAO save;
+
     /* Listeners */
     private SoundListener soundListener = new SoundManager();
     private GameFactory gameFactory = new GameFactory();
@@ -72,15 +75,16 @@ public class GameController implements Game {
     private Boolean isMultiplayer = false;
     private Random random = new Random();
 
-    /*Spawn variables*/
+    /* Spawn variables */
     private double spawnTimer = 2000;
     private double lastSpawn = 0;
     private double elapsedTime = 0;
 
 
-    public GameController(Scene scene){
+    public GameController(Scene scene) {
         this.scene = scene;
     }
+
     /**
      * Manage pre init config, such as sounds and input keys
      */
@@ -310,6 +314,17 @@ public class GameController implements Game {
                     FXGL.getDevService().openDevPane();
                 else
                     FXGL.getDevService().closeDevPane();
+
+                save = new SaveTXT();
+
+                Save save1 = new Save(
+                        isMultiplayer,
+                        currentLevel,
+                        players
+                );
+
+                save.save(save1);
+
             }
         }, KeyCode.F1);
 
@@ -317,10 +332,18 @@ public class GameController implements Game {
             @Override
             protected void onActionBegin() {
                 playRandomMusic();
+
+                Save ss = new SaveTXT().read();
+                System.out.println(ss.P1Data.getLastShot());
             }
         }, KeyCode.DIGIT0);
     }
 
+    /**
+     * Method to get all players points
+     *
+     * @return total points from players
+     */
     @Override
     public Double getPlayersPoints() {
         double totalPoints = this.players.get(PlayerTypes.P1).getComponent(Player.class).getPoints();
@@ -332,16 +355,17 @@ public class GameController implements Game {
     }
 
 
+    /**
+     * Condition to know if a player can level up
+     */
     @Override
-    public void playerCanLevelUp(Entity door) {
+    public boolean playerCanLevelUp() {
         double totalGamePoints = this.getPlayersPoints();
 
         System.out.println("Pontuação atual: " + totalGamePoints);
 
-        if (totalGamePoints >= 500 && this.currentLevel == 1)
-            door.removeFromWorld();
-        else if (totalGamePoints >= 1000 && this.currentLevel == 2)
-            door.removeFromWorld();
+        return (!((this.currentLevel == 1 && this.getPlayersPoints() >= 10)
+                || (this.currentLevel == 2 && this.getPlayersPoints() >= 1000)));
     }
 
     @Override
@@ -356,14 +380,39 @@ public class GameController implements Game {
 //            for (Ranking ranking : rank.getTopPlayers()) {
 //                System.out.println(ranking.name + ": " + ranking.points);
 //            }
-            String msg = isMultiplayer ? "Vocês conquistaram " : "Você conquistou ";
+            String msg = isMultiplayer ? "  Vocês conquistaram " : "  Você conquistou ";
             msg += String.format("%.0f", this.getPlayersPoints()) + " pontos. Parabéns!\n\n\n      Escolha o método de save do jogo:";
+//                    "Digite um nome para poder continuar";
 
             Button btnRankJSON = this.fxglFactoryService.newButton("Ranking JSON");
             Button btnRankTXT = this.fxglFactoryService.newButton("Ranking TXT");
-            TextField textField = new TextField();
+
             btnRankJSON.setAlignment(Pos.CENTER);
+            btnRankJSON.setDisable(true);
+
             btnRankTXT.setAlignment(Pos.CENTER);
+            btnRankTXT.setDisable(true);
+
+            TextField textField = new TextField();
+            textField.setPromptText("Nome do Player");
+
+            textField.setOnKeyTyped(e -> {
+                int charLimit = 12;
+                //TODO: Pedir no mínimo 3 letras pra salvar no ranking
+                if (textField.getText().length() > 3) {
+                    btnRankJSON.setDisable(false);
+                    btnRankTXT.setDisable(false);
+                } else {
+                    btnRankJSON.setDisable(true);
+                    btnRankTXT.setDisable(true);
+                }
+
+                if (textField.getText().length() > charLimit) {
+                    textField.setText(textField.getText().substring(0, charLimit));
+                    textField.positionCaret(textField.getText().length());
+                }
+            });
+
             textField.setAlignment(Pos.CENTER);
             textField.setMaxWidth(200);
 
@@ -446,12 +495,11 @@ public class GameController implements Game {
     }
 
     @Override
-    public void spawnEnemy(){
+    public void spawnEnemy() {
         EnemyType[] enemyTypes = EnemyType.values();
         EnemyType enemyType = enemyTypes[this.random.nextInt(enemyTypes.length)];
 
-        if ((System.currentTimeMillis() - lastSpawn) > spawnTimer &&
-                (spawnEnabler(this.getPlayersPoints(), this.getCurrentLevel()))) {
+        if ((System.currentTimeMillis() - lastSpawn) > spawnTimer && this.playerCanLevelUp()) {
 
             PlayerTypes[] playerTypes = PlayerTypes.values();
             PlayerTypes playerType = this.isMultiplayer ? playerTypes[this.random.nextInt(playerTypes.length)] : PlayerTypes.P1;
@@ -490,14 +538,13 @@ public class GameController implements Game {
         }
     }
 
-    private boolean spawnEnabler (double points, int currentLevel) {
-        return !((currentLevel == 1 && points >= 500) || (currentLevel == 2 && points >= 1000));
-    }
 
-    private void resetSpawn(){
+    private void resetSpawn() {
         this.spawnTimer = 2000;
         this.lastSpawn = 0;
     }
+
+
 }
 
 

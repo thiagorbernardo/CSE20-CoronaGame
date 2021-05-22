@@ -119,7 +119,8 @@ public class CoronaKillerApp extends GameApplication {
         });
 
         FXGL.onCollisionBegin(EntityType.PLAYER, EntityType.DOOR, (player, door) -> {
-            this.gameController.playerCanLevelUp(door);
+            this.gameController.playerCanLevelUp();
+            door.removeFromWorld();
         });
 
         /* Collisions SOMETHING -> WALL */

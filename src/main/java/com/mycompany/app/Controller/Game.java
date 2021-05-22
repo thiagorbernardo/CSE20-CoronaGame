@@ -27,7 +27,7 @@ public interface Game {
 
     Double getPlayersPoints();
 
-    void playerCanLevelUp(Entity door);
+    boolean playerCanLevelUp();
 
     void checkDeathCondition(Entity playerDamaged);
 

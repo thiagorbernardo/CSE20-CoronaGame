@@ -20,7 +20,7 @@ public class GameMenu extends Menu {
 
         Node btn0 = this.createActionButton(createStringBinding(() -> "RESUME"), this::fireResume);
         Node btn1 = this.createActionButton(createStringBinding(() -> "SAVE"), this::fireResume);
-        Node btn2 = this.createActionButton(createStringBinding(() -> "MAIN MENU"), this::exit);
+        Node btn2 = this.createActionButton(createStringBinding(() -> "MAIN MENU"), this::fireExit);
 
 
         Group group = new Group(btn0, btn1, btn2);
@@ -39,8 +39,4 @@ public class GameMenu extends Menu {
         return group;
     }
 
-    private void exit() {
-
-        fireExitToMainMenu();
-    }
 }

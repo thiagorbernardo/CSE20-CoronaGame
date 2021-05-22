@@ -2,6 +2,7 @@ package com.mycompany.app.Controller;
 
 
 import com.almasb.fxgl.app.ReadOnlyGameSettings;
+import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
@@ -368,11 +369,13 @@ public class GameController implements Game {
                 this.rank = new RankingJSON();
                 this.rank.save(new Ranking(textField.getText(), this.getPlayersPoints()));
                 this.resetGame();
+                fxglGameController.gotoMainMenu();
             });
             btnRankTXT.setOnAction(e -> {
                 this.rank = new RankingTXT();
                 this.rank.save(new Ranking(textField.getText(), this.getPlayersPoints()));
                 this.resetGame();
+                fxglGameController.gotoMainMenu();
             });
 
             FXGL.getDialogService().showBox(msg, textField, btnRankJSON, btnRankTXT);
@@ -408,7 +411,8 @@ public class GameController implements Game {
         this.resetSpawn();
         this.currentLevel = 0;
         this.fxglWorld.reset();
-        this.fxglGameController.startNewGame();
+//        this.fxglGameController.startNewGame();
+
     }
 
     @Override

@@ -29,6 +29,13 @@ public class Player extends Character {
     protected long lastUsePower = 0;
     protected boolean isInvincible = false;
 
+    /**
+     * Constructor
+     * @param playerType type of player (P1, P2)
+     * @param speed init speed of player
+     * @param life starting life
+     * @param notificationListener listener to emit notifications
+     */
     public Player(PlayerTypes playerType, int speed, int life, NotificationListener notificationListener) {
         super("player/" + playerType.name() + ".png", 34, 32, speed, life);
         this.playerType = playerType;
@@ -41,7 +48,7 @@ public class Player extends Character {
         this.addPlayerName();
     }
 
-    public void shotProjectile(GameFactory gameFactory) {
+    public List<Point2D> shotProjectile() {
         Point2D origin = this.entity.getCenter();
 
         Point2D direction;
@@ -63,45 +70,61 @@ public class Player extends Character {
 
         this.lastShot = System.currentTimeMillis();
 
-        gameFactory.newBullet(this.playerType, origin, direction, "bullet1", 400);
+        return Arrays.asList(origin, direction);
     }
 
+    /**
+     * Earn points
+     */
     public void hit() {
-        this.setActivePower();
         this.points += 10;
+        this.setActivePower();
     }
 
+    /**
+     * Damaging player and verifying invincibility
+     * @return new life of player
+     */
     @Override
     public int damage() {
-        if(!isInvincible){
-            this.notificationListener.fireEvent(Color.RED, "Você tem " + this.life + " ponto de vida restante.");
-            return --this.life;
+        if (!isInvincible) {
+            if (--this.life == 0)
+                this.notificationListener.fireEvent(Color.RED, this.playerType.name() +  " morreu!");
         }
         return this.life;
     }
 
+    /**
+     * Check if player can shot
+     * @return a boolean
+     */
     public boolean canShot() {
         double diffFromLastShot = System.currentTimeMillis() - this.lastShot;
         return diffFromLastShot > this.fireRate;
     }
 
+    /**
+     * Logic to verify if a new power is available
+     */
     protected void setActivePower() {
         Random rand = new Random();
 
-        if (this.getPoints() > 0 && this.getPoints()%100 == 0) {
-            List<PowerType> givenList = Arrays.asList(PowerType.SPEED, PowerType.SPEEDSHOT, PowerType.INVINCIBLE);
+        if (this.getPoints() > 0 && this.getPoints() % 100 == 0) {
+            List<PowerType> givenList = Arrays.asList(PowerType.MOVESPEED, PowerType.SPEEDSHOT, PowerType.INVINCIBLE);
 
             this.powerType = givenList.get(rand.nextInt(givenList.size()));
-            this.notificationListener.fireEvent(Color.BISQUE, "Você ganhou um novo poder: " + this.powerType);
             usePower();
         }
     }
 
+    /**
+     * Polymorphism of powers
+     */
     public void usePower() {
         if (powerType != null) {
             this.lastUsePower = System.currentTimeMillis();
             switch (powerType) {
-                case SPEED:
+                case MOVESPEED:
                     activePower = new MoveSpeed();
                     this.setPlayerData(activePower.use(this.getPlayerData()));
                     break;
@@ -127,10 +150,26 @@ public class Player extends Character {
         return this.points;
     }
 
+    public PowerType getPowerType() {
+        return this.powerType;
+    }
+
+    public int getLife() {
+        return this.life;
+    }
+
+    /**
+     * Get player stats
+     * @return a data
+     */
     public Data getPlayerData() {
         return new Data(this.points, this.speed, this.powerType, this.lastShot, this.life, this.fireRate, this.isInvincible);
     }
 
+    /**
+     * Setting new player data
+     * @param data new data
+     */
     public void setPlayerData(Data data) {
         this.powerType = data.getActivePower();
         this.lastShot = data.getLastShot();
@@ -141,6 +180,9 @@ public class Player extends Character {
         this.isInvincible = data.getInvincibility();
     }
 
+    /**
+     * Adding texture to indicate player (if is P1 or P2)
+     */
     private void addPlayerName() {
         Texture texture = new Texture(FXGL.image("indicators/" + this.playerType.name() + ".png"));
 
@@ -150,8 +192,12 @@ public class Player extends Character {
 
         this.entity.getViewComponent().addChild(stackPane);
     }
-    private void resetPlayer(){
-        if((this.activePower != null) && (System.currentTimeMillis() - this.lastUsePower > 5000)){
+
+    /**
+     * Reseting player data and power
+     */
+    private void resetPlayer() {
+        if ((this.activePower != null) && (System.currentTimeMillis() - this.lastUsePower > 5000)) {
             this.activePower = null;
             this.setPlayerData(new Data(this.points, 200, null, this.lastShot, 2, 250, false));
         }

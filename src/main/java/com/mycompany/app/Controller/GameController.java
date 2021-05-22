@@ -10,6 +10,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 
+import com.almasb.fxgl.ui.DialogService;
 import com.almasb.fxgl.ui.UIFactoryService;
 import com.mycompany.app.Characters.EnemyType;
 import com.mycompany.app.Characters.Player;
@@ -32,6 +33,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -45,6 +47,7 @@ public class GameController implements Game {
     private com.almasb.fxgl.app.GameController fxglGameController = FXGL.getGameController();
     private UIFactoryService fxglFactoryService = FXGL.getUIFactoryService();
     private GameScene fxglGameScene = FXGL.getGameScene();
+    private DialogService fxglDialogService = FXGL.getDialogService();
 
     /* Ranking */
     private RankingDAO rank;
@@ -72,8 +75,9 @@ public class GameController implements Game {
 
     /* Spawn variables */
     private double spawnTimer = 2000;
-    private double lastSpawn = 0;
+    private double lastSpawn = System.currentTimeMillis();
     private double elapsedTime = 0;
+    private double enterLevelTime = 0;
 
     /* UI variables */
     private Text playersPointsUI = new Text("Pontuação: 0");
@@ -218,12 +222,14 @@ public class GameController implements Game {
      */
     @Override
     public void setLevel(SpawnData spawnLocation) {
-        this.soundListener.stopAll();
+//        this.soundListener.stopAll();
 
         Entity p1 = this.players.get(PlayerTypes.P1);
         Entity p2;
 
         if (p1 != null) {
+            this.resetSpawn();
+            this.initPlayerOptionToSave();
             Data p1Data = p1.getComponent(Player.class).getPlayerData();
             this.playersData.put(PlayerTypes.P1, p1Data);
 
@@ -239,7 +245,6 @@ public class GameController implements Game {
             this.gameFactory.newWallScreen();
             this.setEntitiesLocation(spawnLocation);
             this.playRandomMusic();
-            this.resetSpawn();
             return;
         }
         FXGL.setLevelFromMap("level" + ++this.currentLevel + ".tmx");
@@ -396,8 +401,8 @@ public class GameController implements Game {
     public boolean playerCanLevelUp() {
         double totalGamePoints = this.getPlayersPoints();
 
-        return (!((this.currentLevel == 1 && totalGamePoints >= 10)
-                || (this.currentLevel == 2 && totalGamePoints >= 1000)));
+        return (((this.currentLevel == 1 && totalGamePoints >= 10)
+                || (this.currentLevel == 2 && totalGamePoints >= 40)));
     }
 
     @Override
@@ -464,7 +469,7 @@ public class GameController implements Game {
                 fxglGameController.gotoMainMenu();
             });
 
-            FXGL.getDialogService().showBox(msg, textField, btnRankJSON, btnRankTXT);
+            fxglDialogService.showBox(msg, textField, btnRankJSON, btnRankTXT);
 
         }
     }
@@ -529,7 +534,7 @@ public class GameController implements Game {
         EnemyType[] enemyTypes = EnemyType.values();
         EnemyType enemyType = enemyTypes[this.random.nextInt(enemyTypes.length)];
 
-        if ((System.currentTimeMillis() - lastSpawn) > spawnTimer && this.playerCanLevelUp()) {
+        if ((System.currentTimeMillis() - lastSpawn) > spawnTimer && !this.playerCanLevelUp() && System.currentTimeMillis() - this.enterLevelTime > 5000) {
 
             PlayerTypes[] playerTypes = PlayerTypes.values();
             PlayerTypes playerType = this.isMultiplayer ? playerTypes[this.random.nextInt(playerTypes.length)] : PlayerTypes.P1;
@@ -571,7 +576,7 @@ public class GameController implements Game {
 
     private void resetSpawn() {
         this.spawnTimer = 2000;
-        this.lastSpawn = 0;
+        this.lastSpawn = System.currentTimeMillis();
     }
 
     @Override
@@ -592,8 +597,45 @@ public class GameController implements Game {
 
         this.fxglGameScene.addUINode(this.playersPointsUI);
     }
+    private void initPlayerOptionToSave() {
+        String msg = "Escolha o tipo de Save:";
 
+        Button btnRankJSON = this.fxglFactoryService.newButton("Save JSON");
+        Button btnRankTXT = this.fxglFactoryService.newButton("Save TXT");
+
+
+        btnRankJSON.setAlignment(Pos.CENTER);
+        btnRankTXT.setAlignment(Pos.CENTER);
+
+        btnRankJSON.setTranslateX(-10);
+        btnRankTXT.setTranslateX(10);
+
+        Rectangle a = new Rectangle(1,1);
+
+        btnRankJSON.setOnAction(e -> {
+            this.savingWorld(new SaveJSON());
+        });
+        btnRankTXT.setOnAction(e -> {
+            this.savingWorld(new SaveTXT());
+        });
+
+        this.fxglDialogService.showBox(msg, a, btnRankJSON, btnRankTXT);
+
+    }
+
+    private void savingWorld(SaveDAO save) {
+        this.enterLevelTime = System.currentTimeMillis();
+        Save save1 = new Save(
+                isMultiplayer,
+                currentLevel,
+                players
+        );
+
+        save.save(save1);
+
+    }
 }
+
 
 
 

@@ -119,15 +119,18 @@ public class Menu extends FXGLMenu {
 
     private void rank() {
 
-//            for (Ranking ranking : rank.getTopPlayers()) {
-//                System.out.println(ranking.name + ": " + ranking.points);
-//            }
         String msg = "Escolha o tipo de Ranking:";
 
         Button btnRankJSON = this.fxglFactoryService.newButton("Ranking JSON");
         Button btnRankTXT = this.fxglFactoryService.newButton("Ranking TXT");
+
         btnRankJSON.setAlignment(Pos.CENTER);
         btnRankTXT.setAlignment(Pos.CENTER);
+
+        btnRankJSON.setTranslateX(-10);
+        btnRankTXT.setTranslateX(10);
+
+        Rectangle a = new Rectangle(1,1);
 
         btnRankJSON.setOnAction(e -> {
             this.showRank(new RankingJSON());
@@ -136,7 +139,7 @@ public class Menu extends FXGLMenu {
             this.showRank(new RankingTXT());
         });
 
-        FXGL.getDialogService().showBox(msg, btnRankJSON, btnRankTXT);
+        FXGL.getDialogService().showBox(msg, a, btnRankJSON, btnRankTXT);
 
     }
 
@@ -148,7 +151,7 @@ public class Menu extends FXGLMenu {
             msg += i++ + ". " + ranking.name + ": " + ranking.points + "\n\n";
         }
 
-        FXGL.getDialogService().showMessageBox(msg, this::fireExitToMainMenu);
+        FXGL.getDialogService().showMessageBox(msg);
     }
 
     /**
@@ -194,8 +197,14 @@ public class Menu extends FXGLMenu {
 
         Button btnRankJSON = this.fxglFactoryService.newButton("Load JSON");
         Button btnRankTXT = this.fxglFactoryService.newButton("Load TXT");
+
         btnRankJSON.setAlignment(Pos.CENTER);
         btnRankTXT.setAlignment(Pos.CENTER);
+
+        btnRankJSON.setTranslateX(-10);
+        btnRankTXT.setTranslateX(10);
+
+        Rectangle a = new Rectangle(1 ,1);
 
         btnRankJSON.setOnAction(e -> {
             this.loadSave(new SaveJSON());
@@ -204,7 +213,7 @@ public class Menu extends FXGLMenu {
             this.loadSave(new SaveTXT());
         });
 
-        FXGL.getDialogService().showBox(msg, btnRankJSON, btnRankTXT);
+        FXGL.getDialogService().showBox(msg,a , btnRankJSON, btnRankTXT);
 
     }
 
@@ -214,8 +223,9 @@ public class Menu extends FXGLMenu {
         if(saveFile != null) {
             this.menuListener.setSave(saveFile);
             fireNewGame();
-        } else
-            FXGL.getDialogService().showMessageBox("Não existe um arquivo de save para este formato!");
+        } else {
+            FXGL.showMessage("Não existe um arquivo de save para este formato!");
+        }
     }
 
     public MenuListener getMenuListener() {

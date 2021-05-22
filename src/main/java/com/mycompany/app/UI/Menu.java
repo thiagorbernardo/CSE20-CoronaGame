@@ -10,16 +10,19 @@ import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.ui.UIFactoryService;
 import com.mycompany.app.Events.Menu.MenuListener;
 import com.mycompany.app.Events.Menu.MenuManager;
-import com.mycompany.app.Save.Ranking;
-import com.mycompany.app.Save.RankingDAO;
+import com.mycompany.app.Events.Sound.SoundNames;
+import com.mycompany.app.Save.*;
 import javafx.beans.binding.StringBinding;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -29,7 +32,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import com.mycompany.app.Save.Ranking;
-import com.mycompany.app.Save.RankingJSON;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,7 @@ public class Menu extends FXGLMenu {
     private int animIndex = 0;
     private boolean flag = true;
     private MenuListener menuListener = new MenuManager();
+    private UIFactoryService fxglFactoryService = FXGL.getUIFactoryService();
 
     public Menu(MenuType type) {
         super(type);
@@ -115,8 +118,36 @@ public class Menu extends FXGLMenu {
 
     private void Rank() {
 
+//            for (Ranking ranking : rank.getTopPlayers()) {
+//                System.out.println(ranking.name + ": " + ranking.points);
+//            }
+        String msg = "Escolha o tipo de Ranking:";
 
-        System.out.println("teste");
+        Button btnRankJSON = this.fxglFactoryService.newButton("Ranking JSON");
+        Button btnRankTXT = this.fxglFactoryService.newButton("Ranking TXT");
+        btnRankJSON.setAlignment(Pos.CENTER);
+        btnRankTXT.setAlignment(Pos.CENTER);
+
+        btnRankJSON.setOnAction(e -> {
+            this.showRank(new RankingJSON());
+        });
+        btnRankTXT.setOnAction(e -> {
+            this.showRank(new RankingTXT());
+        });
+
+        FXGL.getDialogService().showBox(msg, btnRankJSON, btnRankTXT);
+
+    }
+
+    private void showRank(RankingDAO rank) {
+
+        int i = 1;
+        String msg = "Top 5 Cowboys\n\n";
+        for (Ranking ranking : rank.getTopPlayers()) {
+            msg += i++ + ". " + ranking.name + ": " + ranking.points + "\n\n";
+        }
+
+        FXGL.getDialogService().showMessageBox(msg, this::fireExitToMainMenu);
     }
 
     /**

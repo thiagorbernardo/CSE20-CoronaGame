@@ -9,13 +9,15 @@ public class Data {
     private PowerType activePower;
     private double lastShot;
     private int life;
+    private double fireRate;
 
-    public Data(double points, int speed, PowerType activePower, double lastShot, int life) {
+    public Data(double points, int speed, PowerType activePower, double lastShot, int life, double fireRate) {
         this.points = points;
         this.speed = speed;
         this.activePower = activePower;
         this.lastShot = lastShot;
         this.life = life;
+        this.fireRate = fireRate;
     }
 
     public double getPoints() {
@@ -38,11 +40,17 @@ public class Data {
         return life;
     }
 
+    public double getFireRate() {
+        return fireRate;
+    }
+
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-    public void setLastShot(int lastShot) {
-        this.lastShot = lastShot;
+    public void setFireRate(double fireRate){
+        this.fireRate = fireRate;
     }
+
+
 
 }

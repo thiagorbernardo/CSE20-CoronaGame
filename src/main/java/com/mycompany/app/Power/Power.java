@@ -1,6 +1,9 @@
 package com.mycompany.app.Power;
 
+import com.mycompany.app.Save.Data;
+
+
 public interface Power {
-    void use();
+    Data use(Data oldData);
     void executionTime();
 }

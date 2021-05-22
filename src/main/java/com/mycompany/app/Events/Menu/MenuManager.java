@@ -5,7 +5,7 @@ import com.mycompany.app.Save.Save;
 
 public class MenuManager implements MenuListener {
     private Save save;
-    private boolean multiplayer = false;
+    private boolean isMultiplayer = false;
 
     @Override
     public Save getSave() {
@@ -17,13 +17,14 @@ public class MenuManager implements MenuListener {
         this.save = save;
     }
 
+
     @Override
     public void setMultiplayer() {
-        this.multiplayer = true;
+        this.isMultiplayer = true;
     }
 
     @Override
     public boolean getMultiplayer() {
-        return this.multiplayer;
+        return this.isMultiplayer;
     }
 }

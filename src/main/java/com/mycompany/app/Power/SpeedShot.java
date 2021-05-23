@@ -5,7 +5,7 @@ public class SpeedShot implements Power{
     @Override
     public Data use(Data oldData) {
 
-        oldData.setFireRate(oldData.getFireRate()/2);
+        oldData.setFireRate(oldData.getFireRate() - 70);
 
         return oldData;
     }

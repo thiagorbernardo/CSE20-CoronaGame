@@ -199,7 +199,7 @@ public class Player extends Character {
     private void resetPlayer() {
         if ((this.activePower != null) && (System.currentTimeMillis() - this.lastUsePower > 5000)) {
             this.activePower = null;
-            this.setPlayerData(new Data(this.points, 200, null, this.lastShot, 2, 250, false));
+            this.setPlayerData(new Data(this.points, 200, null, this.lastShot, this.life, 250, false));
         }
     }
 }

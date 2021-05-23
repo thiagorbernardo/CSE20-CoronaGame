@@ -7,9 +7,11 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.DialogService;
 import com.almasb.fxgl.ui.UIFactoryService;
+
 import com.mycompany.app.Events.Menu.MenuListener;
 import com.mycompany.app.Events.Menu.MenuManager;
 import com.mycompany.app.Save.*;
+
 import javafx.beans.binding.StringBinding;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -23,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import com.mycompany.app.Save.Ranking;
 import com.mycompany.app.Save.Save;
 

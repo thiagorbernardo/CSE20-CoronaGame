@@ -29,6 +29,8 @@ public class Player extends Character {
     protected long lastUsePower = 0;
     protected boolean isInvincible = false;
 
+    private StackPane playerShield;
+
     /**
      * Constructor
      * @param playerType type of player (P1, P2)
@@ -46,6 +48,11 @@ public class Player extends Character {
     public void onAdded() {
         super.onAdded();
         this.addPlayerName();
+
+        Texture texture = new Texture(FXGL.image("indicators/shield.png"));
+        texture.setScaleX(1.2);
+        texture.setScaleY(1.2);
+        this.playerShield = new StackPane(texture);
     }
 
     public List<Point2D> shotProjectile() {
@@ -135,6 +142,7 @@ public class Player extends Character {
                 case INVINCIBLE:
                     activePower = new Invincible();
                     this.setPlayerData(activePower.use(this.getPlayerData()));
+                    this.entity.getViewComponent().addChild(this.playerShield);
                     break;
             }
         }
@@ -200,6 +208,7 @@ public class Player extends Character {
         if ((this.activePower != null) && (System.currentTimeMillis() - this.lastUsePower > 5000)) {
             this.activePower = null;
             this.setPlayerData(new Data(this.points, 200, null, this.lastShot, this.life, 250, false));
+            this.entity.getViewComponent().removeChild(this.playerShield);
         }
     }
 }

@@ -2,7 +2,6 @@ package com.mycompany.app.Events.Sound;
 
 
 import com.almasb.fxgl.app.services.FXGLAssetLoaderService;
-import com.almasb.fxgl.audio.Audio;
 import com.almasb.fxgl.audio.AudioPlayer;
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.audio.Sound;
@@ -10,7 +9,6 @@ import com.almasb.fxgl.dsl.FXGL;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class SoundManager implements SoundListener {

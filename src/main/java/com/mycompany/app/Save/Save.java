@@ -20,6 +20,10 @@ public class Save {
             this.mapsToObjects(players);
     }
 
+    /**
+     * Converting a map of entities (players) to a Data object
+     * @param players map of players
+     */
     private void mapsToObjects(Map<PlayerTypes, Entity> players){
         this.P1Data = players.get(PlayerTypes.P1).getComponent(Player.class).getPlayerData();
 

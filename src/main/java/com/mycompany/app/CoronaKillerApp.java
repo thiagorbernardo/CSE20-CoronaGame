@@ -131,6 +131,9 @@ public class CoronaKillerApp extends GameApplication {
         });
     }
 
+    /**
+     * Initialize UI objects.
+     */
     @Override
     protected void initUI() {
         this.gameController.initPlayerUIInfo();
@@ -144,6 +147,9 @@ public class CoronaKillerApp extends GameApplication {
         this.gameController.initGame();
     }
 
+    /**
+     * Called once per application lifetime, just before initGame().
+     */
     @Override
     protected void onPreInit() {
         super.onPreInit();

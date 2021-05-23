@@ -14,6 +14,11 @@ public class RankingJSON implements RankingDAO {
 
     private FileManager fileManager = new FileManager("src/main/resources/ranking/ranking.json", "[]");
 
+    /**
+     * Reading a file of ranking
+     *
+     * @return a list of player ranking completes
+     */
     @Override
     public List<Ranking> read() {
 
@@ -33,6 +38,11 @@ public class RankingJSON implements RankingDAO {
         return rankingList;
     }
 
+    /**
+     * Getting top 5 players
+     *
+     * @return a list of top 5 players
+     */
     @Override
     public List<Ranking> getTopPlayers() {
 
@@ -46,6 +56,11 @@ public class RankingJSON implements RankingDAO {
         return rankingList;
     }
 
+    /**
+     * Saving a ranking
+     *
+     * @param newRanking new Ranking to append in file
+     */
     @Override
     public void save(Ranking newRanking) {
         List<Ranking> rankingList = this.read();
@@ -54,5 +69,4 @@ public class RankingJSON implements RankingDAO {
 
         this.fileManager.saveString(this.gson.toJson(rankingList), false);
     }
-
 }

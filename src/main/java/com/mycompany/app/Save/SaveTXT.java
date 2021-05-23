@@ -21,6 +21,11 @@ public class SaveTXT implements SaveDAO {
 
     private Map<String, String> saveMap = new HashMap<>();
 
+    /**
+     * Reading save file
+     *
+     * @return a Save object
+     */
     @Override
     public Save read() {
         this.fileManager.createFile();
@@ -48,6 +53,11 @@ public class SaveTXT implements SaveDAO {
         return this.mapToSave();
     }
 
+    /**
+     * Saving a object of save
+     *
+     * @param save a Save object
+     */
     @Override
     public void save(Save save) {
         StringBuilder savingString = new StringBuilder();
@@ -80,6 +90,10 @@ public class SaveTXT implements SaveDAO {
         this.fileManager.saveString(savingString.toString(), false);
     }
 
+    /**
+     * Creating a save object with a map of player data based on a map of string
+     * @return a Save object
+     */
     private Save mapToSave() {
         if (this.saveMap.size() == 0)
             return null;

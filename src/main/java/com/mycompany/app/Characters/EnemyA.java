@@ -27,14 +27,24 @@ public class EnemyA extends Character implements Ia {
         this.flag = false;
     }
 
+    /**
+     * Setting flag to represent a enemy hitting a wall
+     */
     public void setFlag(){
         this.flag = true;
     }
 
+    /**
+     * Setting a player to follow
+     * @param charToFollow entity player
+     */
     public void followPlayer(Entity charToFollow){
         this.player = charToFollow;
     }
 
+    /**
+     * Polimorphism to change way of movement from IA
+     */
     @Override
     public void movement() {
         Point2D playerCenter = this.player.getCenter();

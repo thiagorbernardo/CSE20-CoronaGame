@@ -17,8 +17,8 @@ public class SoundManager implements SoundListener {
 
     private FXGLAssetLoaderService loaderService = FXGL.getAssetLoader();
     private AudioPlayer audioPlayer = FXGL.getAudioPlayer();
-    Map<SoundNames, Sound> soundMap = new HashMap<>();
-    Map<MusicsNames, Music> musicMap = new HashMap<>();
+    private Map<SoundNames, Sound> soundMap = new HashMap<>();
+    private Map<MusicsNames, Music> musicMap = new HashMap<>();
 
     /**
      * Play a sound using FXGL audio player
@@ -41,6 +41,10 @@ public class SoundManager implements SoundListener {
         }
     }
 
+    /**
+     * Load a a list of musics to FXGL asset loader
+     * @param musics List to load
+     */
     @Override
     public void loadMusics(List<MusicsNames> musics) {
         for (MusicsNames music : musics) {
@@ -58,22 +62,33 @@ public class SoundManager implements SoundListener {
         this.audioPlayer.playMusic(this.musicMap.get(musicName));
     }
 
-
+    /**
+     * Stop all current sounds and musics
+     */
     @Override
     public void stopAll() {
         this.audioPlayer.stopAllSoundsAndMusic();
     }
 
+    /**
+     * Stop all current sounds
+     */
     @Override
     public void stopAllSounds() {
         this.audioPlayer.stopAllSounds();
     }
 
+    /**
+     * Stop all current musics
+     */
     @Override
     public void stopAllMusics() {
         this.audioPlayer.stopAllMusic();
     }
 
+    /**
+     * Pause a current music
+     */
     @Override
     public void pauseMusics() {
         this.audioPlayer.pauseAllMusic();

@@ -1,15 +1,18 @@
 package com.mycompany.app.Power;
 
-import com.mycompany.app.Characters.PlayerTypes;
 import com.mycompany.app.Save.Data;
 
-import java.util.Map;
-
 public class Invincible implements Power{
+
+    /**
+     * Using a power, Polimorphism
+     *
+     * @param oldData player old data to modify
+     * @return a data modified
+     */
     @Override
     public Data use(Data oldData) {
         oldData.setIsInvincible(true);
         return oldData;
     }
-    
 }

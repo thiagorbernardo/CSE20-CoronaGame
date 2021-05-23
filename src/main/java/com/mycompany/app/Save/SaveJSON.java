@@ -14,6 +14,11 @@ public class SaveJSON implements SaveDAO {
 
     private FileManager fileManager = new FileManager("src/main/resources/save/save.json", "");
 
+    /**
+     * Reading save file
+     *
+     * @return a Save object
+     */
     @Override
     public Save read() {
         this.fileManager.createFile();
@@ -32,6 +37,11 @@ public class SaveJSON implements SaveDAO {
         return save;
     }
 
+    /**
+     * Saving a object of save
+     *
+     * @param save object
+     */
     @Override
     public void save(Save save) {
         this.fileManager.saveString(this.gson.toJson(save), false);

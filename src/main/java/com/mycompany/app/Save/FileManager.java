@@ -12,6 +12,9 @@ public class FileManager {
         this.header = header;
     }
 
+    /**
+     * Creating a file and folder if not exists
+     */
     public void createFile() {
         File file = new File(this.path);
 
@@ -34,6 +37,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * Save a string (using in implementations of DAO)
+     * @param content content to save
+     * @param append checking if is to overwrite or append
+     */
     public void saveString(String content, Boolean append) {
         this.createFile();
         try {

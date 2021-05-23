@@ -9,9 +9,9 @@ import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
-
 import com.almasb.fxgl.ui.DialogService;
 import com.almasb.fxgl.ui.UIFactoryService;
+
 import com.mycompany.app.Characters.EnemyType;
 import com.mycompany.app.Characters.Player;
 import com.mycompany.app.Characters.PlayerTypes;
@@ -87,6 +87,10 @@ public class GameController implements Game {
     private Text playersLifeUI = new Text("Vidas P1: ");
 
 
+    /**
+     * Constructor
+     * @param scene to control
+     */
     public GameController(Scene scene) {
         this.scene = scene;
     }
@@ -258,7 +262,7 @@ public class GameController implements Game {
     }
 
     /**
-     * Setting Player Actions
+     * Setting Player Actions, keys to move
      *
      * @param selectedPlayer PlayerType to set input actions from a player
      */
@@ -345,7 +349,7 @@ public class GameController implements Game {
     }
 
     /**
-     * Setting Dev Actions
+     * Setting Dev Actions, keys to show hitbox and skip music
      */
     @Override
     public void setDevActions() {
@@ -357,15 +361,15 @@ public class GameController implements Game {
                 else
                     FXGL.getDevService().closeDevPane();
 
-                save = new SaveTXT();
-
-                Save save1 = new Save(
-                        isMultiplayer,
-                        currentLevel,
-                        players
-                );
-
-                save.save(save1);
+//                save = new SaveTXT();
+//
+//                Save save1 = new Save(
+//                        isMultiplayer,
+//                        currentLevel,
+//                        players
+//                );
+//
+//                save.save(save1);
 
             }
         }, KeyCode.F1);
@@ -414,6 +418,10 @@ public class GameController implements Game {
                 || (this.currentLevel == 2 && totalGamePoints >= 1000)));
     }
 
+    /**
+     * Checking if a player is dead and show rank if is true
+     * @param playerDamaged playerThatHitted a enemy
+     */
     @Override
     public void checkDeathCondition(Entity playerDamaged) {
 
@@ -484,6 +492,10 @@ public class GameController implements Game {
         }
     }
 
+    /**
+     * Reset location of players, when load game or next level up
+     * @param spawnLocation new location to spawn players
+     */
     private void setEntitiesLocation(SpawnData spawnLocation) {
 
         Data p1Data = this.playersData.get(PlayerTypes.P1);
@@ -501,6 +513,9 @@ public class GameController implements Game {
 //            FXGL.getGameController().gotoGameMenu();
     }
 
+    /**
+     * Reseting players, spawn and fxgl world
+     */
     private void resetGame() {
         this.players.put(PlayerTypes.P1, null);
         if (isMultiplayer)
@@ -513,6 +528,10 @@ public class GameController implements Game {
 
     }
 
+    /**
+     * Player earning points (hitting enemies)
+     * @param playerThatHitted
+     */
     @Override
     public void playerBulletHittingEnemy(PlayerTypes playerThatHitted) {
         Entity player = this.players.get(playerThatHitted);
@@ -525,11 +544,9 @@ public class GameController implements Game {
         System.out.println(playerThatHitted + ": " + points);
     }
 
-
-    private void updateUiInformation() {
-//        this.textPixels.setText("Pontuação: " + String.format("%.0f", points));
-    }
-
+    /**
+     * Call sound listener to play a random music
+     */
     private void playRandomMusic() {
         this.soundListener.stopAllMusics();
         MusicsNames[] musicsNames = MusicsNames.values();
@@ -539,6 +556,9 @@ public class GameController implements Game {
         this.soundListener.playMusic(someRandomMusic);
     }
 
+    /**
+     * Spaw of enemies, getting location of players to follow, increasing game difficult
+     */
     @Override
     public void spawnEnemy() {
         EnemyType[] enemyTypes = EnemyType.values();
@@ -583,12 +603,17 @@ public class GameController implements Game {
         }
     }
 
-
+    /**
+     * Resetting vars of spawn
+     */
     private void resetSpawn() {
         this.spawnTimer = 2000;
         this.lastSpawn = System.currentTimeMillis();
     }
 
+    /**
+     * Updating UI of players stats
+     */
     @Override
     public void setPlayerUIInformation() {
         this.playersPointsUI.setText("Pontuação: " + String.format("%.0f", this.getPlayersPoints()));
@@ -621,6 +646,9 @@ public class GameController implements Game {
         this.playersLifeUI.setText(playersLife);
     }
 
+    /**
+     * Initing UI position of players stats
+     */
     @Override
     public void initPlayerUIInfo() {
         this.playersPointsUI.setTranslateX(18);
@@ -647,6 +675,10 @@ public class GameController implements Game {
         this.fxglGameScene.addUINode(this.p2ActivePowerUI);
         this.fxglGameScene.addUINode(this.playersLifeUI);
     }
+
+    /**
+     * Initting player options to save game and create a SaveDAO instance of (SaveJSON or SaveTXT)
+     */
     private void initPlayerOptionToSave() {
         String msg = "Escolha o tipo de Save:";
 
@@ -673,6 +705,10 @@ public class GameController implements Game {
 
     }
 
+    /**
+     * Creating a new Save object and calling a SaveDAO instance to save game
+     * @param save instance of SaveDAO (SaveJSON or SaveTXT)
+     */
     private void savingWorld(SaveDAO save) {
         this.enterLevelTime = System.currentTimeMillis();
         Save save1 = new Save(

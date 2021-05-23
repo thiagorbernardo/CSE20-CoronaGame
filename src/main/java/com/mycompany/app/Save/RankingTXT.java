@@ -16,6 +16,11 @@ public class RankingTXT implements RankingDAO {
 
     private FileManager fileManager = new FileManager("src/main/resources/ranking/ranking.txt", "");
 
+    /**
+     * Reading a file of ranking
+     *
+     * @return a list of player ranking completes
+     */
     @Override
     public List<Ranking> read() {
 
@@ -45,6 +50,11 @@ public class RankingTXT implements RankingDAO {
         return rankingList;
     }
 
+    /**
+     * Getting top 5 players
+     *
+     * @return a list of top 5 players
+     */
     @Override
     public List<Ranking> getTopPlayers() {
 
@@ -58,6 +68,11 @@ public class RankingTXT implements RankingDAO {
         return rankingList;
     }
 
+    /**
+     * Saving a ranking
+     *
+     * @param newRanking new Ranking to append in file
+     */
     @Override
     public void save(Ranking newRanking) {
 
@@ -67,5 +82,4 @@ public class RankingTXT implements RankingDAO {
 
         this.fileManager.saveString(rankingComplete.toString(), true);
     }
-
 }

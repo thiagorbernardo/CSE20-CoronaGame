@@ -39,10 +39,10 @@ public class Bullet extends Component {
             entity.translateY(-tpf * this.speed);
     }
 
-    public void increaseSpeed(){
-        this.speed += 100;
-    }
-
+    /**
+     * Getting owner of a bullet
+     * @return bullet owner
+     */
     public PlayerTypes getBulletOwner() {
         return this.bulletOwner;
     }

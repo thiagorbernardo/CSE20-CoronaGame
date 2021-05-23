@@ -18,6 +18,12 @@ import com.mycompany.app.Events.Notification.Notificator;
 import com.mycompany.app.Projectiles.Bullet;
 
 public class GameFactory implements EntityFactory {
+    /**
+     * Creating a entity of player and setting a hitbox
+     * @param playerType if is a P1 or P2
+     * @param data location of spawn
+     * @return a Entity of player
+     */
     @Spawns("player")
     public Entity newPlayer(PlayerTypes playerType, SpawnData data) {
 
@@ -34,6 +40,15 @@ public class GameFactory implements EntityFactory {
                 .buildAndAttach();
     }
 
+    /**
+     * Creating a entity of bullet and setting a hitbox
+     * @param bulletOwner who shot the bullet, if is a P1 or P2
+     * @param origin location of spawn
+     * @param destiny final location
+     * @param path sprite of a bullet
+     * @param speed move speed of the bullet
+     * @return a Entity of bullet
+     */
     @Spawns("bullet")
     public Entity newBullet(PlayerTypes bulletOwner, Point2D origin, Point2D destiny, String path, double speed) {
         return FXGL.entityBuilder()
@@ -45,6 +60,14 @@ public class GameFactory implements EntityFactory {
                 .buildAndAttach();
     }
 
+    /**
+     * Creating a entity of enemy with Polimorphism and setting a hitbox
+     * @param x location in x axis of world
+     * @param y location in y axis of world
+     * @param type type of enemy to create (EnemyA, EnemyB or EnemyC)
+     * @param player entity that some enemies will follow
+     * @return a Entity of enemy
+     */
     @Spawns("enemy")
     public Entity newEnemy(int x, int y, EnemyType type, Entity player) {
         PhysicsComponent physics = new PhysicsComponent();
@@ -75,9 +98,8 @@ public class GameFactory implements EntityFactory {
 
     /**
      * Method to create a entity wall
-     *
      * @param data tmx tile data
-     * @return a Entity
+     * @return a wall Entity
      */
     @Spawns("wall")
     public Entity newWall(SpawnData data) {
@@ -93,9 +115,8 @@ public class GameFactory implements EntityFactory {
 
     /**
      * Method to create a entity door
-     *
      * @param data tmx tile data
-     * @return a Entity
+     * @return a door Entity
      */
     @Spawns("door")
     public Entity newDoor(SpawnData data) {
@@ -113,6 +134,10 @@ public class GameFactory implements EntityFactory {
                 .build();
     }
 
+    /**
+     * Creating screen bounds to prevent entities from moving away from screenm
+     * @return a wall Entity
+     */
     @Spawns("screen")
     public Entity newWallScreen() {
         return FXGL.entityBuilder()

@@ -26,6 +26,9 @@ public class EnemyB extends Character implements Ia {
         movement();
     }
 
+    /**
+     * Polimorphism to change way of movement from IA
+     */
     @Override
     public void movement() {
 
@@ -56,7 +59,11 @@ public class EnemyB extends Character implements Ia {
 
     }
 
-    public boolean canMove() {
+    /**
+     * Checking if enemy can move
+     * @return the check
+     */
+    private boolean canMove() {
         double diffFromLastMove = System.currentTimeMillis() - this.lastMovement;
         return diffFromLastMove > 500;
     }

@@ -375,14 +375,14 @@ public class GameController implements Game {
             protected void onActionBegin() {
                 playRandomMusic();
 
-                SaveDAO saveDAO = new SaveJSON();
-                saveDAO.save(new Save(
-                        isMultiplayer,
-                        currentLevel,
-                        players
-                ));
-
-                System.out.println("Saving game");
+//                SaveDAO saveDAO = new SaveJSON();
+//                saveDAO.save(new Save(
+//                        isMultiplayer,
+//                        currentLevel,
+//                        players
+//                ));
+//
+//                System.out.println("Saving game");
             }
         }, KeyCode.DIGIT0);
     }

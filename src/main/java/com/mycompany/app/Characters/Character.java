@@ -27,6 +27,14 @@ public abstract class Character extends Component {
 
     protected Direction activeDirection = Direction.RIGHT;
 
+    /**
+     * Constructor
+     * @param path path to character sprite
+     * @param width width of character
+     * @param height height of character
+     * @param speed speed of character
+     * @param life life of character
+     */
     public Character(String path, int width, int height, int speed, int life) {
         Image image = image(path);
         int qtdImages = 10;
@@ -64,6 +72,9 @@ public abstract class Character extends Component {
         }
     }
 
+    /**
+     * Setting active texture of a character
+     */
     protected void setTexture() {
         AnimationChannel activeAnimationChannel = this.texture.getAnimationChannel();
         if (this.physics.isMoving()) {
@@ -135,6 +146,9 @@ public abstract class Character extends Component {
       return this.life--;
     }
 
+    /**
+     * Setting active idle animation
+     */
     protected void setIdleAnimation() {
         if (this.activeDirection == Direction.LEFT) {
             texture.loopAnimationChannel(animLeftIdle);

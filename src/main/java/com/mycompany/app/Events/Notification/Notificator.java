@@ -7,6 +7,11 @@ import javafx.scene.paint.Color;
 public class Notificator implements NotificationListener {
     private NotificationService notify = FXGL.getNotificationService();
 
+    /**
+     * Push a notification in screen
+     * @param color color to display
+     * @param msg message printed
+     */
     @Override
     public void fireEvent(Color color, String msg) {
 

@@ -20,11 +20,19 @@ public class SoundManager implements SoundListener {
     Map<SoundNames, Sound> soundMap = new HashMap<>();
     Map<MusicsNames, Music> musicMap = new HashMap<>();
 
+    /**
+     * Play a sound using FXGL audio player
+     * @param soundName sound to play
+     */
     @Override
     public void playSound(SoundNames soundName) {
         this.audioPlayer.playSound(this.soundMap.get(soundName));
     }
 
+    /**
+     * Load a a list of sounds to FXGL asset loader
+     * @param sounds List to load
+     */
     @Override
     public void loadSounds(List<SoundNames> sounds) {
         for (SoundNames sound : sounds) {
@@ -41,6 +49,10 @@ public class SoundManager implements SoundListener {
         }
     }
 
+    /**
+     * Play a music using FXGL audio player
+     * @param musicName music to play
+     */
     @Override
     public void playMusic(MusicsNames musicName) {
         this.audioPlayer.playMusic(this.musicMap.get(musicName));

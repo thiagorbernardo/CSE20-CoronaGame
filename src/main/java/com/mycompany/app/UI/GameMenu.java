@@ -1,8 +1,6 @@
 package com.mycompany.app.UI;
 
 import com.almasb.fxgl.app.scene.MenuType;
-import com.almasb.fxgl.dsl.FXGL;
-import com.mycompany.app.UI.Menu;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -17,9 +15,6 @@ public class GameMenu extends Menu {
      */
     public GameMenu(MenuType type) {
         super(type);
-        Node body = createBody();
-        body.setTranslateY(0);
-        getContentRoot().getChildren().addAll(body);
     }
 
     /**
@@ -27,7 +22,7 @@ public class GameMenu extends Menu {
      * @return the node with buttons
      */
     @Override
-    public Node createBody() {
+    protected Node createBody() {
 
         Node btn0 = this.createActionButton(createStringBinding(() -> "RESUME"), this::fireResume);
         Node btn1 = this.createActionButton(createStringBinding(() -> "EXIT"), this::fireExit);

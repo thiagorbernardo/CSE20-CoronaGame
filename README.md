@@ -2,6 +2,9 @@
 
 This is a game project developed in Java for the UTFPR Programming Techniques (OOP) subject. The game is inspired by Stardew Valley, a popular farming simulation game. In this game, the player will have to kill different enemies that will be on the player path.
 
+## Gameplay
+**Check on YouTube** https://youtu.be/ErAMZ5NqgcI
+
 ### Game Menu
 ![Game Menu](https://user-images.githubusercontent.com/51447939/224223126-d07be142-d1e2-490c-bc5f-ce4924bc5d59.png)
 

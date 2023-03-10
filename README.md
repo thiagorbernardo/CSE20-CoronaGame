@@ -8,7 +8,16 @@ To run the game, you will need to have Java 15 or later and Maven installed on y
 After installing Java, you can download the source code of the game from the GitHub repository: `https://github.com/thiagorbernardo/The-Last-Cowboy`
 
 To run the game, navigate to the project folder and run the following command in the terminal:
-mvn package
+```
+mvn install
+mvn exec:java
+```
+
+To create the .jar with dependencies run:
+```
+mvn clean compile assembly:single
+java -jar target\the-last-cowboy-1.0-jar-with-dependencies.jar
+```
 
 ## How to Play
 When you start the game, you will be greeted with a main menu. From here, you can start a new game, load a saved game, see the rank, or exit the game.

@@ -12,7 +12,7 @@ import com.mycompany.app.Projectiles.Bullet;
 import com.mycompany.app.UI.Scene;
 
 
-public class CoronaKillerApp extends GameApplication {
+public class TheLastCowboy extends GameApplication {
     private Scene scene = new Scene();
 
     /* Game Controller */

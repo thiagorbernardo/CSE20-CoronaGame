@@ -46,7 +46,7 @@ public class SoundManager implements SoundListener {
     @Override
     public void loadMusics(List<MusicsNames> musics) {
         for (MusicsNames music : musics) {
-            Music musicLoaded = this.loaderService.loadMusic(music + ".mp3");
+            Music musicLoaded = this.loaderService.loadMusic(music.name().toLowerCase() + ".mp3");
             this.musicMap.put(music, musicLoaded);
         }
     }

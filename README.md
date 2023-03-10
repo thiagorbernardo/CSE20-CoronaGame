@@ -17,8 +17,13 @@ Once you start a new game, you will be taken to the first level. You can move yo
 
 You can kill enemies in the game by pressing spacebar and getting super powers to help you defeat the 3 levels.
 
+## Sound Track
+
+Yessss! We have a speacial 8 bit sound track for the game.
+`https://open.spotify.com/playlist/014ejkXf7DEC65Jh8KnNlh?si=6246f2e8ab624c46`
+
 ## Contributing
-If you would like to contribute to the game project, feel free to fork the repository and submit a pull request. Please make sure to follow the coding conventions and submit unit tests with your code.
+If you would like to contribute to the game project, feel free to fork the repository and submit a pull request.
 
 ## Credits
 The game was developed by Thiago Ramos, João Ferreira and Frank Bloemer for the UTFPR Programming Techniques subject. The game was inspired by Stardew Valley, developed by ConcernedApe.

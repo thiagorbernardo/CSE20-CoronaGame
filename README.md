@@ -2,6 +2,23 @@
 
 This is a game project developed in Java for the UTFPR Programming Techniques (OOP) subject. The game is inspired by Stardew Valley, a popular farming simulation game. In this game, the player will have to kill different enemies that will be on the player path.
 
+### Game Menu
+![Game Menu](https://user-images.githubusercontent.com/51447939/224223126-d07be142-d1e2-490c-bc5f-ce4924bc5d59.png)
+
+### First Level
+![First Level](https://user-images.githubusercontent.com/51447939/224223268-e0028bf4-ddd9-4387-904f-49651f6163fe.png)
+
+### Second Level
+![Second Level](https://user-images.githubusercontent.com/51447939/224223997-ffa150de-84be-4226-80cf-af903845a72d.png)
+
+### Third Level
+![Third Level](https://user-images.githubusercontent.com/51447939/224224067-6148035d-74c3-4762-a12e-72b7b59c9464.png)
+
+
+### Ranking
+![Ranking](https://user-images.githubusercontent.com/51447939/224223531-e0a3abf8-d559-437f-8252-ec6dfc6d7d47.png)
+
+
 ## Getting Started
 To run the game, you will need to have Java 15 or later and Maven installed on your computer. You can download the latest version of Java from the official website: `https://www.java.com/en/download/` and Maven: `https://maven.apache.org/install.html`.
 
